@@ -12,34 +12,34 @@
 
     :root {
       /* ===== FASTSIGNS brand palette ===== */
-      --ink:        #1C2333;   /* dark slate — primary text/chrome */
-      --ink-2:      #2C3444;   /* deeper slate — structure */
-      --champagne:  #0066B3;   /* FASTSIGNS Blue — primary accent */
-      --champagne-lo:#5ba3e0;  /* lighter FASTSIGNS blue */
-      --champagne-hi:#004990;  /* darker FASTSIGNS blue */
-      --ease-luxury: cubic-bezier(0.19, 1, 0.22, 1); /* slow, deliberate deceleration — no bounce */
+      --ink:        #1C2333;
+      --ink-2:      #2C3444;
+      --champagne:  #0066B3;
+      --champagne-lo:#5ba3e0;
+      --champagne-hi:#004990;
+      --ease-luxury: cubic-bezier(0.19, 1, 0.22, 1);
 
       --bg:      #ffffff;
-      --wash:    #f7f9fc;      /* barely-there section wash */
+      --wash:    #f7f9fc;
       --card:    #ffffff;
-      --line:    rgba(28,35,51,0.09);   /* hairline */
+      --line:    rgba(28,35,51,0.09);
       --line-2:  rgba(28,35,51,0.055);
 
       --t1: var(--ink);
       --t2: #1C2333;
       --t3: #1C2333;
 
-      /* Five centers — official FASTSIGNS brand colors (from brand guidelines) */
-      --c-long-beach:    #0066B3;  /* FASTSIGNS Blue */
-      --c-torrance:      #C38600;  /* Green 6 (gold/mustard) */
-      --c-santa-ana:     #DA2128;  /* FASTSIGNS Red */
-      --c-thousand-oaks: #52247F;  /* Blue 1 (purple) */
-      --c-tarzana:       #00853F;  /* Green 3 */
+      /* ===== CENTER COLORS — updated per branding guide ===== */
+      --c-long-beach:    #004990;  /* BLUE 2 Pantone 2685 */
+      --c-torrance:      #0066B3;  /* FASTSIGNS Blue Pantone 286 */
+      --c-santa-ana:     #0096D6;  /* BLUE 6 Pantone 2925 */
+      --c-thousand-oaks: #52247F;  /* BLUE 1 Pantone 2617 */
+      --c-tarzana:       #97005E;  /* RED 1 Pantone 235 */
 
       /* status */
-      --pos: #15803d;   /* strong green — over goal */
-      --warn:#b45309;   /* strong amber — near goal */
-      --neg: #dc2626;   /* strong red — under goal */
+      --pos: #00853F;   /* green — over goal (FASTSIGNS Green 3) */
+      --warn:#b45309;
+      --neg: #DA2128;   /* FASTSIGNS Red — under goal */
 
       --shadow:  0 1px 2px rgba(28,35,51,0.04);
       --shadow-2: 0 8px 40px rgba(28,35,51,0.07);
@@ -48,7 +48,6 @@
       --sans:  'Lato', system-ui, -apple-system, sans-serif;
       --radius: 3px;
 
-      /* generous, rhythmic spacing — the luxury is the space */
       --s1:6px; --s2:10px; --s3:16px; --s4:24px; --s5:36px; --s6:56px; --s7:88px; --s8:132px;
     }
 
@@ -72,7 +71,7 @@
 
     ::selection { background: rgba(0,102,179,0.18); }
 
-    /* ============ HEADER — slim, full-width, sticky ============ */
+    /* ============ HEADER ============ */
     .header {
       --hp: #0066B3;
       --hp-2: #004990;
@@ -92,16 +91,8 @@
     }
     @keyframes headerDrop { from { opacity: 0; transform: translateY(-100%); } to { opacity: 1; transform: none; } }
 
-    .header .header-logo {
-      display: flex;
-      align-items: center;
-      flex: none;
-    }
-    .header .header-logo img {
-      height: 24px;
-      width: auto;
-      display: block;
-    }
+    .header .header-logo { display: flex; align-items: center; flex: none; }
+    .header .header-logo img { height: 24px; width: auto; display: block; }
     .header .header-logo .logo-fallback {
       display: none;
       font-family: var(--serif);
@@ -111,19 +102,8 @@
       text-transform: uppercase;
       color: rgba(255,255,255,0.95);
     }
-
-    .header .header-divider {
-      width: 1px;
-      height: 20px;
-      background: rgba(255,255,255,0.18);
-      flex: none;
-    }
-
-    .header-title {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    .header .header-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.18); flex: none; }
+    .header-title { display: flex; flex-direction: column; gap: 2px; }
     .header h1 {
       font-family: var(--serif);
       font-size: 1.05rem;
@@ -133,11 +113,7 @@
       color: #ffffff;
       white-space: nowrap;
     }
-    .header h1 em {
-      font-style: italic;
-      font-weight: 400;
-      color: rgba(255,255,255,0.72);
-    }
+    .header h1 em { font-style: italic; font-weight: 400; color: rgba(255,255,255,0.72); }
     .header-tagline {
       font-family: var(--sans);
       font-size: 0.5rem;
@@ -147,7 +123,6 @@
       color: rgba(255,255,255,0.42);
       white-space: nowrap;
     }
-
     .header-ticker {
       flex: 1 1 auto;
       min-width: 0;
@@ -169,10 +144,7 @@
       transition: opacity 0.5s cubic-bezier(0.19,1,0.22,1), transform 0.5s cubic-bezier(0.19,1,0.22,1);
     }
     .header-ticker .ht-inner.ht-swap { opacity: 0; transform: translateY(6px); }
-    .header-ticker .ht-inner b {
-      color: #fff;
-      font-weight: 800;
-    }
+    .header-ticker .ht-inner b { color: #fff; font-weight: 800; }
     .header-ticker .ht-inner .ht-dim { opacity: 0.62; font-weight: 500; }
     .header-ticker .ht-inner .ht-up { color: #4ade80; font-weight: 800; }
     .header-ticker .ht-inner .ht-down { color: #f87171; font-weight: 800; }
@@ -198,7 +170,6 @@
       position: relative;
       z-index: 1;
     }
-
     .header .header-motif {
       position: absolute;
       right: -18px;
@@ -208,13 +179,7 @@
       pointer-events: none;
       display: flex;
     }
-    .header .header-motif svg {
-      width: 210px;
-      height: 210px;
-      fill: #DA2128;
-      opacity: 0.22;
-      display: block;
-    }
+    .header .header-motif svg { width: 210px; height: 210px; fill: #DA2128; opacity: 0.22; display: block; }
 
     #data-banner {
       font-size: 0.62rem;
@@ -230,11 +195,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
     #data-banner::before {
       content:'';
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: currentColor;
       display: inline-block;
@@ -242,11 +205,7 @@
     }
 
     @media (max-width: 900px) {
-      .header {
-        height: 48px;
-        padding: 0 var(--s4);
-        gap: var(--s3);
-      }
+      .header { height: 48px; padding: 0 var(--s4); gap: var(--s3); }
       .header .header-logo img { height: 20px; }
       .header h1 { font-size: 0.92rem; }
       .header .header-divider { height: 16px; }
@@ -255,10 +214,7 @@
     }
 
     /* ============ SECTION ============ */
-    .section { 
-      margin-bottom: var(--s8); 
-      padding-top: var(--s4);
-    }
+    .section { margin-bottom: var(--s8); padding-top: var(--s4); }
     .section-head { margin-bottom: var(--s6); }
     .section-head-flex {
       display: flex;
@@ -268,45 +224,46 @@
       flex-wrap: wrap;
     }
     .section-head-flex .shf-left { flex: 1 1 420px; min-width: 0; }
-    .section-num {
-      font-family: var(--serif); 
-      font-style: italic; 
-      font-size: 0.95rem;
-      color: var(--champagne); 
-      margin-bottom: var(--s2); 
-      display: block;
-    }
-    .section-eyebrow {
-      font-size: 0.64rem; 
-      font-weight: 600; 
-      color: var(--ink);
-      text-transform: uppercase; 
-      letter-spacing: 0; 
-      margin-bottom: var(--s3);
-    }
-    .section-title {
-      font-family: var(--serif);
-      font-size: clamp(2.1rem, 3.6vw, 3.1rem); 
-      font-weight: 500; 
-      letter-spacing: -0.005em;
-      color: var(--ink); 
-      line-height: 1.04;
-    }
-    .section-title em { 
-      font-style: italic; 
-      font-weight: 400; 
-      color: var(--champagne); 
-    }
-    .section-sub {
-      margin-top: var(--s3); 
-      color: var(--t2); 
-      font-size: 0.9rem; 
-      line-height: 1.7;
-      max-width: 62ch; 
-      font-weight: 400;
-    }
+    .section-num { font-family: var(--serif); font-style: italic; font-size: 0.95rem; color: var(--champagne); margin-bottom: var(--s2); display: block; }
+    .section-eyebrow { font-size: 0.64rem; font-weight: 600; color: var(--ink); text-transform: uppercase; letter-spacing: 0; margin-bottom: var(--s3); }
+    .section-title { font-family: var(--sans); font-size: clamp(1.8rem, 3.2vw, 2.6rem); font-weight: 400; letter-spacing: 0; color: var(--ink); line-height: 1.1; display: inline-flex; align-items: center; gap: 8px; border: 2.5px solid var(--ink); border-radius: 24px; padding: 12px 24px; background: transparent; }
+    .section-title .title-main { font-weight: 900; font-family: var(--sans); }
+    .section-title .title-accent { font-weight: 400; font-family: var(--sans); color: var(--champagne); font-style: italic; }
+    .section-sub { margin-top: var(--s3); color: var(--t2); font-size: 0.9rem; line-height: 1.7; max-width: 62ch; font-weight: 400; }
 
-    /* ============ COMPANY TOTAL FEATURE — light, elegant, right of the big title ============ */
+    /* ============ ENTITY BADGE — filled pill button per Stan's request ============ */
+    /* Used in card/chart h3 for individual entity headings (center or rep breakdowns) */
+    .entity-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px 5px 10px;
+      border-radius: 100px;
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #fff;
+      background: var(--badge-color, var(--ink));
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .entity-badge .badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      flex: none;
+    }
+    /* outlined variant for "Company" / "Team" totals — stays neutral */
+    .entity-badge.outlined {
+      background: transparent;
+      border: 1.5px solid var(--badge-color, var(--ink));
+      color: var(--badge-color, var(--ink));
+    }
+    .entity-badge.outlined .badge-dot { background: var(--badge-color, var(--ink)); }
+
+    /* ============ COMPANY FEATURE ============ */
     .company-feature {
       flex: 0 0 auto;
       display: none;
@@ -323,111 +280,79 @@
     .cf-ring { position: relative; width: 104px; height: 104px; flex: none; }
     .cf-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
     .cf-ring .trk { fill: none; stroke: rgba(28,35,51,0.08); stroke-width: 5.5; }
-    .cf-ring .fil {
-      fill: none; stroke: var(--champagne); stroke-width: 5.5; stroke-linecap: round;
-      transition: stroke-dashoffset 1.2s var(--ease-luxury);
-    }
-    .cf-center {
-      position: absolute; inset: 0; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 1px;
-    }
-    .cf-center .v {
-      font-family: var(--sans); font-size: 1.12rem; font-weight: 900;
-      color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.01em;
-    }
+    .cf-ring .fil { fill: none; stroke: var(--champagne); stroke-width: 5.5; stroke-linecap: round; transition: stroke-dashoffset 1.2s var(--ease-luxury); }
+    .cf-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; }
+    .cf-center .v { font-family: var(--sans); font-size: 1.12rem; font-weight: 900; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
     .cf-center .p { font-size: 0.6rem; font-weight: 700; color: var(--champagne-hi); }
-    .cf-text .lbl {
-      font-size: 0.6rem; font-weight: 700; letter-spacing: 0; text-transform: uppercase;
-      color: var(--champagne-hi); margin-bottom: 6px;
-    }
-    .cf-text .big {
-      font-family: var(--sans); font-size: 1.3rem; font-weight: 900;
-      color: var(--ink); line-height: 1.1; font-variant-numeric: tabular-nums;
-    }
+    .cf-text .lbl { font-size: 0.6rem; font-weight: 700; letter-spacing: 0; text-transform: uppercase; color: var(--champagne-hi); margin-bottom: 6px; }
+    .cf-text .big { font-family: var(--sans); font-size: 1.3rem; font-weight: 900; color: var(--ink); line-height: 1.1; font-variant-numeric: tabular-nums; }
     .cf-text .det { margin-top: 6px; font-size: 0.68rem; color: rgba(28,35,51,0.62); line-height: 1.65; }
     .cf-text .det b { color: var(--ink); font-weight: 800; font-variant-numeric: tabular-nums; }
 
     /* ============ CARD ============ */
     .card {
-      background: var(--card); 
+      background: var(--card);
       border: 1px solid var(--line);
-      border-radius: var(--radius); 
+      border-radius: var(--radius);
       padding: var(--s6) var(--s5);
       margin-bottom: var(--s4);
     }
     .card > h3 {
-      font-family: var(--serif); 
-      font-size: 2rem; 
-      font-weight: 500; 
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 500;
       color: var(--ink);
-      margin-bottom: var(--s5); 
-      display: flex; 
-      align-items: center; 
+      margin-bottom: var(--s5);
+      display: flex;
+      align-items: center;
       gap: var(--s3);
       letter-spacing: -0.01em;
       line-height: 1.1;
+      flex-wrap: wrap;
     }
-    .card > h3 .dot {
-      width: 9px; 
-      height: 9px; 
-      border-radius: 50%; 
-      flex: none;
-    }
+    .card > h3 .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
     .card > h3 .tag {
-      margin-left: auto; 
-      font-family: var(--sans); 
-      font-size: 0.64rem; 
+      margin-left: auto;
+      font-family: var(--sans);
+      font-size: 0.64rem;
       font-weight: 600;
-      text-transform: uppercase; 
-      letter-spacing: 0; 
+      text-transform: uppercase;
+      letter-spacing: 0;
       color: var(--t3);
-      display: inline-flex; 
-      align-items: center; 
+      display: inline-flex;
+      align-items: center;
       gap: 7px;
     }
     .card > h3 .tag.live { color: var(--pos); }
-    .card > h3 .tag::before {
-      content:''; 
-      width: 5px; 
-      height: 5px; 
-      border-radius: 50%; 
-      background: currentColor;
-    }
+    .card > h3 .tag::before { content:''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
     /* ============ TABLES ============ */
     .table-wrapper { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
     thead th {
-      padding: 10px 14px; 
-      text-align: right; 
-      font-weight: 600; 
+      padding: 10px 14px;
+      text-align: right;
+      font-weight: 600;
       color: var(--t3);
-      border-bottom: 1px solid var(--ink); 
+      border-bottom: 1px solid var(--ink);
       white-space: nowrap;
-      font-size: 0.6rem; 
-      text-transform: uppercase; 
+      font-size: 0.6rem;
+      text-transform: uppercase;
       letter-spacing: 0;
       font-family: var(--sans);
     }
     thead th.month-col { text-align: left; }
     tbody td {
-      padding: 11px 14px; 
-      text-align: right; 
+      padding: 11px 14px;
+      text-align: right;
       border-bottom: 1px solid var(--line-2);
-      color: var(--ink); 
-      font-weight: 500; 
+      color: var(--ink);
+      font-weight: 500;
       font-variant-numeric: tabular-nums;
-      font-family: var(--sans); 
+      font-family: var(--sans);
       font-size: 0.82rem;
     }
-    tbody td.month-col {
-      text-align: left; 
-      font-family: var(--serif); 
-      font-size: 1.02rem; 
-      font-weight: 600;
-      color: var(--ink); 
-      letter-spacing: 0;
-    }
+    tbody td.month-col { text-align: left; font-family: var(--serif); font-size: 1.02rem; font-weight: 600; color: var(--ink); letter-spacing: 0; }
     tbody tr:hover td { background: var(--wash); transition: background 0.25s ease; }
 
     .delta-pos { color: var(--pos); font-weight: 600; }
@@ -440,127 +365,159 @@
     .matrix-table th, .matrix-table td { white-space: nowrap; }
 
     .matrix-superhead th.mx-district {
-      text-align: center; 
-      font-size: 0.58rem; 
-      font-weight: 600; 
+      text-align: center;
+      font-size: 0.58rem;
+      font-weight: 600;
       letter-spacing: 0;
-      text-transform: uppercase; 
-      color: var(--gc); 
+      text-transform: uppercase;
+      color: var(--gc);
       padding: 6px 10px 10px;
       font-family: var(--sans);
     }
     .matrix-grouphead th.mx-group {
-      text-align: center; 
-      font-family: var(--serif); 
-      font-size: 1.15rem; 
+      text-align: center;
+      font-family: var(--serif);
+      font-size: 1.15rem;
       font-weight: 600;
-      letter-spacing: 0; 
-      color: var(--gc); 
-      padding: 8px 10px 12px; 
-      text-transform: none;
-      border-bottom: 1.5px solid var(--gc);
-    }
-    .matrix-grouphead th.mx-company { color: var(--ink); border-bottom-color: var(--ink); }
-    .matrix-subhead th {
-      text-align: right; 
-      font-size: 0.56rem; 
-      font-weight: 600; 
       letter-spacing: 0;
-      text-transform: uppercase; 
-      padding: 9px 12px 8px; 
+      color: var(--gc);
+      padding: 8px 10px 12px;
+      text-transform: none;
+      border-bottom: none;
+    }
+    .matrix-grouphead th.mx-company { color: var(--ink); border-bottom: none; }
+    .matrix-subhead th {
+      text-align: right;
+      font-size: 0.56rem;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      padding: 9px 12px 8px;
       color: var(--t3);
-      border-bottom: 1px solid var(--line);
+      border-bottom: none;
     }
-    .mx-sticky {
-      position: sticky; 
-      left: 0; 
-      z-index: 2; 
-      background: var(--card);
-    }
+    .mx-sticky { position: sticky; left: 0; z-index: 2; background: var(--card); }
     thead .mx-sticky { z-index: 3; background: var(--card); }
     .matrix-table tbody td {
-      padding: 10px 12px; 
-      text-align: right; 
+      padding: 10px 12px;
+      text-align: right;
       font-variant-numeric: tabular-nums;
-      border-bottom: 1px solid var(--line-2); 
-      font-weight: 500; 
+      border-bottom: 1px solid var(--line-2);
+      font-weight: 500;
       font-size: 0.8rem;
     }
     .matrix-table tbody td.month-col { text-align: left; }
     .matrix-table tbody tr:hover td:not(.mx-sticky) { background: var(--wash); }
     .matrix-table td.mx-edge { border-left: 1px solid var(--line); }
-
     .matrix-total td { border-top: 1.5px solid var(--ink); font-weight: 700 !important; }
     .matrix-total td.month-col { color: var(--ink); }
 
-    /* subtle per-center column tints — brand color at whisper strength */
-    .matrix-table td.loc-long-beach    { background: rgba(0,102,179,0.045); }
-    .matrix-table td.loc-torrance      { background: rgba(195,134,0,0.05); }
-    .matrix-table td.loc-santa-ana     { background: rgba(218,33,40,0.04); }
-    .matrix-table td.loc-thousand-oaks { background: rgba(82,36,127,0.045); }
-    .matrix-table td.loc-tarzana       { background: rgba(0,133,63,0.045); }
-    .matrix-table td.rep-tint          { background: rgba(28,35,51,0.02); }
+    /* strong center COLUMN colors — entire columns get colored */
+    td[data-center="Long Beach"] { background: #004990 !important; color: #fff !important; font-weight: 600; }
+    td[data-center="Long Beach"] * { color: #fff !important; }
+    td[data-center="Long Beach"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-center="Long Beach"].month-col * { color: #1C2333 !important; }
+    td[data-center="Torrance"] { background: #0066B3 !important; color: #fff !important; font-weight: 600; }
+    td[data-center="Torrance"] * { color: #fff !important; }
+    td[data-center="Torrance"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-center="Torrance"].month-col * { color: #1C2333 !important; }
+    td[data-center="Santa Ana"] { background: #0096D6 !important; color: #fff !important; font-weight: 600; }
+    td[data-center="Santa Ana"] * { color: #fff !important; }
+    td[data-center="Santa Ana"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-center="Santa Ana"].month-col * { color: #1C2333 !important; }
+    td[data-center="Thousand Oaks"] { background: #52247F !important; color: #fff !important; font-weight: 600; }
+    td[data-center="Thousand Oaks"] * { color: #fff !important; }
+    td[data-center="Thousand Oaks"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-center="Thousand Oaks"].month-col * { color: #1C2333 !important; }
+    td[data-center="Tarzana"] { background: #97005E !important; color: #fff !important; font-weight: 600; }
+    td[data-center="Tarzana"] * { color: #fff !important; }
+    td[data-center="Tarzana"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-center="Tarzana"].month-col * { color: #1C2333 !important; }
+    /* Strong rep row colors */
+    td[data-rep="Brittany Herrera"] { background: #00788A !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Brittany Herrera"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Dylan Falk-Hutchings"] { background: #007161 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Dylan Falk-Hutchings"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Jeremy Medina (OSR)"] { background: #00853F !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Jeremy Medina (OSR)"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Santoie Croxford"] { background: #688F00 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Santoie Croxford"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Nathaniel Darling"] { background: #78A22F !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Nathaniel Darling"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Santa Ana CSR"] { background: #C38600 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Santa Ana CSR"].month-col { background: #fff !important; color: #1C2333 !important; }
+    .matrix-table td.rep-tint          { background: rgba(0,120,138,0.08); }
+    /* Individual rep row colors — solid, strong, with white text */
+    td[data-rep="Brittany Herrera"] { background: #00788A !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Brittany Herrera"] * { color: #fff !important; }
+    td[data-rep="Brittany Herrera"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Brittany Herrera"].month-col * { color: #1C2333 !important; }
+    td[data-rep="Dylan Falk-Hutchings"] { background: #007161 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Dylan Falk-Hutchings"] * { color: #fff !important; }
+    td[data-rep="Dylan Falk-Hutchings"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Dylan Falk-Hutchings"].month-col * { color: #1C2333 !important; }
+    td[data-rep="Jeremy Medina (OSR)"] { background: #00853F !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Jeremy Medina (OSR)"] * { color: #fff !important; }
+    td[data-rep="Jeremy Medina (OSR)"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Jeremy Medina (OSR)"].month-col * { color: #1C2333 !important; }
+    td[data-rep="Santoie Croxford"] { background: #688F00 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Santoie Croxford"] * { color: #fff !important; }
+    td[data-rep="Santoie Croxford"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Santoie Croxford"].month-col * { color: #1C2333 !important; }
+    td[data-rep="Nathaniel Darling"] { background: #78A22F !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Nathaniel Darling"] * { color: #fff !important; }
+    td[data-rep="Nathaniel Darling"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Nathaniel Darling"].month-col * { color: #1C2333 !important; }
+    td[data-rep="Santa Ana CSR"] { background: #C38600 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Santa Ana CSR"] * { color: #fff !important; }
+    td[data-rep="Santa Ana CSR"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Santa Ana CSR"].month-col * { color: #1C2333 !important; }
     .matrix-table td.mx-company-cell   { background: rgba(28,35,51,0.05); font-weight: 700; }
 
-    /* Editable cells — Goal only; Sales is read-only, straight from CoreBridge */
+    /* Editable cells */
     .goal-input {
-      display: inline-block; 
-      padding: 3px 8px; 
+      display: inline-block;
+      padding: 3px 8px;
       border: 1px solid transparent;
-      border-radius: var(--radius); 
-      font-family: var(--sans); 
+      border-radius: var(--radius);
+      font-family: var(--sans);
       font-size: 0.8rem;
-      font-weight: 600; 
-      transition: all 0.2s ease; 
+      font-weight: 600;
+      transition: all 0.2s ease;
       cursor: text;
-      color: var(--ink); 
+      color: var(--ink);
       background: rgba(28,35,51,0.04);
     }
     .goal-input:hover { background: rgba(28,35,51,0.08); border-color: var(--line); }
-    .goal-input:focus {
-      outline: none; 
-      background: #fff; 
-      border-color: var(--champagne);
-      box-shadow: 0 0 0 3px rgba(0,102,179,0.18);
-    }
-    .cell-input {
-      width: 90px; 
-      text-align: right; 
-      border: 1px solid var(--champagne); 
-      border-radius: var(--radius);
-      padding: 3px 8px; 
-      font-family: var(--sans); 
-      font-weight: 600; 
-      font-size: 0.8rem;
-      color: var(--ink);
-    }
+    .goal-input:focus { outline: none; background: #fff; border-color: var(--champagne); box-shadow: 0 0 0 3px rgba(0,102,179,0.18); }
+    .cell-input { width: 90px; text-align: right; border: 1px solid var(--champagne); border-radius: var(--radius); padding: 3px 8px; font-family: var(--sans); font-weight: 600; font-size: 0.8rem; color: var(--ink); }
 
     /* ============ SWITCHER / TABS ============ */
     .tab-bar {
-      display: flex; 
-      flex-wrap: wrap; 
-      gap: 2px; 
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
       margin-bottom: var(--s5);
       border-bottom: 1px solid var(--line);
     }
     .tab-btn {
-      display: inline-flex; 
-      align-items: center; 
-      gap: 8px; 
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       padding: 12px 20px;
-      border: none; 
-      background: transparent; 
+      border: none;
+      background: transparent;
       color: var(--t3);
-      font-family: var(--sans); 
-      font-size: 0.66rem; 
+      font-family: var(--sans);
+      font-size: 0.66rem;
       font-weight: 600;
-      text-transform: uppercase; 
-      letter-spacing: 0; 
+      text-transform: uppercase;
+      letter-spacing: 0;
       cursor: pointer;
-      transition: all 0.25s ease; 
-      white-space: nowrap; 
+      transition: all 0.25s ease;
+      white-space: nowrap;
       position: relative;
-      border-bottom: 1.5px solid transparent; 
+      border-bottom: 1.5px solid transparent;
       margin-bottom: -1px;
     }
     .tab-btn:hover { color: var(--ink); background: rgba(28,35,51,0.045); border-radius: 6px 6px 0 0; }
@@ -575,22 +532,22 @@
     @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(14px) scale(0.992); } to { opacity: 1; transform: none; } }
 
-    /* ============ CUSTOM TOOLTIP (replaces native browser title tooltips) ============ */
+    /* ============ CUSTOM TOOLTIP ============ */
     .custom-tooltip {
-      position: fixed; 
-      z-index: 9999; 
+      position: fixed;
+      z-index: 9999;
       pointer-events: none;
       background: linear-gradient(135deg, #0066B3, #004990);
-      color: #fff; 
-      font-family: var(--sans); 
-      font-size: 0.92rem; 
+      color: #fff;
+      font-family: var(--sans);
+      font-size: 0.92rem;
       font-weight: 700;
-      line-height: 1.5; 
-      padding: 11px 16px; 
+      line-height: 1.5;
+      padding: 11px 16px;
       border-radius: 9px;
       box-shadow: 0 14px 36px rgba(0,73,144,0.38), 0 2px 10px rgba(0,73,144,0.2);
       border: 1px solid rgba(255,255,255,0.1);
-      opacity: 0; 
+      opacity: 0;
       transform: translateY(6px) scale(0.94);
       transform-origin: bottom center;
       transition: opacity 0.18s var(--ease-luxury), transform 0.18s var(--ease-luxury);
@@ -616,11 +573,11 @@
 
     /* ============ CHART CONTAINER ============ */
     .chart-container {
-      background: var(--card); 
-      border-radius: var(--radius); 
+      background: var(--card);
+      border-radius: var(--radius);
       padding: var(--s6) var(--s5);
-      margin-bottom: var(--s4); 
-      margin-top: var(--s4); 
+      margin-bottom: var(--s4);
+      margin-top: var(--s4);
       max-width: 100%;
       position: relative;
       overflow: hidden;
@@ -636,79 +593,43 @@
       transition: transform 0.8s var(--ease-luxury);
     }
     .chart-container:hover::before { transform: scaleX(1); }
-    /* Flashy chart-bar hover: bigger numbers, brighter bars */
     .grp { cursor: default; }
-    .grp .bar-actual, .grp .bar-goal {
-      transition: filter 0.4s var(--ease-luxury), opacity 0.4s var(--ease-luxury);
-    }
+    .grp .bar-actual, .grp .bar-goal { transition: filter 0.4s var(--ease-luxury), opacity 0.4s var(--ease-luxury); }
     .grp:hover .bar-actual { filter: brightness(1.15) saturate(1.25); }
     .grp:hover .bar-goal { filter: brightness(1.2); opacity: 0.85 !important; }
-    .grp .val-actual, .grp .val-goal {
-      transition: transform 0.4s var(--ease-luxury), fill 0.3s var(--ease-luxury);
-      transform-box: fill-box;
-      transform-origin: center bottom;
-    }
-    .grp .val-actual-bg, .grp .val-goal-bg {
-      opacity: 0;
-      transition: opacity 0.4s var(--ease-luxury), transform 0.4s var(--ease-luxury);
-      transform-box: fill-box;
-      transform-origin: center bottom;
-      pointer-events: none;
-    }
+    .grp .val-actual, .grp .val-goal { transition: transform 0.4s var(--ease-luxury), fill 0.3s var(--ease-luxury); transform-box: fill-box; transform-origin: center bottom; }
+    .grp .val-actual-bg, .grp .val-goal-bg { opacity: 0; transition: opacity 0.4s var(--ease-luxury), transform 0.4s var(--ease-luxury); transform-box: fill-box; transform-origin: center bottom; pointer-events: none; }
     .grp:hover .val-actual { transform: scale(1.55) translateY(-3px); fill: #fff !important; }
     .grp:hover .val-goal { transform: scale(1.4) translateY(-3px); fill: #fff !important; }
     .grp:hover .val-actual-bg { opacity: 1; transform: scale(1.55) translateY(-3px); }
     .grp:hover .val-goal-bg { opacity: 1; transform: scale(1.4) translateY(-3px); }
     .chart-container h3 {
-      font-family: var(--serif); 
-      font-size: 2rem; 
-      font-weight: 500; 
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 500;
       color: var(--ink);
-      margin-bottom: var(--s5); 
-      display: flex; 
-      align-items: center; 
+      margin-bottom: var(--s5);
+      display: flex;
+      align-items: center;
       gap: var(--s3);
       letter-spacing: -0.01em;
       line-height: 1.1;
+      flex-wrap: wrap;
     }
-    .chart-container h3 .dot { 
-      width: 9px; 
-      height: 9px; 
-      border-radius: 50%; 
-      flex: none; 
-    }
-    .chart-container h3 .tag {
-      margin-left: auto; 
-      font-family: var(--sans); 
-      font-size: 0.66rem; 
-      font-weight: 600;
-      text-transform: uppercase; 
-      letter-spacing: 0; 
-      color: var(--t3);
-    }
-    .chart-wrap, .chart-wrap-wide { 
-      width: 100%; 
-      margin: 0; 
-      overflow-x: auto; 
-    }
+    .chart-container h3 .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+    .chart-container h3 .tag { margin-left: auto; font-family: var(--sans); font-size: 0.66rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0; color: var(--t3); }
+    .chart-wrap, .chart-wrap-wide { width: 100%; margin: 0; overflow-x: auto; }
     .chart-container.wide-frame {
       margin-left: calc(-1 * (var(--s5) - var(--s3)));
       margin-right: calc(-1 * (var(--s5) - var(--s3)));
       padding-left: var(--s3);
       padding-right: var(--s3);
     }
-    .chart-container svg { 
-      width: 100%; 
-      height: auto; 
-      min-width: 860px; 
-    }
+    .chart-container svg { width: 100%; height: auto; min-width: 860px; }
 
-    #pipeline-snapshot {
-      width: 100%;
-      margin: 0 auto;
-    }
+    #pipeline-snapshot { width: 100%; margin: 0 auto; }
 
-    /* ============ PIPELINE SNAPSHOT — nested arcs from one origin, stage-alone values ============ */
+    /* ============ PIPELINE SNAPSHOT ============ */
     .pipeline-stage {
       position: relative;
       padding-top: var(--s2);
@@ -722,193 +643,53 @@
     .ps-arc { transition: filter 0.4s var(--ease-luxury); cursor: default; }
     .ps-arc:hover { filter: brightness(1.07) saturate(1.15); }
     .ps-lbl { cursor: default; }
-    .ps-caption {
-      text-align: center;
-      margin-top: 12px;
-      font-family: var(--sans);
-      font-size: 0.74rem;
-      color: var(--t2);
-      font-weight: 500;
-    }
-
-    /* floating stage detail card — right side, on top of the chart */
-    .ps-overlay {
-      position: absolute; top: 30px; right: 24px; width: 208px;
-      display: flex; flex-direction: column; gap: 10px; z-index: 2;
-    }
-    .ps-panel {
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(28,35,51,0.06);
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(28,35,51,0.09);
-      padding: 13px 15px;
-    }
-    .ps-panel h4 {
-      font-family: var(--sans);
-      font-size: 0.7rem; font-weight: 800; color: var(--ink);
-      display: flex; justify-content: space-between; align-items: center;
-    }
+    .ps-caption { text-align: center; margin-top: 12px; font-family: var(--sans); font-size: 0.74rem; color: var(--t2); font-weight: 500; }
+    .ps-overlay { position: absolute; top: 30px; right: 24px; width: 208px; display: flex; flex-direction: column; gap: 10px; z-index: 2; }
+    .ps-panel { background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border: 1px solid rgba(28,35,51,0.06); border-radius: 14px; box-shadow: 0 10px 30px rgba(28,35,51,0.09); padding: 13px 15px; }
+    .ps-panel h4 { font-family: var(--sans); font-size: 0.7rem; font-weight: 800; color: var(--ink); display: flex; justify-content: space-between; align-items: center; }
     .ps-panel h4 .chev { color: rgba(28,35,51,0.4); font-size: 9px; }
     .ps-rows { margin-top: 10px; display: flex; flex-direction: column; gap: 7px; }
     .ps-row2 { display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: rgba(28,35,51,0.6); }
     .ps-row2 .nm { display: inline-flex; align-items: center; gap: 6px; }
     .ps-row2 .sw { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
-    .ps-row2 .val {
-      font-family: var(--sans);
-      font-size: 0.64rem; font-weight: 800; color: var(--ink);
-      background: rgba(28,35,51,0.055); border-radius: 6px; padding: 2px 7px;
-      font-variant-numeric: tabular-nums;
-    }
-    .ps-pill {
-      background: rgba(255,255,255,0.92); backdrop-filter: blur(8px);
-      border: 1px solid rgba(28,35,51,0.06); border-radius: 12px;
-      box-shadow: 0 8px 22px rgba(28,35,51,0.07); padding: 11px 15px;
-      font-family: var(--sans);
-      font-size: 0.7rem; font-weight: 800; color: var(--ink);
-      display: flex; justify-content: space-between; align-items: center;
-    }
+    .ps-row2 .val { font-family: var(--sans); font-size: 0.64rem; font-weight: 800; color: var(--ink); background: rgba(28,35,51,0.055); border-radius: 6px; padding: 2px 7px; font-variant-numeric: tabular-nums; }
+    .ps-pill { background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border: 1px solid rgba(28,35,51,0.06); border-radius: 12px; box-shadow: 0 8px 22px rgba(28,35,51,0.07); padding: 11px 15px; font-family: var(--sans); font-size: 0.7rem; font-weight: 800; color: var(--ink); display: flex; justify-content: space-between; align-items: center; }
     .ps-pill .pv { color: var(--champagne-hi); font-variant-numeric: tabular-nums; }
     @media (max-width: 900px) {
       .ps-overlay { position: static; width: 100%; flex-direction: row; flex-wrap: wrap; margin-bottom: 18px; }
       .ps-panel, .ps-pill { flex: 1 1 180px; }
     }
 
-    /* ============ OVERVIEW / YTD CARDS — big rings around the numbers ============ */
-    .overview-grid {
-      display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 64px 48px;
-      padding: 48px 0;
-    }
-    .ov-card {
-      padding: 0;
-      border: none;
-      position: relative; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      text-align: center;
-      background: transparent;
-      transition: transform 0.6s var(--ease-luxury);
-      cursor: default;
-    }
-    .ov-card:hover {
-      background: transparent;
-      transform: translateY(-4px);
-    }
-    .ov-card h4 {
-      font-size: 0.64rem; 
-      font-weight: 700; 
-      color: rgba(28,35,51,0.65);
-      text-transform: uppercase; 
-      letter-spacing: 0.08em; 
-      margin-top: 24px;
-      margin-bottom: 0;
-      display: flex; 
-      align-items: center; 
-      gap: 7px;
-    }
+    /* ============ OVERVIEW / YTD CARDS ============ */
+    .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 64px 48px; padding: 48px 0; }
+    .ov-card { padding: 0; border: none; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; background: transparent; transition: transform 0.6s var(--ease-luxury); cursor: default; }
+    .ov-card:hover { background: transparent; transform: translateY(-4px); }
+    .ov-card h4 { font-size: 0.64rem; font-weight: 700; color: rgba(28,35,51,0.65); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 24px; margin-bottom: 0; display: flex; align-items: center; gap: 7px; }
     .ov-card h4 .mk { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-
-    /* the big ring, wrapped AROUND the number */
     .big-ring { position: relative; width: 140px; height: 140px; margin-bottom: 0; }
     .big-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
     .big-ring .trk { fill: none; stroke: rgba(28,35,51,0.06); stroke-width: 4; }
-    .big-ring .fil {
-      fill: none; stroke-width: 4; stroke-linecap: round;
-      transition: stroke-dashoffset 1.3s var(--ease-luxury);
-    }
-    .big-ring-center {
-      position: absolute; inset: 0; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 3px;
-    }
-    .big-ring-center .amt {
-      font-family: var(--sans);
-      font-size: 1.5rem; 
-      font-weight: 800; 
-      letter-spacing: -0.02em;
-      color: var(--ink); 
-      font-variant-numeric: tabular-nums; 
-      line-height: 1;
-    }
-    .big-ring-center .pc {
-      font-family: var(--sans);
-      font-size: 0.62rem; 
-      font-weight: 700; 
-      font-variant-numeric: tabular-nums;
-      color: rgba(28,35,51,0.55);
-    }
-    .ov-det { 
-      font-size: 0.68rem; 
-      line-height: 1.6; 
-      color: rgba(28,35,51,0.62); 
-      font-family: var(--sans); 
-      margin-top: 12px;
-    }
-    .ov-det b { 
-      color: var(--ink); 
-      font-weight: 700; 
-      font-variant-numeric: tabular-nums; 
-    }
+    .big-ring .fil { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1.3s var(--ease-luxury); }
+    .big-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+    .big-ring-center .amt { font-family: var(--sans); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1; }
+    .big-ring-center .pc { font-family: var(--sans); font-size: 0.62rem; font-weight: 700; font-variant-numeric: tabular-nums; color: rgba(28,35,51,0.55); }
+    .ov-det { font-size: 0.68rem; line-height: 1.6; color: rgba(28,35,51,0.62); font-family: var(--sans); margin-top: 12px; }
+    .ov-det b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
     .ov-det .dp { font-weight: 700; }
-    .dp.pos { color: var(--pos); } 
+    .dp.pos { color: var(--pos); }
     .dp.neg { color: var(--neg); }
-
-    .overview-note {
-      margin-top: 64px;
-      font-size: 0.76rem;
-      line-height: 1.7;
-      color: rgba(28,35,51,0.68);
-      font-style: italic;
-      max-width: 100%;
-    }
+    .overview-note { margin-top: 64px; font-size: 0.76rem; line-height: 1.7; color: rgba(28,35,51,0.68); font-style: italic; max-width: 100%; }
 
     /* mini toggle */
-    .mini-toggle {
-      display: inline-flex; 
-      gap: 0; 
-      border: 1px solid var(--line); 
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-    .mini-toggle button {
-      border: none; 
-      background: transparent; 
-      font-family: var(--sans); 
-      font-weight: 600;
-      font-size: 0.6rem; 
-      text-transform: uppercase; 
-      letter-spacing: 0;
-      padding: 7px 14px; 
-      cursor: pointer; 
-      color: var(--t3); 
-      transition: all 0.2s;
-      border-right: 1px solid var(--line);
-    }
+    .mini-toggle { display: inline-flex; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .mini-toggle button { border: none; background: transparent; font-family: var(--sans); font-weight: 600; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0; padding: 7px 14px; cursor: pointer; color: var(--t3); transition: all 0.2s; border-right: 1px solid var(--line); }
     .mini-toggle button:last-child { border-right: none; }
     .mini-toggle button.active { background: var(--ink); color: #fff; }
 
-    select.month-select {
-      font-family: var(--sans); 
-      font-weight: 600; 
-      font-size: 0.72rem; 
-      color: var(--ink);
-      padding: 8px 14px; 
-      border: 1px solid var(--line); 
-      border-radius: var(--radius);
-      background: #fff; 
-      cursor: pointer; 
-      letter-spacing: 0;
-    }
+    select.month-select { font-family: var(--sans); font-weight: 600; font-size: 0.72rem; color: var(--ink); padding: 8px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; cursor: pointer; letter-spacing: 0; }
 
-    /* ============ ELEGANT MONTH NAVIGATOR (arrow-driven) ============ */
-    .month-nav {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s3);
-      user-select: none;
-    }
+    /* ============ ELEGANT MONTH NAVIGATOR ============ */
+    .month-nav { display: inline-flex; align-items: center; gap: var(--s3); user-select: none; }
     .month-nav .mn-arrow {
       width: 42px; height: 42px;
       border-radius: 50%;
@@ -918,144 +699,51 @@
       display: inline-flex; align-items: center; justify-content: center;
       cursor: pointer;
       font-size: 1rem;
-      transition:
-        background 0.6s var(--ease-luxury),
-        border-color 0.6s var(--ease-luxury),
-        color 0.6s var(--ease-luxury),
-        transform 0.5s var(--ease-luxury),
-        box-shadow 0.5s var(--ease-luxury);
+      transition: background 0.6s var(--ease-luxury), border-color 0.6s var(--ease-luxury), color 0.6s var(--ease-luxury), transform 0.5s var(--ease-luxury), box-shadow 0.5s var(--ease-luxury);
       position: relative;
       overflow: hidden;
     }
-    .month-nav .mn-arrow::after {
-      /* the champagne flash ripple */
-      content: '';
-      position: absolute; inset: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle at center, var(--champagne) 0%, transparent 70%);
-      opacity: 0;
-      transform: scale(0.4);
-    }
-    .month-nav .mn-arrow:hover {
-      border-color: var(--champagne);
-      color: var(--champagne-hi);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 22px rgba(28,35,51,0.1);
-    }
+    .month-nav .mn-arrow::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at center, var(--champagne) 0%, transparent 70%); opacity: 0; transform: scale(0.4); }
+    .month-nav .mn-arrow:hover { border-color: var(--champagne); color: var(--champagne-hi); transform: translateY(-1px); box-shadow: 0 8px 22px rgba(28,35,51,0.1); }
     .month-nav .mn-arrow:active { transform: translateY(0) scale(0.94); }
     .month-nav .mn-arrow.flash::after { animation: mnFlash 0.6s var(--ease-luxury); }
-    @keyframes mnFlash {
-      0%   { opacity: 0.55; transform: scale(0.4); }
-      100% { opacity: 0; transform: scale(1.5); }
-    }
-    .month-nav .mn-arrow:disabled {
-      opacity: 0.32; cursor: default;
-      border-color: var(--line); color: var(--ink);
-      transform: none; box-shadow: none;
-    }
+    @keyframes mnFlash { 0% { opacity: 0.55; transform: scale(0.4); } 100% { opacity: 0; transform: scale(1.5); } }
+    .month-nav .mn-arrow:disabled { opacity: 0.32; cursor: default; border-color: var(--line); color: var(--ink); transform: none; box-shadow: none; }
     .month-nav .mn-arrow:disabled::after { display: none; }
-
-    /* the month readout — a fixed-width window the label slides through */
-    .month-nav .mn-window {
-      position: relative;
-      width: 168px; height: 44px;
-      overflow: hidden;
-      text-align: center;
-    }
-    .month-nav .mn-label {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      font-family: var(--serif);
-      font-size: 1.5rem; font-weight: 500;
-      color: var(--ink);
-      letter-spacing: 0.01em;
-      line-height: 1;
-      white-space: nowrap;
-    }
-    .month-nav .mn-label .mn-year {
-      font-family: var(--sans);
-      font-size: 0.56rem; font-weight: 700;
-      color: var(--champagne-hi);
-      letter-spacing: 0.16em;
-      margin-top: 4px;
-    }
-    /* directional slide: incoming from the travel direction, outgoing away from it */
+    .month-nav .mn-window { position: relative; width: 168px; height: 44px; overflow: hidden; text-align: center; }
+    .month-nav .mn-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--serif); font-size: 1.5rem; font-weight: 500; color: var(--ink); letter-spacing: 0.01em; line-height: 1; white-space: nowrap; }
+    .month-nav .mn-label .mn-year { font-family: var(--sans); font-size: 0.56rem; font-weight: 700; color: var(--champagne-hi); letter-spacing: 0.16em; margin-top: 4px; }
     .month-nav .mn-label.enter-right { transform: translateX(100%); opacity: 0; }
     .month-nav .mn-label.enter-left  { transform: translateX(-100%); opacity: 0; }
-    .month-nav .mn-label.settle {
-      transform: translateX(0); opacity: 1;
-      transition: transform 0.72s var(--ease-luxury), opacity 0.72s var(--ease-luxury);
-    }
-    .month-nav .mn-label.leave-left {
-      transform: translateX(-100%); opacity: 0;
-      transition: transform 0.72s var(--ease-luxury), opacity 0.72s var(--ease-luxury);
-    }
-    .month-nav .mn-label.leave-right {
-      transform: translateX(100%); opacity: 0;
-      transition: transform 0.72s var(--ease-luxury), opacity 0.72s var(--ease-luxury);
-    }
+    .month-nav .mn-label.settle { transform: translateX(0); opacity: 1; transition: transform 0.72s var(--ease-luxury), opacity 0.72s var(--ease-luxury); }
+    .month-nav .mn-label.leave-left { transform: translateX(-100%); opacity: 0; transition: transform 0.72s var(--ease-luxury), opacity 0.72s var(--ease-luxury); }
+    .month-nav .mn-label.leave-right { transform: translateX(100%); opacity: 0; transition: transform 0.72s var(--ease-luxury), opacity 0.72s var(--ease-luxury); }
 
-    /* watermark motif — Spirit of Ecstasy-esque quotation, very faint */
-    .motif {
-      position: fixed; 
-      top: 10%; 
-      right: -8%; 
-      z-index: 0; 
-      opacity: 0.028;
-      pointer-events: none; 
-      width: 620px; 
-      color: var(--ink); 
-      user-select: none;
-    }
+    .motif { position: fixed; top: 10%; right: -8%; z-index: 0; opacity: 0.028; pointer-events: none; width: 620px; color: var(--ink); user-select: none; }
 
     /* ============ SCROLL TRANSITIONS ============ */
-    /* Each section is a panel that rises up and covers the one before it.
-       White background + soft top shadow = the "curtain drawn over" feel. */
     .section {
       position: relative;
       background: var(--bg);
-      /* the panel's own reveal — slow, staged, no bounce */
       opacity: 0;
       transform: translateY(64px);
-      transition:
-        opacity 1.15s var(--ease-luxury),
-        transform 1.15s var(--ease-luxury),
-        box-shadow 1.15s var(--ease-luxury);
+      transition: opacity 1.15s var(--ease-luxury), transform 1.15s var(--ease-luxury), box-shadow 1.15s var(--ease-luxury);
       will-change: opacity, transform;
     }
-    /* the take-over: a hairline of shadow along the top edge, as if this
-       panel is lifting over the previous section as it arrives */
     .section::before {
       content: '';
       position: absolute;
-      left: 50%;
-      top: -1px;
-      width: 0;
-      height: 1px;
+      left: 50%; top: -1px;
+      width: 0; height: 1px;
       background: linear-gradient(90deg, transparent, var(--champagne), transparent);
       transform: translateX(-50%);
       opacity: 0;
       transition: width 1.4s var(--ease-luxury), opacity 1.4s var(--ease-luxury);
       pointer-events: none;
     }
-    .section.revealed {
-      opacity: 1;
-      transform: translateY(0);
-      box-shadow: 0 -32px 60px -40px rgba(28,35,51,0.16);
-    }
+    .section.revealed { opacity: 1; transform: translateY(0); box-shadow: 0 -32px 60px -40px rgba(28,35,51,0.16); }
     .section.revealed::before { width: 100%; opacity: 1; }
-
-    /* staged children — the title lands, then the content a beat later */
-    .section .section-head,
-    .section > [id] {
-      opacity: 0;
-      transform: translateY(28px);
-      transition:
-        opacity 1s var(--ease-luxury),
-        transform 1s var(--ease-luxury);
-      will-change: opacity, transform;
-    }
+    .section .section-head, .section > [id] { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease-luxury), transform 1s var(--ease-luxury); will-change: opacity, transform; }
     .section.revealed .section-head { opacity: 1; transform: none; transition-delay: 0.12s; }
     .section.revealed > [id]:nth-of-type(1) { opacity: 1; transform: none; transition-delay: 0.28s; }
     .section.revealed > [id]:nth-of-type(2) { opacity: 1; transform: none; transition-delay: 0.40s; }
@@ -1078,107 +766,30 @@
 
     /* ============ ACTIVITY FEED ============ */
     #activity-feed { width: 100%; }
-    .af-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: var(--sans);
-      font-size: 0.82rem;
-      background: transparent;
-    }
-    .af-table thead th {
-      font-family: var(--sans);
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--t2);
-      padding: 0 16px 14px 0;
-      text-align: left;
-      border-bottom: 1px solid var(--line);
-      white-space: nowrap;
-    }
+    .af-table { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 0.82rem; background: transparent; }
+    .af-table thead th { font-family: var(--sans); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--t2); padding: 0 16px 14px 0; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
     .af-table thead th:last-child { padding-right: 0; }
-    .af-table tbody tr {
-      border-bottom: 1px solid rgba(28,35,51,0.05);
-      transition: background 0.18s;
-    }
+    .af-table tbody tr { border-bottom: 1px solid rgba(28,35,51,0.05); transition: background 0.18s; }
     .af-table tbody tr:last-child { border-bottom: none; }
     .af-table tbody tr:hover { background: rgba(28,35,51,0.025); }
-    .af-table tbody td {
-      padding: 13px 16px 13px 0;
-      vertical-align: middle;
-      color: var(--ink);
-      text-align: left;
-    }
+    .af-table tbody td { padding: 13px 16px 13px 0; vertical-align: middle; color: var(--ink); text-align: left; }
     .af-table tbody td:last-child { padding-right: 0; }
-    /* status pill */
-    .af-pill {
-      display: inline-block;
-      padding: 2px 9px;
-      border-radius: 20px;
-      font-size: 0.66rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
+    .af-pill { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
     .af-pill-sale     { background: rgba(0,133,63,0.10);  color: #00853f; }
     .af-pill-estimate { background: rgba(0,102,179,0.10); color: #0066b3; }
     .af-pill-cancelled{ background: rgba(218,33,40,0.10); color: #da2128; }
     .af-pill-unknown  { background: rgba(28,35,51,0.07);  color: var(--t2); }
-    /* event badge */
-    .af-event {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-      background: rgba(28,35,51,0.05);
-      color: var(--t2);
-    }
+    .af-event { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.04em; white-space: nowrap; background: rgba(28,35,51,0.05); color: var(--t2); }
     .af-event-converted  { background: rgba(0,133,63,0.09);  color: #00853f; }
     .af-event-cancelled  { background: rgba(218,33,40,0.09);  color: #da2128; }
     .af-event-new        { background: rgba(0,102,179,0.09);  color: #0066b3; }
     .af-event-completed  { background: rgba(0,102,179,0.10); color: #004990; }
-    /* amount */
-    .af-amt {
-      font-variant-numeric: tabular-nums;
-      font-weight: 700;
-      color: var(--ink);
-      white-space: nowrap;
-    }
+    .af-amt { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); white-space: nowrap; }
     .af-amt-zero { color: var(--t2); font-weight: 400; }
-    /* center dot */
-    .af-center-dot {
-      display: inline-block;
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      margin-right: 6px;
-      flex-shrink: 0;
-      vertical-align: middle;
-      position: relative; top: -1px;
-    }
-    .af-link {
-      font-family: var(--sans);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: var(--champagne);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(0,102,179,0.35);
-      transition: color 0.18s, border-color 0.18s;
-      white-space: nowrap;
-    }
+    .af-center-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; flex-shrink: 0; vertical-align: middle; position: relative; top: -1px; }
+    .af-link { font-family: var(--sans); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; color: var(--champagne); text-decoration: none; border-bottom: 1px solid rgba(0,102,179,0.35); transition: color 0.18s, border-color 0.18s; white-space: nowrap; }
     .af-link:hover { color: var(--ink); border-color: var(--ink); }
-    .af-empty {
-      text-align: center;
-      padding: 48px 0;
-      font-family: var(--sans);
-      font-size: 0.82rem;
-      color: var(--t2);
-    }
+    .af-empty { text-align: center; padding: 48px 0; font-family: var(--sans); font-size: 0.82rem; color: var(--t2); }
     .af-date { color: var(--t2); font-variant-numeric: tabular-nums; white-space: nowrap; }
     .af-company { font-weight: 600; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .af-rep { color: var(--t2); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1187,7 +798,7 @@
 </head>
 <body>
 
-<!-- HEADER — slim, full-width, sticky -->
+<!-- HEADER -->
 <header class="header">
   <div class="header-logo">
     <img
@@ -1216,7 +827,6 @@
 
 <div class="page">
 
-  <!-- faint motif -->
   <div class="motif">
     <svg viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
       <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
@@ -1229,20 +839,20 @@
     <div class="section-head">
       <span class="section-num">00</span>
       <p class="section-eyebrow">Right Now</p>
-      <h2 class="section-title">Pipeline <em>Snapshot</em></h2>
+      <h2 class="section-title"><span class="title-main">Pipeline</span> <span class="title-accent">Snapshot</span></h2>
       <p class="section-sub">Every order fetched this year, grouped by exactly where it stands at this moment live from CoreBridge, not a historical rollup. Each ring shows how much money is sitting in that stage right now.</p>
     </div>
     <div id="pipeline-switcher" class="tab-bar"></div>
     <div id="pipeline-snapshot"></div>
   </section>
 
-  <!-- 01 · YEAR TO DATE — directly below the pipeline chart -->
+  <!-- 01 · YEAR TO DATE -->
   <section class="section">
     <div class="section-head section-head-flex">
       <div class="shf-left">
         <span class="section-num">01</span>
         <p class="section-eyebrow">Year to Date</p>
-        <h2 class="section-title">Company <em>Snapshot</em></h2>
+        <h2 class="section-title"><span class="title-main">Company</span> <span class="title-accent">Snapshot</span></h2>
       </div>
       <div class="company-feature" id="company-feature"></div>
     </div>
@@ -1255,7 +865,7 @@
     <div class="section-head">
       <span class="section-num">02</span>
       <p class="section-eyebrow">Monthly Sales</p>
-      <h2 class="section-title">Monthly Sales · <em>Goal vs Actual</em></h2>
+      <h2 class="section-title"><span class="title-main">Monthly Sales ·</span> <span class="title-accent">Goal vs Actual</span></h2>
       <p class="section-sub">Click any <strong>Goal</strong> cell to edit it in place. Delta and % update automatically. Sales figures come straight from CoreBridge and aren't hand-editable.</p>
     </div>
     <div id="centers-switcher" class="tab-bar"></div>
@@ -1269,7 +879,7 @@
     <div class="section-head">
       <span class="section-num">03</span>
       <p class="section-eyebrow">Daily</p>
-      <h2 class="section-title">Daily Sales · <em>By Center</em></h2>
+      <h2 class="section-title"><span class="title-main">Daily Sales ·</span> <span class="title-accent">By Center</span></h2>
     </div>
     <div id="daily-matrix"></div>
     <div id="estimate-chart"></div>
@@ -1280,7 +890,7 @@
     <div class="section-head">
       <span class="section-num">04</span>
       <p class="section-eyebrow">2026 Tracker · Salespeople</p>
-      <h2 class="section-title">Salespeople · <em>Goal vs Actual</em></h2>
+      <h2 class="section-title"><span class="title-main">Salespeople ·</span> <span class="title-accent">Goal vs Actual</span></h2>
     </div>
     <div id="reps-switcher" class="tab-bar"></div>
     <div id="salespeople-matrix"></div>
@@ -1294,7 +904,7 @@
     <div class="section-head">
       <span class="section-num">05</span>
       <p class="section-eyebrow">2026 Tracker · What It Takes</p>
-      <h2 class="section-title">Goal <em>Breakdown</em></h2>
+      <h2 class="section-title"><span class="title-main">Goal</span> <span class="title-accent">Breakdown</span></h2>
       <p class="section-sub">Working backward from each center's remaining goal: how many orders and estimates are needed, based on the trailing 90-day conversion rate and average order size.</p>
     </div>
     <div id="goal-breakdown-tabs" class="tab-bar"></div>
@@ -1306,7 +916,7 @@
     <div class="section-head">
       <span class="section-num">06</span>
       <p class="section-eyebrow">Live Activity</p>
-      <h2 class="section-title">Recent <em>Orders</em></h2>
+      <h2 class="section-title"><span class="title-main">Recent</span> <span class="title-accent">Orders</span></h2>
       <p class="section-sub">The 25 most-recently modified orders across all five centers — any status, pulled live from CoreBridge.</p>
     </div>
     <div id="activity-feed"></div>
@@ -1332,21 +942,29 @@ const MONTHS = ['January','February','March','April','May','June','July','August
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const REPS = ['Brittany Herrera', 'Dylan Falk-Hutchings', 'Jeremy Medina (OSR)', 'Santoie Croxford', 'Nathaniel Darling', 'Santa Ana CSR'];
 
-/* ===== Official FASTSIGNS brand colors — one per center, pulled from brand guidelines ===== */
+/* ===== UPDATED CENTER COLORS — per branding guide ===== */
 const INK = '#1C2333', CHAMP = '#0066B3';
 const LOC_COLORS = {
-  'Long Beach': '#0066B3', 'Torrance': '#C38600', 'Santa Ana': '#DA2128',
-  'Thousand Oaks': '#52247F', 'Tarzana': '#00853F'
+  'Long Beach':    '#004990',  /* BLUE 2 Pantone 2685 */
+  'Torrance':      '#0066B3',  /* FASTSIGNS Blue Pantone 286 */
+  'Santa Ana':     '#0096D6',  /* BLUE 6 Pantone 2925 */
+  'Thousand Oaks': '#52247F',  /* BLUE 1 Pantone 2617 */
+  'Tarzana':       '#97005E'   /* RED 1 Pantone 235 */
 };
 const DISTRICT_COLORS = { 'South Bay': '#004990', 'Valley': '#411D66' };
-/* reps get their own hues, drawn from the same brand palette */
-const REP_COLORS = {
-  'Brittany Herrera': '#0066B3', 'Dylan Falk-Hutchings': '#DA2128', 'Jeremy Medina (OSR)': '#F05133',
-  'Santoie Croxford': '#52247F', 'Nathaniel Darling': '#00853F', 'Santa Ana CSR': '#00788A'
-};
-const TONAL_GRAD = 'linear-gradient(90deg,#0066B3,#DA2128,#C38600,#52247F,#00853F)';
 
-/* time context — used by tooltips and pace math everywhere */
+/* ===== SALESPERSON COLORS — green family per branding guide ===== */
+const REP_COLORS = {
+  'Brittany Herrera':       '#00788A',  /* Green 1 */
+  'Dylan Falk-Hutchings':   '#007161',  /* Green 2 */
+  'Jeremy Medina (OSR)':    '#00853F',  /* Green 3 */
+  'Santoie Croxford':       '#688F00',  /* Green 4 */
+  'Nathaniel Darling':      '#78A22F',  /* Green 5 */
+  'Santa Ana CSR':          '#C38600'   /* Green 6 */
+};
+
+const TONAL_GRAD = 'linear-gradient(90deg,#004990,#0096D6,#0066B3,#52247F,#97005E)';
+
 const NOW = new Date();
 const DATA_YEAR = NOW.getFullYear();
 const JAN1 = new Date(DATA_YEAR,0,1);
@@ -1355,12 +973,12 @@ const YEAR_PCT = Math.round((DAYS_ELAPSED/365)*100);
 const DATE_RANGE_TXT = 'Jan 1 – ' + NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 
 /* ===== Auto-detect new salespeople from CoreBridge ===== */
-const AUTO_REP_PALETTE = ['#1d4ed8','#dc2626','#0891b2','#a16207','#7c3aed','#059669','#be185d','#4d7c0f','#0369a1','#b45309'];
+const AUTO_REP_PALETTE = ['#00788A','#007161','#00853F','#688F00','#78A22F','#C38600','#004990','#0066B3','#52247F','#97005E'];
 let _autoRepColorIdx = 0;
 function isHouseAccount(name){ return /^house\b/i.test((name||'').trim()); }
 function registerNewRep(name, email){
   if (!name || isHouseAccount(name)) return false;
-  if (REP_LOOKUP[normName(name)]) return false; // already tracked (exact or bare-name match)
+  if (REP_LOOKUP[normName(name)]) return false;
   REPS.push(name);
   const color = AUTO_REP_PALETTE[_autoRepColorIdx % AUTO_REP_PALETTE.length]; _autoRepColorIdx++;
   REP_COLORS[name] = color;
@@ -1391,7 +1009,7 @@ const GOALS_2026_DEFAULT = {
 };
 
 /* ============ PERSISTENCE ============ */
-const LS_KEY = 'fastsigns_dashboard_v21';   // keep prior key so saved data carries over
+const LS_KEY = 'fastsigns_dashboard_v21';
 function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
 let state = loadState();
 
@@ -1408,7 +1026,7 @@ function loadState() {
 }
 function saveState(s){ try { localStorage.setItem(LS_KEY, JSON.stringify(s || state)); } catch(e){} }
 
-/* ============ LIVE DATA (direct CoreBridge fetch) ============ */
+/* ============ LIVE DATA ============ */
 const LIVE_ENABLED = true;
 const CB = {
   SALE_STATUSES: ['approved','order','wip','built','completed','complete','closed','invoiced','delivered'],
@@ -1454,7 +1072,6 @@ function cbDate(v){
 }
 function cbNum(v){ const n=parseFloat(v); return isNaN(n)?0:n; }
 
-/* Active-salesperson roster, straight from CoreBridge — used to hide departed reps */
 async function fetchActiveSalespersons(){
   const activeNames = new Set(), knownNames = new Set();
   for (const tenant of Object.keys(TENANTS)){
@@ -1492,14 +1109,14 @@ async function searchOrders(tenant, filter){
   const resp1 = await cbPost(tenant, '/ExOrder/SearchOrders_v2', baseBody);
   const rows1 = asArray(resp1);
   let out = rows1.slice();
-  if (rows1.length < CB.PAGE_SIZE) return out; // only one page exists
+  if (rows1.length < CB.PAGE_SIZE) return out;
   const pageCount = Math.min(resp1.pageCount || resp1.PageCount || CB.MAX_PAGES, CB.MAX_PAGES);
   if (pageCount <= 1) return out;
   const pagePromises = [];
   for (let p=2; p<=pageCount; p++){
     pagePromises.push(cbPost(tenant, '/ExOrder/SearchOrders_v2', Object.assign({}, baseBody, { Page:p })).then(asArray));
   }
-  const restPages = await Promise.all(pagePromises); // fire all remaining pages at once instead of one-by-one
+  const restPages = await Promise.all(pagePromises);
   for (const rows of restPages) out = out.concat(rows);
   return out;
 }
@@ -1525,8 +1142,9 @@ const REP_LOOKUP = {};
 REPS.forEach(r=>{
   REP_LOOKUP[normName(r)] = r;
   const bare = normName(stripParen(r));
-  if (bare && !REP_LOOKUP[bare]) REP_LOOKUP[bare] = r; // e.g. "Jeremy Medina" -> "Jeremy Medina (OSR)"
+  if (bare && !REP_LOOKUP[bare]) REP_LOOKUP[bare] = r;
 });
+
 async function fetchLocationRows(tenant, locationId, year){
   const start=new Date(year,0,1), end=new Date(year,11,31,23,59,59);
   return searchOrders(tenant, {
@@ -1557,9 +1175,9 @@ async function fetchActuals(year){
     pipeline[c]={}; for (const st of PIPELINE_STAGES) pipeline[c][st]={count:0,amount:0};
   }
   for (const r of REPS) byRep[r]=new Array(12).fill(0);
-  const unmatchedReps = new Map(); // raw name -> occurrence count
-  const unmatchedAmounts = new Map(); // raw name -> [12 months of $]
-  const unmatchedEmails = new Map(); // raw name -> email
+  const unmatchedReps = new Map();
+  const unmatchedAmounts = new Map();
+  const unmatchedEmails = new Map();
   const now=new Date();
   const startToday=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   const startMonth=new Date(now.getFullYear(),now.getMonth(),1);
@@ -1578,7 +1196,6 @@ async function fetchActuals(year){
   const completedDate = o=>cbDate(o.dateCompleted||o.DateCompleted);
 
   const locRowsList = await Promise.all(locs.map(L => fetchLocationRows(L.tenant, L.locationId, year)));
-  /* cache tagged rows for the activity feed — attach center + tenant info */
   { const tagged = [];
     for (let li=0; li<locs.length; li++){
       for (const o of locRowsList[li]) tagged.push({ ...o, _center: locs[li].center, _tenant: locs[li].tenant });
@@ -1628,21 +1245,14 @@ async function fetchActuals(year){
   }
   const newlyAdded = [];
   for (const [name, monthly] of unmatchedAmounts.entries()){
-    if (isHouseAccount(name)) continue; // house/default accounts aren't real salespeople
+    if (isHouseAccount(name)) continue;
     const confirmedActive = activeNames.has(normName(name));
-    if (!confirmedActive){
-      if (activeNames.size===0) console.warn('[dashboard] Could not confirm active roster from CoreBridge — skipping auto-add of "'+name+'" until roster is available.');
-      continue; // only add salespeople CoreBridge positively confirms are active — never guess
-    }
+    if (!confirmedActive){ continue; }
     if (registerNewRep(name, unmatchedEmails.get(name))){
       byRep[name] = monthly;
       newlyAdded.push(name);
       unmatchedReps.delete(name);
     }
-  }
-  if (unmatchedReps.size){
-    console.warn('[dashboard] Salesperson names from CoreBridge that do NOT match the REPS roster (their sales are being skipped):',
-      Array.from(unmatchedReps.entries()).map(([name,count])=>`"${name}" (${count} orders)`));
   }
   return { byLoc, byRep, est, daily, unmatchedReps, newlyAdded, removedInactive, pipeline };
 }
@@ -1673,22 +1283,21 @@ async function loadLiveData(){
     const probe = await discoverLocations();
     if (!probe || !probe.length){
       setBanner('error','Connected, but no matching locations returned. Check center-name matching / API keys.');
-      console.warn('[dashboard] GetLocations returned no matches for', LOCATIONS); return;
+      return;
     }
-    console.log('[dashboard] locations discovered:', probe);
   } catch (err){
     const hint = /Failed to fetch|NetworkError|CORS/i.test(err.message)
-      ? 'CORS/preflight is blocking the browser call. Run Chrome with web security disabled for internal use, or use the Apps Script proxy.'
+      ? 'CORS/preflight is blocking the browser call.'
       : 'Check API keys / tenant URLs.';
     setBanner('error','Cannot reach CoreBridge: ' + err.message + ' — ' + hint);
-    console.error('[dashboard] connectivity probe failed:', err); return;
+    return;
   }
   try {
     const { byLoc, byRep, est, daily, unmatchedReps, newlyAdded, removedInactive, pipeline } = await fetchActuals(DATA_YEAR);
     const grandTotal = LOCATIONS.reduce((s,loc)=> s + (byLoc[loc]||[]).reduce((a,b)=>a+(b||0),0), 0);
     if (grandTotal <= 0){
-      setBanner('error','Live fetch returned no sales — keeping saved data. Check console / status filter.');
-      console.warn('[dashboard] fetchActuals returned zero total; saved data retained.'); return;
+      setBanner('error','Live fetch returned no sales — keeping saved data.');
+      return;
     }
     window._estData = est;
     window._liveDaily = { centers: daily };
@@ -1696,20 +1305,9 @@ async function loadLiveData(){
     window._pipelineData = pipeline;
     mergeMonthly(byLoc); mergeSalespeople(byRep); saveState();
     renderAll(); renderDailyMatrix(); renderPipelineSnapshot(); renderActivityFeed();
-    if (removedInactive && removedInactive.length){
-      console.info('[dashboard] Removed inactive salespeople per CoreBridge roster:', removedInactive);
-    }
-    if (newlyAdded && newlyAdded.length){
-      console.info('[dashboard] Auto-added new salespeople from CoreBridge:', newlyAdded);
-      setBanner('ok','Live data loaded · ' + new Date().toLocaleTimeString());
-    } else if (unmatchedReps && unmatchedReps.size){
-      setBanner('error', unmatchedReps.size + ' unmatched salesperson name(s)', Array.from(unmatchedReps.keys()).join(', ') + ' — don\'t match the roster, see console.');
-    } else {
-      setBanner('ok','Live data loaded · ' + new Date().toLocaleTimeString());
-    }
+    setBanner('ok','Live data loaded · ' + new Date().toLocaleTimeString());
   } catch (err){
     setBanner('error','Live load failed (' + err.message + ') — showing saved data.');
-    console.error('[dashboard] fetchActuals failed:', err);
   }
 }
 function setBanner(kind,msg,fullMsg){
@@ -1726,6 +1324,17 @@ function fmtFull(v){ if(v==null||isNaN(v)) v=0; const n=Math.round(v); return (n
 function pct(a,g){ if(!g||g===0) return 0; return Math.round((a/g)*100); }
 function pctClass(p){ if(p>=100) return 'delta-pos'; if(p>=80) return 'delta-warn'; return 'delta-neg'; }
 function locClass(loc){ return 'loc-'+loc.toLowerCase().replace(/\s/g,'-'); }
+
+/* ============ ENTITY BADGE HELPER ============
+   Stan's request: breakdown headings use a filled badge button in the
+   entity's color instead of just a dot + colored text.
+   entityBadgeHTML(name, color) → HTML string for the badge
+   entityBadgeHTML(name, color, true) → outlined variant (for Company/Team totals)
+   ============================================ */
+function entityBadgeHTML(name, color, outlined){
+  const cls = outlined ? 'entity-badge outlined' : 'entity-badge';
+  return `<span class="${cls}" style="--badge-color:${color}"><span class="badge-dot"></span>${name}</span>`;
+}
 
 /* ============ EDITABLE CELL WIRING ============ */
 function makeEditable(cell, getVal, setVal){
@@ -1800,13 +1409,16 @@ function buildGoalMatrix(cfg){
     const sales=actualAt(k,m), goal=goalAt(k,m);
     const delta=sales-goal, p=pct(sales,goal);
     const isTot=k==='__TOTAL__';
+    const isRep=cfg.dataType==='rep' && !isTot;
+    const isLoc=cfg.dataType==='loc' && !isTot;
+    const repAttr=isRep?` data-rep="${k}"`:isLoc?` data-center="${k}"` :'';
     const clsBase=isTot?'mx-company-cell':('mx '+(cfg.dataType==='loc'?locClass(k):'rep-tint'));
     const canEdit=cfg.editable && !isTot && !isTotalRow;
     const salesCell=`<span title="${fmtFull(sales)}">${fmt(sales)}</span>`;
     const goalCell=canEdit?`<span class="goal-input" data-type="${cfg.dataType}" data-key="${k}" data-month="${m}" title="${fmtFull(goal)}">${fmt(goal)}</span>`:`<span title="${fmtFull(goal)}">${fmt(goal)}</span>`;
-    return `<td class="${clsBase} mx-edge">${salesCell}</td><td class="${clsBase}">${goalCell}</td>
-      <td class="${clsBase} ${delta>=0?'delta-pos':'delta-neg'}" title="${fmtFull(delta)}">${delta>=0?'+':''}${fmt(delta)}</td>
-      <td class="${clsBase} ${pctClass(p)}">${p}%</td>`;
+    return `<td class="${clsBase} mx-edge"${repAttr}>${salesCell}</td><td class="${clsBase}"${repAttr}>${goalCell}</td>
+      <td class="${clsBase} ${delta>=0?'delta-pos':'delta-neg'}"${repAttr} title="${fmtFull(delta)}">${delta>=0?'+':''}${fmt(delta)}</td>
+      <td class="${clsBase} ${pctClass(p)}"${repAttr}>${p}%</td>`;
   }
   let body='';
   for (let m=0;m<12;m++){ body+=`<tr><td class="month-col mx-sticky">${MONTHS[m]}</td>`; cols.forEach(k=>{ body+=cellsFor(k,m,false); }); body+=`</tr>`; }
@@ -1815,13 +1427,16 @@ function buildGoalMatrix(cfg){
     let s=0,g=0; for(let m=0;m<12;m++){ s+=actualAt(k,m); g+=goalAt(k,m); }
     const delta=s-g, p=pct(s,g);
     const isTot=k==='__TOTAL__';
+    const isRep=cfg.dataType==='rep' && !isTot;
+    const isLoc=cfg.dataType==='loc' && !isTot;
+    const repAttr=isRep?` data-rep="${k}"`:isLoc?` data-center="${k}"` :'';
     const clsBase=isTot?'mx-company-cell':('mx '+(cfg.dataType==='loc'?locClass(k):'rep-tint'));
-    body+=`<td class="${clsBase} mx-edge" title="${fmtFull(s)}">${fmt(s)}</td><td class="${clsBase}" title="${fmtFull(g)}">${fmt(g)}</td>
-      <td class="${clsBase} ${delta>=0?'delta-pos':'delta-neg'}" title="${fmtFull(delta)}">${delta>=0?'+':''}${fmt(delta)}</td>
-      <td class="${clsBase} ${pctClass(p)}">${p}%</td>`;
+    body+=`<td class="${clsBase} mx-edge"${repAttr} title="${fmtFull(s)}">${fmt(s)}</td><td class="${clsBase}"${repAttr} title="${fmtFull(g)}">${fmt(g)}</td>
+      <td class="${clsBase} ${delta>=0?'delta-pos':'delta-neg'}"${repAttr} title="${fmtFull(delta)}">${delta>=0?'+':''}${fmt(delta)}</td>
+      <td class="${clsBase} ${pctClass(p)}"${repAttr}>${p}%</td>`;
   });
   body+=`</tr>`;
-  card.innerHTML=`<h3><span class="dot" style="background:${cfg.dotColor||INK}"></span>${cfg.title}</h3>
+  card.innerHTML=`<h3>${entityBadgeHTML(cfg.title, cfg.dotColor||INK, true)}</h3>
     <div class="table-wrapper matrix-scroll"><table class="matrix-table"><thead>${head}</thead><tbody>${body}</tbody></table></div>`;
   return card;
 }
@@ -1842,22 +1457,30 @@ function buildSwitcher(hostId, options, current, colorOf, onPick){
     host.appendChild(btn);
   });
 }
+
+/* buildSingleTable — uses entity badge on h3 */
 function buildSingleTable(cfg){
   const card=document.createElement('div'); card.className='card';
   const bg=cfg.color;
-  let html=`<h3><span class="dot" style="background:${bg}"></span>${cfg.title}</h3><div class="table-wrapper"><table><thead>
+  /* badge: outlined for Company/Team totals (no key), filled for individual entities */
+  const isTotal = !cfg.key;
+  const badgeHtml = entityBadgeHTML(cfg.title, bg, isTotal);
+  const isRep = cfg.dataType==='rep' && cfg.key;
+  const isLoc = cfg.dataType==='loc' && cfg.key;
+  const dataAttr = isRep ? ` data-rep="${cfg.key}"` : isLoc ? ` data-center="${cfg.key}"` : '';
+  let html=`<h3>${badgeHtml}</h3><div class="table-wrapper"><table><thead>
     <tr><th class="month-col">Month</th><th>Sales</th><th>Goal</th><th>Delta</th><th>%</th></tr></thead><tbody>`;
   for (let m=0;m<12;m++){
     const sales=cfg.getActual(m), goal=cfg.getGoal(m);
     const delta=sales-goal, p=pct(sales,goal);
     const salesCell=`<span title="${fmtFull(sales)}">${fmt(sales)}</span>`;
     const goalCell=cfg.editable?`<span class="goal-input" data-type="${cfg.dataType}" data-key="${cfg.key}" data-month="${m}" title="${fmtFull(goal)}">${fmt(goal)}</span>`:`<span title="${fmtFull(goal)}">${fmt(goal)}</span>`;
-    html+=`<tr><td class="month-col">${MONTHS[m]}</td><td>${salesCell}</td><td>${goalCell}</td>
+    html+=`<tr${dataAttr}><td class="month-col">${MONTHS[m]}</td><td>${salesCell}</td><td>${goalCell}</td>
       <td class="${delta>=0?'delta-pos':'delta-neg'}" title="${fmtFull(delta)}">${delta>=0?'+':''}${fmt(delta)}</td><td class="${pctClass(p)}">${p}%</td></tr>`;
   }
   let sA=0,sG=0; for(let m=0;m<12;m++){ sA+=cfg.getActual(m); sG+=cfg.getGoal(m); }
   const dT=sA-sG, pT=pct(sA,sG);
-  html+=`<tr class="matrix-total"><td class="month-col">Total</td><td title="${fmtFull(sA)}">${fmt(sA)}</td><td title="${fmtFull(sG)}">${fmt(sG)}</td>
+  html+=`<tr class="matrix-total"${dataAttr}><td class="month-col">Total</td><td title="${fmtFull(sA)}">${fmt(sA)}</td><td title="${fmtFull(sG)}">${fmt(sG)}</td>
     <td class="${dT>=0?'delta-pos':'delta-neg'}" title="${fmtFull(dT)}">${dT>=0?'+':''}${fmt(dT)}</td><td class="${pctClass(pT)}">${pT}%</td></tr>`;
   html+='</tbody></table></div>';
   card.innerHTML=html;
@@ -1865,20 +1488,15 @@ function buildSingleTable(cfg){
 }
 
 /* ================================================================
-   ============ PIPELINE SNAPSHOT — nested arcs from ONE origin ============
-   Each ring's LABEL and the card show that stage ALONE — how much money
-   is sitting in Estimate, WIP, Built, Completed, Closed right now.
-   The ring sizes stack cumulatively so they nest visually, but every
-   number on screen is stage-alone, straight from CoreBridge.
+   ============ PIPELINE SNAPSHOT ============
    ================================================================ */
 const PIPELINE_STAGES_ORDER = ['ESTIMATE','WIP','BUILT','COMPLETED','CLOSED','CANCELLED','VOIDED'];
-/* Diverse colors — one distinct FASTSIGNS brand hue per stage */
 const PIPELINE_COLORS = {
-  ESTIMATE:'#9a938c',   /* neutral — quotes, not yet won (hatched) */
-  WIP:'#0066B3',        /* FASTSIGNS Blue */
-  BUILT:'#C38600',      /* Gold */
-  COMPLETED:'#52247F',  /* Purple */
-  CLOSED:'#00853F',     /* Green — fully done */
+  ESTIMATE:'#9a938c',
+  WIP:'#004990',        /* updated: Long Beach Blue */
+  BUILT:'#C38600',
+  COMPLETED:'#52247F',
+  CLOSED:'#00853F',
   CANCELLED:'#DA2128', VOIDED:'#8f8b88'
 };
 const PIPELINE_LABELS = {
@@ -1914,7 +1532,6 @@ function renderPipelineSnapshot(){
     for (const s of PIPELINE_STAGES_ORDER){ agg[s] = data[pipelineView][s]; }
   }
 
-  /* ring sizes stack cumulatively so the arcs nest — labels stay stage-alone */
   const estVal = agg.ESTIMATE.amount;
   const wipVal = estVal + agg.WIP.amount;
   const builtVal = wipVal + agg.BUILT.amount;
@@ -1935,7 +1552,6 @@ function renderPipelineSnapshot(){
   radii.COMPLETED = Math.max(radii.BUILT+GAP,     completedVal*scale);
   radii.CLOSED    = Math.max(radii.COMPLETED+GAP, closedVal*scale);
 
-  /* gradients + hatch */
   let defs='<pattern id="ps-hatch" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">'+
     '<rect width="7" height="7" fill="#eceae7"/><line x1="0" y1="0" x2="0" y2="7" stroke="#b7b3ae" stroke-width="1.4"/></pattern>';
   for (const key of ['WIP','BUILT','COMPLETED','CLOSED']){
@@ -1948,7 +1564,6 @@ function renderPipelineSnapshot(){
     </radialGradient>`;
   }
 
-  /* detailed tooltip text — served through the site-wide elegant custom tooltip */
   function stageTitle(key){
     const own=agg[key].amount, cnt=agg[key].count;
     const share = activeTotal>0 ? Math.round(own/activeTotal*100) : 0;
@@ -1961,7 +1576,6 @@ function renderPipelineSnapshot(){
       `${PIPELINE_DESC[key]} — live from CoreBridge`;
   }
 
-  /* arcs — largest first so smaller sit on top, ALL from the same origin */
   const drawOrder=['CLOSED','COMPLETED','BUILT','WIP','ESTIMATE'];
   let arcs='';
   for (const key of drawOrder){
@@ -1973,7 +1587,6 @@ function renderPipelineSnapshot(){
     }
   }
 
-  /* labels — pulled away in a quiet left column, linked by leader lines to a dot on each arc */
   const anchorAngle=58*Math.PI/180;
   const labelX=46;
   const topY=52, slotGap=56;
@@ -2007,7 +1620,6 @@ function renderPipelineSnapshot(){
       <text x="${Math.min(W-16, originX+2*radii.CLOSED+16)}" y="${originY+24}" text-anchor="end" font-family="Lato, sans-serif" font-size="11" fill="rgba(28,35,51,0.55)">Today · ${NOW.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</text>
     </svg>`;
 
-  /* floating stage card — right side, on top of the chart, stage-alone values matching the labels */
   const rowsHtml = ['ESTIMATE','WIP','BUILT','COMPLETED','CLOSED'].map(k=>`
     <div class="ps-row2" title="${stageTitle(k)}">
       <span class="nm"><span class="sw" style="background:${PIPELINE_COLORS[k]}"></span>${PIPELINE_LABELS[k]}</span>
@@ -2027,6 +1639,7 @@ function renderPipelineSnapshot(){
     `<div class="ps-caption">${pipelineView} · each ring shows the money sitting in that stage right now · ${activeOrders.toLocaleString()} active orders · ${fmt(activeTotal)} total — Cancelled &amp; Voided excluded</div>`;
   host.appendChild(wrap);
 }
+
 function renderCentersMatrix(){
   const host=document.getElementById('all-centers-matrix'); if(!host) return;
   host.innerHTML='';
@@ -2095,12 +1708,11 @@ function wireMatrixEditables(host){
   });
 }
 
-/* ============ YEAR-TO-DATE OVERVIEW — big rings around the numbers + Company Total feature ============ */
+/* ============ YEAR-TO-DATE OVERVIEW ============ */
 function renderAllCentersOverview(){
   const host=document.getElementById('all-centers-overview'); host.innerHTML='';
   const totals={}; for (const loc of LOCATIONS) totals[loc]=annualLoc(loc);
 
-  /* --- Company Total: the light, elegant feature beside the section title --- */
   const feature=document.getElementById('company-feature');
   let ca=0,cg=0; for(const loc of LOCATIONS){ ca+=totals[loc].actual; cg+=totals[loc].goal; }
   const cp=pct(ca,cg);
@@ -2119,7 +1731,7 @@ function renderAllCentersOverview(){
         <div class="big">${fmtFull(ca)}</div>
         <div class="det"><b>${fmt(cg)}</b> annual goal · <b>${fmt(Math.max(0,cg-ca))}</b> remaining<br>${DAYS_ELAPSED} days in · ${YEAR_PCT}% of the year gone</div>
       </div>`;
-    feature.title = `Company Total — all 5 centers\n${fmtFull(ca)} posted year-to-date\nAnnual goal ${fmtFull(cg)} · ${cp}% of target\nRemaining ${fmtFull(Math.max(0,cg-ca))}\nPer-day run rate ${fmtFull(ca/DAYS_ELAPSED)} / day\nPeriod ${DATE_RANGE_TXT} · ${DAYS_ELAPSED} days · ${YEAR_PCT}% of year\nA sale is any order at WIP or later (by dateConverted); Cancelled and Voided excluded`;
+    feature.title = `Company Total — all 5 centers\n${fmtFull(ca)} posted year-to-date\nAnnual goal ${fmtFull(cg)} · ${cp}% of target\nRemaining ${fmtFull(Math.max(0,cg-ca))}\nPer-day run rate ${fmtFull(ca/DAYS_ELAPSED)} / day\nPeriod ${DATE_RANGE_TXT} · ${DAYS_ELAPSED} days · ${YEAR_PCT}% of year`;
     feature.style.display='flex';
     requestAnimationFrame(()=>{
       const fil=feature.querySelector('.fil');
@@ -2127,7 +1739,6 @@ function renderAllCentersOverview(){
     });
   }
 
-  /* --- center cards: big ring wrapped around the number, details below --- */
   const grid=document.createElement('div'); grid.className='overview-grid'; host.appendChild(grid);
   const sorted=LOCATIONS.slice().sort((a,b)=>totals[b].actual-totals[a].actual);
   const ringTargets=[];
@@ -2138,7 +1749,7 @@ function renderAllCentersOverview(){
     const onPace = percent>=YEAR_PCT;
     const uid='ring-'+loc.replace(/\s+/g,'');
     const card=document.createElement('div'); card.className='ov-card';
-    card.title = `${loc} — Year to Date\n${fmtFull(actual)} posted so far this year\nAnnual goal ${fmtFull(goal)} · ${percent}% of target\nRemaining ${fmtFull(rem)}\nPer-day run rate ${fmtFull(actual/DAYS_ELAPSED)} / day\nPeriod ${DATE_RANGE_TXT} · ${DAYS_ELAPSED} days\n${onPace?'Ahead of':'Behind'} the ${YEAR_PCT}% year mark — live from CoreBridge`;
+    card.title = `${loc} — Year to Date\n${fmtFull(actual)} posted so far this year\nAnnual goal ${fmtFull(goal)} · ${percent}% of target\nRemaining ${fmtFull(rem)}\n${onPace?'Ahead of':'Behind'} the ${YEAR_PCT}% year mark`;
     card.innerHTML=`
       <h4><span class="mk" style="background:${color}"></span>${loc}</h4>
       <div class="big-ring">
@@ -2161,7 +1772,6 @@ function renderAllCentersOverview(){
   const note=document.createElement('p'); note.className='overview-note';
   note.textContent = `"Sales" above is the total posted so far this year (${DATA_YEAR}); "Goal" is the full ${DATA_YEAR} annual target for all 12 months — so these percentages climb as the year goes on and only reach 100% once December's numbers are in.`;
   host.appendChild(note);
-  // animate rings filling in after paint
   requestAnimationFrame(()=>{
     for (const {uid,percent} of ringTargets){
       const el = grid.querySelector(`.fil[data-uid="${uid}"]`); if (!el) continue;
@@ -2225,7 +1835,7 @@ function renderDailyMatrix(){
     body+=`</tr>`;
   }
   const card=document.createElement('div'); card.className='card matrix-card';
-  card.innerHTML=`<h3><span class="dot" style="background:${INK}"></span>Daily Sales · Today vs This Month vs Last Month
+  card.innerHTML=`<h3>${entityBadgeHTML('Daily Sales · Today vs This Month vs Last Month', INK, true)}
     <span class="tag ${isLive?'live':''}">${isLive?'Live CoreBridge':'Sample data'}</span></h3>
     <div class="table-wrapper matrix-scroll"><table class="matrix-table"><thead>${head}</thead><tbody>${body}</tbody></table></div>`;
   host.appendChild(card);
@@ -2256,7 +1866,8 @@ function renderGoalBreakdown(){
       return { loc, rem, conv:b.conv, avgOrder:b.avgOrder, ordersNeeded, estNeeded };
     });
     const bg=isCo?INK:LOC_COLORS[key];
-    let html=`<div class="card"><h3><span class="dot" style="background:${bg}"></span>${key} · What It Takes</h3><div class="table-wrapper"><table><thead>
+    const badgeHtml = entityBadgeHTML(key + ' · What It Takes', bg, isCo);
+    let html=`<div class="card"><h3>${badgeHtml}</h3><div class="table-wrapper"><table><thead>
       <tr><th class="month-col">${isCo?'Center':'Metric'}</th><th>Remaining Goal</th><th>90-Day Conv.</th><th>Avg Order</th><th># Orders Needed</th><th># Estimates Needed</th></tr></thead><tbody>`;
     for (const r of rows){
       const convCell=isCo?`${r.conv}%`:`<span class="conv-input goal-input" data-loc="${r.loc}">${r.conv}%</span>`;
@@ -2288,13 +1899,7 @@ function renderGoalBreakdown(){
 }
 
 /* ================================================================
-   ============ UNIFIED CHART SYSTEM — one style, everywhere ============
-   Every bar chart routes through drawBars(). Identical:
-     · corner radius (BAR_RX = 4)
-     · bar width (thin, via BAND_INNER = 0.55 inner padding)
-     · gradient-filled Actual + dashed-outline Goal
-     · axis / gridline / label styling / typography
-   Change these constants once → every chart changes together.
+   ============ UNIFIED CHART SYSTEM ============
    ================================================================ */
 function lightenColor(hex, amt){
   const h = hex.replace('#','');
@@ -2303,9 +1908,9 @@ function lightenColor(hex, amt){
   return `rgb(${mix(r)},${mix(g)},${mix(b)})`;
 }
 const CHART = {
-  BAR_RX: 4,          // rounded corners — same on all bars
-  BAND_INNER: 0.55,   // slot padding between groups: slender bars with air
-  BAR_PAD: 0.34,      // padding between the two bars (actual/goal) in a slot
+  BAR_RX: 4,
+  BAND_INNER: 0.55,
+  BAR_PAD: 0.34,
   W: 1280, H: 440,
   M: { top: 30, right: 20, bottom: 56, left: 76 },
   FONT: "'Lato', system-ui, sans-serif",
@@ -2313,17 +1918,19 @@ const CHART = {
   LABEL_HI: '11px', LABEL_LO: '10px', VAL: '10px', VAL_LO: '9px'
 };
 
-function chartShell(hostId, title, dotColor, tagHtml){
+/* chart shell — badge on chart h3 headings */
+function chartShell(hostId, title, color, tagHtml){
   const host=document.getElementById(hostId); if(!host) return null;
   host.innerHTML='';
   const card=document.createElement('div'); card.className='chart-container';
-  const dot = dotColor ? `<span class="dot" style="background:${dotColor}"></span>` : '';
-  card.innerHTML=`<h3>${dot}${title}${tagHtml?`<span class="tag">${tagHtml}</span>`:''}</h3><div class="chart-wrap"></div>`;
+  /* use outlined badge for "Company" / multi-entity charts, filled for single entity */
+  const isMulti = !color || color === INK;
+  const badgeHtml = entityBadgeHTML(title, color || INK, isMulti);
+  card.innerHTML=`<h3>${badgeHtml}${tagHtml?`<span class="tag">${tagHtml}</span>`:''}</h3><div class="chart-wrap"></div>`;
   host.appendChild(card);
   return { card, wrap: card.querySelector('.chart-wrap') };
 }
 
-/* capsule/pill bar path — rounded top AND bottom, like the reference dashboard cards */
 function barPath(x,y,w,h,r){
   if (h<=0) h = 0.0001;
   const rad = Math.min(w/2, h/2);
@@ -2339,10 +1946,6 @@ function barPath(x,y,w,h,r){
     Z`;
 }
 
-/* THE one chart primitive. groups = [{label, actual, goal, color}] */
-/* ============ SCROLL-GATE: run a chart's animation when it scrolls into view ============ */
-/* Charts further down the page would otherwise finish animating before you
-   reach them. This defers the growth animation until the chart is visible. */
 const _chartVisObserver = ('IntersectionObserver' in window)
   ? new IntersectionObserver((entries, obs)=>{
       for (const e of entries){
@@ -2360,9 +1963,6 @@ const _chartVisObserver = ('IntersectionObserver' in window)
 function whenVisible(el, fn){
   const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReduced || !_chartVisObserver){ fn(); return; }
-  // if already on screen at call time, run now; else queue it — an element can
-  // have MULTIPLE pending callbacks (e.g. actual-bar AND goal-bar animations
-  // on the same chart wrap), so we push onto an array instead of overwriting.
   const r = el.getBoundingClientRect();
   if (r.top < (window.innerHeight||0) * 0.9 && r.bottom > 0){ fn(); return; }
   if (!el._onVisibleFns) el._onVisibleFns = [];
@@ -2376,7 +1976,7 @@ function drawBars(wrap, groups, opts){
   const yFmt = opts.yFmt || (v=>fmt(v));
   const valFmt = opts.valFmt || (v=>fmt(v));
   const rotate = !!opts.rotateX;
-  const singleMetric = opts.singleMetric || null; // 'actual' | 'goal' | null(both)
+  const singleMetric = opts.singleMetric || null;
 
   const M = Object.assign({}, CHART.M, opts.margin||{});
   const width = (opts.width||CHART.W) - M.left - M.right;
@@ -2406,16 +2006,13 @@ function drawBars(wrap, groups, opts){
   const maxV = d3.max(groups, g=>Math.max(g.actual||0, g.goal||0)) || 1;
   const y = d3.scaleLinear().domain([0, maxV*1.16]).range([height,0]).nice();
 
-  // gridlines (behind)
   gEl.append('g').call(d3.axisLeft(y).ticks(6).tickSize(-width).tickFormat(''))
     .call(s=>s.select('.domain').remove())
     .call(s=>s.selectAll('line').attr('stroke',CHART.GRID).attr('stroke-dasharray','2,4'));
-  // y axis
   gEl.append('g').call(d3.axisLeft(y).ticks(6).tickFormat(yFmt))
     .call(s=>s.select('.domain').remove())
     .call(s=>s.selectAll('line').remove())
     .call(s=>s.selectAll('text').attr('fill',CHART.AXIS).attr('font-size',CHART.LABEL_LO).attr('font-weight','500'));
-  // y axis label
   if (opts.yLabel){
     gEl.append('text').attr('transform','rotate(-90)').attr('x',-height/2).attr('y',-58)
       .attr('text-anchor','middle').attr('fill','#1C2333')
@@ -2427,7 +2024,6 @@ function drawBars(wrap, groups, opts){
     .attr('class','grp')
     .attr('transform',g=>`translate(${x0(g.label)},0)`);
 
-  // Actual — gradient bar, rounded top
   if (subKeys.includes('actual')){
     const actualBars = grp.append('path').attr('class','bar-actual')
       .attr('d', g=>barPath(x1('actual'), height, x1.bandwidth(), 0, 0))
@@ -2441,7 +2037,7 @@ function drawBars(wrap, groups, opts){
         .attr('height', 20).attr('rx', 6).attr('fill', `url(#${hoverGradId})`).attr('opacity', 0);
       valActual = grp.append('text').attr('class','val-actual')
         .attr('x', x1('actual')+x1.bandwidth()/2).attr('y', g=>y(g.actual||0)-6)
-        .attr('text-anchor','middle').attr('font-size',singleMetric?CHART.VAL:CHART.VAL)
+        .attr('text-anchor','middle').attr('font-size',CHART.VAL)
         .attr('font-weight','700').attr('fill', g=>g.color).attr('opacity',0)
         .text(g=>g.actual?valFmt(g.actual):'');
     }
@@ -2451,11 +2047,10 @@ function drawBars(wrap, groups, opts){
       if (valActual) valActual.transition().duration(400).delay((g,i)=>i*35+500).attr('opacity',1);
     });
   }
-  // Goal — dashed outline, rounded top (same radius)
   if (subKeys.includes('goal')){
     const goalBars = grp.append('path').attr('class','bar-goal')
       .attr('d', g=>barPath(x1('goal'), height, x1.bandwidth(), 0, 0))
-      .attr('fill', singleMetric?'goal':'none').attr('fill', g=> singleMetric==='goal'?g.color:'none')
+      .attr('fill', g=> singleMetric==='goal'?g.color:'none')
       .attr('stroke', g=>g.color).attr('stroke-width',1.6)
       .attr('stroke-dasharray','3,3').attr('opacity', 0);
     goalBars.append('title').text(g=>`${g.label} · Goal\n${fmtFull(g.goal||0)}`);
@@ -2479,14 +2074,12 @@ function drawBars(wrap, groups, opts){
     });
   }
 
-  // x axis
   const xAxis = gEl.append('g').attr('transform',`translate(0,${height})`).call(d3.axisBottom(x0).tickSize(0).tickPadding(16))
     .call(s=>s.select('.domain').remove());
-  const xt = xAxis.selectAll('text').attr('fill','var(--ink,#1C2333)').attr('fill','#1C2333')
+  const xt = xAxis.selectAll('text').attr('fill','#1C2333')
     .attr('font-weight','600').attr('font-size', CHART.LABEL_HI).style('font-family','var(--serif)');
   if (rotate) xt.attr('transform','rotate(-20)').attr('text-anchor','end').attr('dy','0.7em');
 
-  // legend (Actual solid / Goal dashed) — only when showing both
   if (!singleMetric && opts.legend !== false){
     const lg = svg.append('g').attr('transform',`translate(${M.left},10)`);
     lg.append('rect').attr('width',11).attr('height',11).attr('rx',2).attr('fill', INK).attr('opacity',0.85);
@@ -2497,42 +2090,37 @@ function drawBars(wrap, groups, opts){
   return { svg, gEl, x0, x1, y, width, height };
 }
 
-/* ---- YTD sums ---- */
 function ytdActualGoal(getActual, getGoal, keys){
   const out={};
   for (const k of keys){ let a=0,g=0; for(let m=0;m<12;m++){ const av=getActual(k,m)||0; a+=av; if(av>0) g+=getGoal(k,m)||0; } out[k]={actual:a,goal:g}; }
   return out;
 }
 
-/* ---- YTD grouped bars, by entity ---- */
 function drawYTDByEntity(hostId, title, keys, colorOf, data, dotColor){
   const shell=chartShell(hostId, title, dotColor); if(!shell) return;
   const groups=keys.map(k=>({ label:k, actual:data[k].actual, goal:data[k].goal, color:colorOf(k) }));
   drawBars(shell.wrap, groups, { uid:hostId.replace(/[^a-z0-9]/gi,''), yLabel:'SALES ($)', rotateX:true, width:Math.max(CHART.W, keys.length*150) });
 }
 
-/* ---- Monthly two-bar for a single entity ---- */
 function drawEntityMonthly(hostId, title, color, getA, getG){
   const shell=chartShell(hostId, title, color); if(!shell) return;
   const groups=MONTHS_SHORT.map((mn,i)=>({ label:mn, actual:getA(i)||0, goal:getG(i)||0, color }));
   drawBars(shell.wrap, groups, { uid:hostId.replace(/[^a-z0-9]/gi,''), yLabel:'SALES ($)', showValues:true });
 }
 
-/* ---- Company monthly ---- */
 function drawCompanyTrend(hostId){
   drawEntityMonthly(hostId, 'Company · Monthly Actual vs Goal', '#0066B3',
     m=>LOCATIONS.reduce((s,l)=>s+state.locActual[l][m],0),
     m=>LOCATIONS.reduce((s,l)=>s+(state.goals.locations[l][m]||0),0));
 }
 
-/* ---- Estimate funnel: New/Converted/Cancelled per month (unified styling) ---- */
 function drawEstimateChart(hostId){
   const host=document.getElementById(hostId); if(!host) return;
   host.innerHTML='';
   const est=window._estData;
   const card=document.createElement('div'); card.className='chart-container';
   if (!est){
-    card.innerHTML=`<h3><span class="dot" style="background:${INK}"></span>Estimate Breakdown</h3>
+    card.innerHTML=`<h3>${entityBadgeHTML('Estimate Breakdown', INK, true)}</h3>
       <p style="color:var(--t3);font-size:0.85rem;margin:0;">Loads once live CoreBridge data is fetched — new vs converted vs cancelled estimates per month.</p>`;
     host.appendChild(card); return;
   }
@@ -2541,13 +2129,12 @@ function drawEstimateChart(hostId){
     for(let m=0;m<12;m++){ newC[m]+=e.newCount[m]||0; conv[m]+=e.converted[m]||0; canc[m]+=e.cancelled[m]||0; } }
   const totNew=newC.reduce((a,b)=>a+b,0), totConv=conv.reduce((a,b)=>a+b,0);
   const convRate=(totNew+totConv)>0?Math.round(totConv/(totNew+totConv)*100):0;
-  card.innerHTML=`<h3><span class="dot" style="background:${INK}"></span>Estimate Breakdown · New vs Converted vs Cancelled
+  card.innerHTML=`<h3>${entityBadgeHTML('Estimate Breakdown · New vs Converted vs Cancelled', INK, true)}
     <span class="tag">Conversion ${convRate}%</span></h3><div class="chart-wrap"></div>`;
   host.appendChild(card);
   const wrap=card.querySelector('.chart-wrap');
 
-  // three thin bars per month, same rx/width/label system
-  const series=[{key:'new',label:'New',color:'#0066B3',data:newC},{key:'conv',label:'Converted',color:'#00853F',data:conv},{key:'canc',label:'Cancelled',color:'#DA2128',data:canc}];
+  const series=[{key:'new',label:'New',color:'#004990',data:newC},{key:'conv',label:'Converted',color:'#00853F',data:conv},{key:'canc',label:'Cancelled',color:'#DA2128',data:canc}];
   const M=Object.assign({},CHART.M,{bottom:52}), width=CHART.W-M.left-M.right, height=CHART.H-M.top-M.bottom;
   const svg=d3.select(wrap).append('svg').attr('viewBox',`0 0 ${width+M.left+M.right} ${height+M.top+M.bottom}`).attr('width','100%').style('font-family',CHART.FONT);
   const defs=svg.append('defs');
@@ -2595,7 +2182,7 @@ function drawEstimateChart(hostId){
   let lx=0; series.forEach(s=>{ lg.append('rect').attr('x',lx).attr('width',11).attr('height',11).attr('rx',2).attr('fill',s.color).attr('opacity',0.9); lg.append('text').attr('x',lx+16).attr('y',9.5).attr('font-size','9.5px').attr('font-weight','600').attr('fill',CHART.AXIS).text(s.label); lx+=16+s.label.length*6.5+16; });
 }
 
-/* ---- Per-rep monthly, with Both/Sales/Goal toggle + rep tabs ---- */
+/* ---- Per-rep monthly chart ---- */
 let repChartMetric='both', repChartRep=REPS[0];
 function drawRepMonthlyChart(){
   const host=document.getElementById('rep-monthly-chart'); if(!host) return;
@@ -2605,7 +2192,7 @@ function drawRepMonthlyChart(){
   const card=document.createElement('div'); card.className='chart-container';
   const controls=document.createElement('div');
   controls.style.cssText='display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:14px;';
-  controls.innerHTML=`<h3 style="margin:0;"><span class="dot" style="background:${color}"></span>Monthly Actual vs Goal · ${repChartRep}</h3>
+  controls.innerHTML=`<h3 style="margin:0;">${entityBadgeHTML('Monthly Actual vs Goal · ' + repChartRep, color)}</h3>
     <div class="mini-toggle" id="rep-metric-toggle">
       <button data-m="both" class="${repChartMetric==='both'?'active':''}">Both</button>
       <button data-m="actual" class="${repChartMetric==='actual'?'active':''}">Sales</button>
@@ -2633,7 +2220,7 @@ function drawRepMonthlyChart(){
   });
 }
 
-/* ---- All-reps breakdown for a chosen month ---- */
+/* ---- All-reps breakdown ---- */
 let breakdownMonth=new Date().getMonth();
 function drawRepBreakdownBars(wrap){
   const groups=REPS.map(rep=>({ label:rep, actual:state.repActual[rep][breakdownMonth], goal:state.goals.reps[rep][breakdownMonth]||0, color:REP_COLORS[rep]||INK }));
@@ -2641,13 +2228,11 @@ function drawRepBreakdownBars(wrap){
   drawBars(wrap, groups, { uid:'repbreakdown', yLabel:'SALES ($)', rotateX:true, showValues:true });
 }
 function slideMonthLabel(windowEl, dir){
-  // dir: +1 travelling forward (new enters from right), -1 back (enters from left)
   const outgoing = windowEl.querySelector('.mn-label');
   const incoming = document.createElement('div');
   incoming.className = 'mn-label ' + (dir>0 ? 'enter-right' : 'enter-left');
   incoming.innerHTML = `${MONTHS[breakdownMonth]}<span class="mn-year">${DATA_YEAR}</span>`;
   windowEl.appendChild(incoming);
-  // next frame: settle incoming in, sweep outgoing out the opposite side
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
     incoming.classList.remove('enter-right','enter-left');
     incoming.classList.add('settle');
@@ -2663,7 +2248,7 @@ function drawRepBreakdownChart(){
   const card=document.createElement('div'); card.className='chart-container';
   const controls=document.createElement('div');
   controls.style.cssText='display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:20px;';
-  controls.innerHTML=`<h3 style="margin:0;"><span class="dot" style="background:${INK}"></span>Salespeople Breakdown</h3>
+  controls.innerHTML=`<h3 style="margin:0;">${entityBadgeHTML('Salespeople Breakdown', INK, true)}</h3>
     <div class="month-nav">
       <button class="mn-arrow" id="bd-prev" aria-label="Previous month">&#8592;</button>
       <div class="mn-window" id="bd-window">
@@ -2696,13 +2281,13 @@ function drawRepBreakdownChart(){
   drawRepBreakdownBars(wrap);
 }
 
-/* ---- Big all-centers monthly (12 months × 5 centers) — same rx/width DNA ---- */
+/* ---- All-centers monthly mega ---- */
 function drawCentersMonthlyMega(hostId){
   const host=document.getElementById(hostId); if(!host) return;
   host.innerHTML='';
   const centers=[...DISTRICTS['South Bay'], ...DISTRICTS['Valley']];
   const card=document.createElement('div'); card.className='chart-container wide-frame';
-  card.innerHTML=`<h3><span class="dot" style="background:${INK}"></span>All Centers · Monthly Actual vs Goal · Full Year
+  card.innerHTML=`<h3>${entityBadgeHTML('All Centers · Monthly Actual vs Goal · Full Year', INK, true)}
     <span class="tag">Bar = Actual · Outline = Goal</span></h3><div class="chart-wrap-wide"></div>`;
   host.appendChild(card);
   const wrap=card.querySelector('.chart-wrap-wide');
@@ -2794,6 +2379,7 @@ function renderRepChart(){
     if(monthlyHost) monthlyHost.innerHTML=''; if(breakdownHost) breakdownHost.innerHTML='';
   }
 }
+
 /* ============ ACTIVITY FEED ============ */
 function renderActivityFeed(){
   const host = document.getElementById('activity-feed'); if (!host) return;
@@ -2806,8 +2392,6 @@ function renderActivityFeed(){
     host.innerHTML = `<p class="af-empty">No orders returned.</p>`;
     return;
   }
-
-  /* ---- helpers ---- */
   function fmtDate(d){ if(!d) return '—'; return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
   function eventLabel(o){
     const conv = cbDate(o.dateConverted||o.DateConverted);
@@ -2852,7 +2436,6 @@ function renderActivityFeed(){
     return `<span class="af-num">${num}</span>`;
   }
 
-  /* Sort by event date, most recent first */
   const sorted = rows.slice().sort((a,b)=>{
     const evA = eventLabel(a);
     const evB = eventLabel(b);
@@ -2862,15 +2445,8 @@ function renderActivityFeed(){
   });
 
   const thead = `<thead><tr>
-    <th>Event</th>
-    <th>Date</th>
-    <th>Order #</th>
-    <th>Company</th>
-    <th>Rep</th>
-    <th>Center</th>
-    <th>Status</th>
-    <th>Amount</th>
-    <th>Link</th>
+    <th>Event</th><th>Date</th><th>Order #</th><th>Company</th>
+    <th>Rep</th><th>Center</th><th>Status</th><th>Amount</th><th>Link</th>
   </tr></thead>`;
 
   const tbodyRows = sorted.map(o=>{
@@ -2896,7 +2472,6 @@ function renderActivityFeed(){
   host.innerHTML = `<table class="af-table">${thead}<tbody>${tbodyRows}</tbody></table>`;
 }
 
-
 function renderCharts(){
   renderCenterChart();
   drawCompanyTrend('company-trend-chart');
@@ -2914,7 +2489,8 @@ function renderAll(){
   renderCharts();
   refreshHeaderTicker();
 }
-/* ============ HEADER TICKER (Wall-Street style, 5 slides — one per center) ============ */
+
+/* ============ HEADER TICKER ============ */
 let _tickerMsgs = [], _tickerIdx = 0, _tickerTimer = null;
 function expectedPacePct(){
   const now = new Date();
@@ -2941,7 +2517,7 @@ function refreshHeaderTicker(){
   if (inner && _tickerMsgs.length){
     inner.innerHTML = _tickerMsgs[_tickerIdx].html;
     inner.classList.remove('flash-up','flash-down');
-    void inner.offsetWidth; // restart animation
+    void inner.offsetWidth;
     inner.classList.add(_tickerMsgs[_tickerIdx].trend==='up' ? 'flash-up' : 'flash-down');
   }
   if (!_tickerTimer && _tickerMsgs.length > 1){
@@ -2952,20 +2528,21 @@ function refreshHeaderTicker(){
         _tickerIdx = (_tickerIdx+1) % _tickerMsgs.length;
         inner.innerHTML = _tickerMsgs[_tickerIdx].html;
         inner.classList.remove('ht-swap','flash-up','flash-down');
-        void inner.offsetWidth; // restart animation
+        void inner.offsetWidth;
         inner.classList.add(_tickerMsgs[_tickerIdx].trend==='up' ? 'flash-up' : 'flash-down');
       }, 500);
     }, 4000);
   }
 }
+
 function init(){ renderAll(); renderPipelineSnapshot(); renderActivityFeed(); loadLiveData(); }
-/* ============ SOPHISTICATED CUSTOM TOOLTIPS ============ */
+
+/* ============ CUSTOM TOOLTIPS ============ */
 (function initCustomTooltips(){
   const tip = document.createElement('div');
   tip.className = 'custom-tooltip';
   document.body.appendChild(tip);
   let active = null;
-
   function findTitleSource(el){
     while (el && el.nodeType===1 && el !== document.body){
       if (el.hasAttribute && el.hasAttribute('title') && el.getAttribute('title')){
@@ -2983,7 +2560,7 @@ function init(){ renderAll(); renderPipelineSnapshot(); renderActivityFeed(); lo
     let y = e.clientY - r.height - gap;
     if (x < 8) x = 8;
     if (x + r.width > window.innerWidth-8) x = window.innerWidth - 8 - r.width;
-    if (y < 8) y = e.clientY + gap; // flip below cursor if no room above (tail styling still reads fine)
+    if (y < 8) y = e.clientY + gap;
     tip.style.left = x+'px'; tip.style.top = y+'px';
   }
   function restore(){
@@ -3013,9 +2590,7 @@ function init(){ renderAll(); renderPipelineSnapshot(); renderActivityFeed(); lo
   window.addEventListener('scroll', ()=>{ if(active){ restore(); tip.classList.remove('show'); } }, true);
 })();
 
-/* ============ ROLLS-ROYCE SCROLL REVEAL ============ */
-/* Reveals each section as it rises into view — the incoming panel lifts up
-   and covers the previous one, staged and slow. Once revealed, it stays. */
+/* ============ SCROLL REVEAL ============ */
 function initScrollReveal(){
   const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sections = document.querySelectorAll('.page .section');
@@ -3025,14 +2600,10 @@ function initScrollReveal(){
   }
   const io = new IntersectionObserver((entries)=>{
     for (const e of entries){
-      if (e.isIntersecting){
-        e.target.classList.add('revealed');
-        io.unobserve(e.target); // reveal once, then leave it be
-      }
+      if (e.isIntersecting){ e.target.classList.add('revealed'); io.unobserve(e.target); }
     }
   }, { threshold: 0.12, rootMargin: '0px 0px -12% 0px' });
   sections.forEach(s=>io.observe(s));
-  // the first section is likely already in view on load — reveal it immediately
   requestAnimationFrame(()=>{
     if (sections[0]){
       const r = sections[0].getBoundingClientRect();
