@@ -359,6 +359,29 @@
     .delta-neg { color: var(--neg); font-weight: 600; }
     .delta-warn { color: var(--warn); font-weight: 600; }
 
+    /* ============ DELTA STATUS PILL ============
+       Small translucent pill hugging just the Delta value — the
+       center/rep column's own background stays untouched. Uses the
+       same up/down palette as the header ticker (#4ade80 / #f87171).
+       Two classes give this (0,2,0) specificity, which beats the
+       td[data-center]/[data-rep] wildcard's (0,1,1) color:#fff rule
+       even without needing !important on its own — !important is
+       still added as a safety net since the wildcard rule uses it. */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px 11px;
+      border-radius: 100px;
+      font-family: var(--sans);
+      font-weight: 800;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .status-pill.stat-pos  { background: var(--pos); color: #fff !important; }
+    .status-pill.stat-neg  { background: var(--neg); color: #fff !important; }
+    .status-pill.stat-warn { background: var(--warn); color: #fff !important; }
+
     /* ===== MATRIX ===== */
     .matrix-scroll { overflow-x: auto; }
     .matrix-table { border-collapse: separate; border-spacing: 0; font-size: 0.78rem; min-width: 1080px; }
@@ -1323,6 +1346,7 @@ function fmt(v){ if(!v||isNaN(v)) return '$0'; const n=Math.abs(v); const sign=v
 function fmtFull(v){ if(v==null||isNaN(v)) v=0; const n=Math.round(v); return (n<0?'-':'')+'$'+Math.abs(n).toLocaleString('en-US'); }
 function pct(a,g){ if(!g||g===0) return 0; return Math.round((a/g)*100); }
 function pctClass(p){ if(p>=100) return 'delta-pos'; if(p>=80) return 'delta-warn'; return 'delta-neg'; }
+function statusPill(text,cls){ return `<span class="status-pill ${cls}">${text}</span>`; }
 function locClass(loc){ return 'loc-'+loc.toLowerCase().replace(/\s/g,'-'); }
 
 /* ============ ENTITY BADGE HELPER ============
@@ -1417,7 +1441,7 @@ function buildGoalMatrix(cfg){
     const salesCell=`<span title="${fmtFull(sales)}">${fmt(sales)}</span>`;
     const goalCell=canEdit?`<span class="goal-input" data-type="${cfg.dataType}" data-key="${k}" data-month="${m}" title="${fmtFull(goal)}">${fmt(goal)}</span>`:`<span title="${fmtFull(goal)}">${fmt(goal)}</span>`;
     return `<td class="${clsBase} mx-edge"${repAttr}>${salesCell}</td><td class="${clsBase}"${repAttr}>${goalCell}</td>
-      <td class="${clsBase} ${delta>=0?'delta-pos':'delta-neg'}"${repAttr} title="${fmtFull(delta)}">${delta>=0?'+':''}${fmt(delta)}</td>
+      <td class="${clsBase}"${repAttr} title="${fmtFull(delta)}">${statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg')}</td>
       <td class="${clsBase} ${pctClass(p)}"${repAttr}>${p}%</td>`;
   }
   let body='';
@@ -1432,7 +1456,7 @@ function buildGoalMatrix(cfg){
     const repAttr=isRep?` data-rep="${k}"`:isLoc?` data-center="${k}"` :'';
     const clsBase=isTot?'mx-company-cell':('mx '+(cfg.dataType==='loc'?locClass(k):'rep-tint'));
     body+=`<td class="${clsBase} mx-edge"${repAttr} title="${fmtFull(s)}">${fmt(s)}</td><td class="${clsBase}"${repAttr} title="${fmtFull(g)}">${fmt(g)}</td>
-      <td class="${clsBase} ${delta>=0?'delta-pos':'delta-neg'}"${repAttr} title="${fmtFull(delta)}">${delta>=0?'+':''}${fmt(delta)}</td>
+      <td class="${clsBase}"${repAttr} title="${fmtFull(delta)}">${statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg')}</td>
       <td class="${clsBase} ${pctClass(p)}"${repAttr}>${p}%</td>`;
   });
   body+=`</tr>`;
