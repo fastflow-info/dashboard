@@ -6,7 +6,7 @@
   <title>Sales Performance · FASTSIGNS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
@@ -44,11 +44,10 @@
       --shadow:  0 1px 2px rgba(28,35,51,0.04);
       --shadow-2: 0 8px 40px rgba(28,35,51,0.07);
 
-      --serif: 'Cormorant Garamond', Georgia, serif;
       --sans:  'Lato', system-ui, -apple-system, sans-serif;
       --radius: 3px;
 
-      --s1:6px; --s2:10px; --s3:16px; --s4:24px; --s5:36px; --s6:56px; --s7:88px; --s8:132px;
+      --s1:6px; --s2:10px; --s3:16px; --s4:24px; --s5:36px; --s6:56px; --s7:88px; --s8:83px;
     }
 
     html { scroll-behavior: smooth; overflow-x: hidden; }
@@ -95,7 +94,7 @@
     .header .header-logo img { height: 24px; width: auto; display: block; }
     .header .header-logo .logo-fallback {
       display: none;
-      font-family: var(--serif);
+      font-family: var(--sans);
       font-size: 1.1rem;
       font-weight: 600;
       letter-spacing: 0.14em;
@@ -105,7 +104,7 @@
     .header .header-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.18); flex: none; }
     .header-title { display: flex; flex-direction: column; gap: 2px; }
     .header h1 {
-      font-family: var(--serif);
+      font-family: var(--sans);
       font-size: 1.05rem;
       font-weight: 500;
       letter-spacing: 0.01em;
@@ -179,7 +178,7 @@
       pointer-events: none;
       display: flex;
     }
-    .header .header-motif svg { width: 210px; height: 210px; fill: #DA2128; opacity: 0.22; display: block; }
+    .header .header-motif svg { width: 230px; height: 203px; fill: #DA2128; opacity: 0.22; display: block; }
 
     #data-banner {
       font-size: 0.62rem;
@@ -224,7 +223,7 @@
       flex-wrap: wrap;
     }
     .section-head-flex .shf-left { flex: 1 1 420px; min-width: 0; }
-    .section-num { font-family: var(--serif); font-style: italic; font-size: 0.95rem; color: var(--champagne); margin-bottom: var(--s2); display: block; }
+    .section-num { font-family: var(--sans); font-style: italic; font-size: 0.95rem; color: var(--champagne); margin-bottom: var(--s2); display: block; }
     .section-eyebrow { font-size: 0.64rem; font-weight: 600; color: var(--ink); text-transform: uppercase; letter-spacing: 0; margin-bottom: var(--s3); }
     .section-title { font-family: var(--sans); font-size: clamp(1.8rem, 3.2vw, 2.6rem); font-weight: 400; letter-spacing: 0; color: var(--ink); line-height: 1.1; display: inline-flex; align-items: center; gap: 8px; border: 2.5px solid var(--ink); border-radius: 24px; padding: 12px 24px; background: transparent; }
     .section-title .title-main { font-weight: 900; font-family: var(--sans); }
@@ -298,7 +297,7 @@
       margin-bottom: var(--s4);
     }
     .card > h3 {
-      font-family: var(--serif);
+      font-family: var(--sans);
       font-size: 2rem;
       font-weight: 500;
       color: var(--ink);
@@ -352,7 +351,8 @@
       font-family: var(--sans);
       font-size: 0.82rem;
     }
-    tbody td.month-col { text-align: left; font-family: var(--serif); font-size: 1.02rem; font-weight: 600; color: var(--ink); letter-spacing: 0; }
+    tbody td.month-col { text-align: left; font-family: var(--sans); font-size: 1.02rem; font-weight: 600; color: var(--ink); letter-spacing: 0; }
+    tbody td.brk-name { text-align: left; font-family: var(--sans); font-size: 1.02rem; font-weight: 700; }
     tbody tr:hover td { background: var(--wash); transition: background 0.25s ease; }
 
     .delta-pos { color: var(--pos); font-weight: 600; }
@@ -399,7 +399,7 @@
     }
     .matrix-grouphead th.mx-group {
       text-align: center;
-      font-family: var(--serif);
+      font-family: var(--sans);
       font-size: 1.15rem;
       font-weight: 600;
       letter-spacing: 0;
@@ -409,6 +409,8 @@
       border-bottom: none;
     }
     .matrix-grouphead th.mx-company { color: var(--ink); border-bottom: none; }
+    .matrix-grouphead th.mx-group.mx-group-filled { background: var(--gc); color: #fff; }
+    .matrix-subhead th.mx-subhead-filled { background: var(--gc); color: rgba(255,255,255,0.85); }
     .matrix-subhead th {
       text-align: right;
       font-size: 0.56rem;
@@ -627,7 +629,7 @@
     .grp:hover .val-actual-bg { opacity: 1; transform: scale(1.55) translateY(-3px); }
     .grp:hover .val-goal-bg { opacity: 1; transform: scale(1.4) translateY(-3px); }
     .chart-container h3 {
-      font-family: var(--serif);
+      font-family: var(--sans);
       font-size: 2rem;
       font-weight: 500;
       color: var(--ink);
@@ -683,25 +685,45 @@
       .ps-panel, .ps-pill { flex: 1 1 180px; }
     }
 
-    /* ============ OVERVIEW / YTD CARDS ============ */
-    .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 64px 48px; padding: 48px 0; }
+    /* ============ COMPANY ANNUAL GOAL SNAPSHOT — per Stan's redesign ============
+       Blue banner header + district-grouped rings (South Bay / Valley /
+       Company Total), condensed spacing, darker/heavier detail text,
+       thicker ring strokes, blue outline around the whole card. */
+    .company-banner-card { border: 2px solid var(--champagne-hi); border-radius: 14px; overflow: hidden; margin-bottom: var(--s4); }
+    .company-banner-header { background: linear-gradient(135deg, #0066B3 0%, #004990 100%); padding: 18px 28px; display: flex; align-items: baseline; flex-wrap: wrap; }
+    .company-banner-header .cb-main { font-family: var(--sans); font-weight: 900; font-size: 1.7rem; color: #fff; letter-spacing: -0.01em; }
+    .company-banner-header .cb-accent { font-family: var(--sans); font-weight: 900; font-size: 1.7rem; color: rgba(255,255,255,0.55); letter-spacing: -0.01em; }
+    .company-banner-body { padding: 24px 28px 20px; background: #fff; }
+    .district-row { display: flex; align-items: flex-start; gap: 20px; }
+    .district-block { flex: 1 1 0; min-width: 0; }
+    .district-block.company-block { flex: 0 0 auto; }
+    .district-pill-label { display: block; width: 100%; box-sizing: border-box; text-align: center; padding: 6px 14px; border-radius: 8px; font-family: var(--sans); font-weight: 800; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; margin-bottom: 14px; }
+    .district-pill-label.south-bay { background: #004990; }
+    .district-pill-label.valley { background: #97005E; }
+    .district-pill-label.company-total { background: var(--ink); max-width: 150px; margin-left: auto; margin-right: auto; }
+    .district-divider { width: 1px; align-self: stretch; background: rgba(28,35,51,0.15); flex: none; }
+    .district-rings { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
     .ov-card { padding: 0; border: none; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; background: transparent; transition: transform 0.6s var(--ease-luxury); cursor: default; }
-    .ov-card:hover { background: transparent; transform: translateY(-4px); }
-    .ov-card h4 { font-size: 0.64rem; font-weight: 700; color: rgba(28,35,51,0.65); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 24px; margin-bottom: 0; display: flex; align-items: center; gap: 7px; }
+    .ov-card:hover { background: transparent; transform: translateY(-3px); }
+    .ov-card h4 { font-size: 0.68rem; font-weight: 800; color: #1C2333; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px; display: flex; align-items: center; gap: 6px; }
     .ov-card h4 .mk { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-    .big-ring { position: relative; width: 140px; height: 140px; margin-bottom: 0; }
+    .big-ring { position: relative; width: 112px; height: 112px; margin-bottom: 0; }
     .big-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
-    .big-ring .trk { fill: none; stroke: rgba(28,35,51,0.06); stroke-width: 4; }
-    .big-ring .fil { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1.3s var(--ease-luxury); }
-    .big-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
-    .big-ring-center .amt { font-family: var(--sans); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1; }
-    .big-ring-center .pc { font-family: var(--sans); font-size: 0.62rem; font-weight: 700; font-variant-numeric: tabular-nums; color: rgba(28,35,51,0.55); }
-    .ov-det { font-size: 0.68rem; line-height: 1.6; color: rgba(28,35,51,0.62); font-family: var(--sans); margin-top: 12px; }
-    .ov-det b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
-    .ov-det .dp { font-weight: 700; }
+    .big-ring .trk { fill: none; stroke: rgba(28,35,51,0.08); stroke-width: 6; }
+    .big-ring .fil { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1.3s var(--ease-luxury); }
+    .big-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+    .big-ring-center .amt { font-family: var(--sans); font-size: 1.24rem; font-weight: 900; letter-spacing: -0.02em; color: #1C2333; font-variant-numeric: tabular-nums; line-height: 1; }
+    .big-ring-center .pc { font-family: var(--sans); font-size: 0.6rem; font-weight: 800; font-variant-numeric: tabular-nums; color: #1C2333; }
+    .ov-det { font-size: 0.76rem; line-height: 1.55; color: #1C2333; font-weight: 600; font-family: var(--sans); margin-top: 8px; }
+    .ov-det b { color: var(--ink); font-weight: 800; font-variant-numeric: tabular-nums; }
+    .ov-det .dp { font-weight: 800; }
     .dp.pos { color: var(--pos); }
     .dp.neg { color: var(--neg); }
-    .overview-note { margin-top: 64px; font-size: 0.76rem; line-height: 1.7; color: rgba(28,35,51,0.68); font-style: italic; max-width: 100%; }
+    .overview-note { margin-top: 20px; font-size: 0.74rem; line-height: 1.6; color: rgba(28,35,51,0.68); font-style: italic; max-width: 100%; }
+    @media (max-width: 900px) {
+      .district-row { flex-direction: column; }
+      .district-divider { display: none; }
+    }
 
     /* mini toggle */
     .mini-toggle { display: inline-flex; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
@@ -734,7 +756,7 @@
     .month-nav .mn-arrow:disabled { opacity: 0.32; cursor: default; border-color: var(--line); color: var(--ink); transform: none; box-shadow: none; }
     .month-nav .mn-arrow:disabled::after { display: none; }
     .month-nav .mn-window { position: relative; width: 168px; height: 44px; overflow: hidden; text-align: center; }
-    .month-nav .mn-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--serif); font-size: 1.5rem; font-weight: 500; color: var(--ink); letter-spacing: 0.01em; line-height: 1; white-space: nowrap; }
+    .month-nav .mn-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--sans); font-size: 1.5rem; font-weight: 500; color: var(--ink); letter-spacing: 0.01em; line-height: 1; white-space: nowrap; }
     .month-nav .mn-label .mn-year { font-family: var(--sans); font-size: 0.56rem; font-weight: 700; color: var(--champagne-hi); letter-spacing: 0.16em; margin-top: 4px; }
     .month-nav .mn-label.enter-right { transform: translateX(100%); opacity: 0; }
     .month-nav .mn-label.enter-left  { transform: translateX(-100%); opacity: 0; }
@@ -742,7 +764,7 @@
     .month-nav .mn-label.leave-left { transform: translateX(-100%); opacity: 0; transition: transform 0.72s var(--ease-luxury), opacity 0.72s var(--ease-luxury); }
     .month-nav .mn-label.leave-right { transform: translateX(100%); opacity: 0; transition: transform 0.72s var(--ease-luxury), opacity 0.72s var(--ease-luxury); }
 
-    .motif { position: fixed; top: 10%; right: -8%; z-index: 0; opacity: 0.028; pointer-events: none; width: 620px; color: var(--ink); user-select: none; }
+    .motif { position: fixed; top: 8%; right: -8%; z-index: 0; pointer-events: none; width: 760px; color: var(--neg); user-select: none; }
 
     /* ============ SCROLL TRANSITIONS ============ */
     .section {
@@ -778,7 +800,6 @@
       .page { padding: var(--s5) var(--s4) var(--s7); }
       table { font-size: 0.72rem; }
       thead th, tbody td { padding: 8px 8px; }
-      .overview-grid { grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
@@ -842,8 +863,9 @@
     <div id="data-banner">Using saved data</div>
   </div>
   <div class="header-motif" aria-hidden="true">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/>
+    <svg viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
+      <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
     </svg>
   </div>
 </header>
@@ -871,13 +893,9 @@
 
   <!-- 01 · YEAR TO DATE -->
   <section class="section">
-    <div class="section-head section-head-flex">
-      <div class="shf-left">
-        <span class="section-num">01</span>
-        <p class="section-eyebrow">Year to Date</p>
-        <h2 class="section-title"><span class="title-main">Company</span> <span class="title-accent">Snapshot</span></h2>
-      </div>
-      <div class="company-feature" id="company-feature"></div>
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <p class="section-eyebrow">Year to Date</p>
     </div>
     <div id="all-centers-overview"></div>
     <div id="company-trend-chart"></div>
@@ -1732,73 +1750,82 @@ function wireMatrixEditables(host){
   });
 }
 
-/* ============ YEAR-TO-DATE OVERVIEW ============ */
+/* ============ YEAR-TO-DATE OVERVIEW — Company Annual Goal Snapshot ============
+   Per Stan's redesign: solid blue banner header, centers grouped under
+   South Bay / Valley district pills, Company Total folded into the same
+   row of rings (instead of a separate feature card), condensed spacing,
+   thicker rings, darker/heavier detail text, blue outline around the
+   whole card. */
 function renderAllCentersOverview(){
   const host=document.getElementById('all-centers-overview'); host.innerHTML='';
   const totals={}; for (const loc of LOCATIONS) totals[loc]=annualLoc(loc);
 
-  const feature=document.getElementById('company-feature');
   let ca=0,cg=0; for(const loc of LOCATIONS){ ca+=totals[loc].actual; cg+=totals[loc].goal; }
   const cp=pct(ca,cg);
-  if (feature){
-    const fr=46, fc=2*Math.PI*fr;
-    feature.innerHTML=`
-      <div class="cf-ring">
-        <svg viewBox="0 0 104 104">
-          <circle class="trk" cx="52" cy="52" r="${fr}"></circle>
-          <circle class="fil" cx="52" cy="52" r="${fr}" style="stroke-dasharray:${fc.toFixed(1)};stroke-dashoffset:${fc.toFixed(1)};"></circle>
-        </svg>
-        <div class="cf-center"><span class="v">${fmt(ca)}</span><span class="p">${cp}%</span></div>
-      </div>
-      <div class="cf-text">
-        <div class="lbl">Company Total · YTD</div>
-        <div class="big">${fmtFull(ca)}</div>
-        <div class="det"><b>${fmt(cg)}</b> annual goal · <b>${fmt(Math.max(0,cg-ca))}</b> remaining<br>${DAYS_ELAPSED} days in · ${YEAR_PCT}% of the year gone</div>
-      </div>`;
-    feature.title = `Company Total — all 5 centers\n${fmtFull(ca)} posted year-to-date\nAnnual goal ${fmtFull(cg)} · ${cp}% of target\nRemaining ${fmtFull(Math.max(0,cg-ca))}\nPer-day run rate ${fmtFull(ca/DAYS_ELAPSED)} / day\nPeriod ${DATE_RANGE_TXT} · ${DAYS_ELAPSED} days · ${YEAR_PCT}% of year`;
-    feature.style.display='flex';
-    requestAnimationFrame(()=>{
-      const fil=feature.querySelector('.fil');
-      if (fil) fil.style.strokeDashoffset=(fc*(1-Math.min(cp,100)/100)).toFixed(1);
-    });
-  }
 
-  const grid=document.createElement('div'); grid.className='overview-grid'; host.appendChild(grid);
-  const sorted=LOCATIONS.slice().sort((a,b)=>totals[b].actual-totals[a].actual);
+  const R=52, C=2*Math.PI*R;
   const ringTargets=[];
-  const R=68, C=2*Math.PI*R;
-  for (const loc of sorted){
-    const {actual,goal}=totals[loc]; const percent=pct(actual,goal); const color=LOC_COLORS[loc];
+
+  function ringCard(label, color, actual, goal, uid){
+    const percent=pct(actual,goal);
     const rem=Math.max(0,goal-actual);
     const onPace = percent>=YEAR_PCT;
-    const uid='ring-'+loc.replace(/\s+/g,'');
-    const card=document.createElement('div'); card.className='ov-card';
-    card.title = `${loc} — Year to Date\n${fmtFull(actual)} posted so far this year\nAnnual goal ${fmtFull(goal)} · ${percent}% of target\nRemaining ${fmtFull(rem)}\n${onPace?'Ahead of':'Behind'} the ${YEAR_PCT}% year mark`;
-    card.innerHTML=`
-      <h4><span class="mk" style="background:${color}"></span>${loc}</h4>
-      <div class="big-ring">
-        <svg viewBox="0 0 148 148">
-          <circle class="trk" cx="74" cy="74" r="${R}"></circle>
-          <circle class="fil" cx="74" cy="74" r="${R}" data-uid="${uid}" style="stroke:${color};stroke-dasharray:${C.toFixed(1)};stroke-dashoffset:${C.toFixed(1)};"></circle>
-        </svg>
-        <div class="big-ring-center">
-          <span class="amt">${fmt(actual)}</span>
-          <span class="pc" style="color:${color}">${percent}% of goal</span>
+    ringTargets.push({uid,percent});
+    return `
+      <div class="ov-card" title="${label} — Year to Date&#10;${fmtFull(actual)} posted so far this year&#10;Annual goal ${fmtFull(goal)} · ${percent}% of target&#10;Remaining ${fmtFull(rem)}&#10;${onPace?'Ahead of':'Behind'} the ${YEAR_PCT}% year mark">
+        <h4><span class="mk" style="background:${color}"></span>${label}</h4>
+        <div class="big-ring">
+          <svg viewBox="0 0 148 148">
+            <circle class="trk" cx="74" cy="74" r="${R}"></circle>
+            <circle class="fil" cx="74" cy="74" r="${R}" data-uid="${uid}" style="stroke:${color};stroke-dasharray:${C.toFixed(1)};stroke-dashoffset:${C.toFixed(1)};"></circle>
+          </svg>
+          <div class="big-ring-center">
+            <span class="amt">${fmt(actual)}</span>
+            <span class="pc" style="color:${color}">${percent}% of goal</span>
+          </div>
+        </div>
+        <div class="ov-det">
+          Goal <b>${fmt(goal)}</b> · Remaining <b>${fmt(rem)}</b><br>
+          <span class="dp ${onPace?'pos':'neg'}">${onPace?'↑ on pace':'↓ behind pace'}</span>
+        </div>
+      </div>`;
+  }
+
+  const southBayHTML = DISTRICTS['South Bay'].map(loc=>
+    ringCard(loc, LOC_COLORS[loc], totals[loc].actual, totals[loc].goal, 'ring-'+loc.replace(/\s+/g,''))
+  ).join('');
+  const valleyHTML = DISTRICTS['Valley'].map(loc=>
+    ringCard(loc, LOC_COLORS[loc], totals[loc].actual, totals[loc].goal, 'ring-'+loc.replace(/\s+/g,''))
+  ).join('');
+  const companyHTML = ringCard('Company', INK, ca, cg, 'ring-company-total');
+
+  const card=document.createElement('div'); card.className='company-banner-card';
+  card.innerHTML=`
+    <div class="company-banner-header"><span class="cb-main">COMPANY</span><span class="cb-accent">ANNUAL GOAL SNAPSHOT</span></div>
+    <div class="company-banner-body">
+      <div class="district-row">
+        <div class="district-block">
+          <span class="district-pill-label south-bay">South Bay</span>
+          <div class="district-rings">${southBayHTML}</div>
+        </div>
+        <div class="district-divider"></div>
+        <div class="district-block">
+          <span class="district-pill-label valley">Valley</span>
+          <div class="district-rings">${valleyHTML}</div>
+        </div>
+        <div class="district-divider"></div>
+        <div class="district-block company-block">
+          <span class="district-pill-label company-total">Company</span>
+          <div class="district-rings">${companyHTML}</div>
         </div>
       </div>
-      <div class="ov-det">
-        Goal <b>${fmt(goal)}</b> · Remaining <b>${fmt(rem)}</b><br>
-        <span class="dp ${onPace?'pos':'neg'}">${onPace?'↑ on pace':'↓ behind pace'}</span> vs ${YEAR_PCT}% of year
-      </div>`;
-    grid.appendChild(card);
-    ringTargets.push({uid,percent});
-  }
-  const note=document.createElement('p'); note.className='overview-note';
-  note.textContent = `"Sales" above is the total posted so far this year (${DATA_YEAR}); "Goal" is the full ${DATA_YEAR} annual target for all 12 months — so these percentages climb as the year goes on and only reach 100% once December's numbers are in.`;
-  host.appendChild(note);
+      <p class="overview-note">"Sales" above is the total posted so far this year (${DATA_YEAR}); "Goal" is the full ${DATA_YEAR} annual target for all 12 months — so these percentages climb as the year goes on and only reach 100% once December's numbers are in.</p>
+    </div>`;
+  host.appendChild(card);
+
   requestAnimationFrame(()=>{
     for (const {uid,percent} of ringTargets){
-      const el = grid.querySelector(`.fil[data-uid="${uid}"]`); if (!el) continue;
+      const el = card.querySelector(`.fil[data-uid="${uid}"]`); if (!el) continue;
       el.style.strokeDashoffset = (C*(1-Math.min(percent,100)/100)).toFixed(1);
     }
   });
@@ -1844,17 +1871,19 @@ function renderDailyMatrix(){
   superRow+=`<th colspan="3"></th></tr>`;
   let head=superRow+`<tr class="matrix-grouphead"><th class="month-col mx-sticky" rowspan="2">Metric</th>`;
   allCols.forEach((k,i)=>{ const c=colorOf(k);
-    head+=`<th colspan="3" class="mx-group ${k==='__TOTAL__'?'mx-company':''}" style="--gc:${c};${i>0?'border-left:1px solid var(--line);':''}">${labelOf(k)}</th>`; });
+    head+=`<th colspan="3" class="mx-group ${k==='__TOTAL__'?'mx-company':'mx-group-filled'}" style="--gc:${c}">${labelOf(k)}</th>`; });
   head+=`</tr><tr class="matrix-subhead">`;
-  allCols.forEach((k,i)=>{ head+=`<th style="${i>0?'border-left:1px solid var(--line);':''}">Today</th><th>Month</th><th>Last</th>`; });
+  allCols.forEach((k,i)=>{ const c=colorOf(k); const filled=k==='__TOTAL__'?'':'mx-subhead-filled';
+    head+=`<th class="${filled}" style="--gc:${c}">Today</th><th class="${filled}" style="--gc:${c}">Month</th><th class="${filled}" style="--gc:${c}">Last</th>`; });
   head+=`</tr>`;
   let body='';
   for (const metric of metrics){
     body+=`<tr><td class="month-col mx-sticky">${metric}</td>`;
     allCols.forEach(k=>{
       const d=dataAt(k,metric);
-      const cls=k==='__TOTAL__'?'mx-company-cell':('mx '+locClass(k));
-      body+=`<td class="${cls} mx-edge" title="${fmtCellFull(metric,d.today)}">${fmtCell(metric,d.today)}</td><td class="${cls}" title="${fmtCellFull(metric,d.month)}">${fmtCell(metric,d.month)}</td><td class="${cls}" title="${fmtCellFull(metric,d.last)}">${fmtCell(metric,d.last)}</td>`;
+      const cls=k==='__TOTAL__'?'mx-company-cell':'mx';
+      const centerAttr=k==='__TOTAL__'?'':` data-center="${k}"`;
+      body+=`<td class="${cls} mx-edge"${centerAttr} title="${fmtCellFull(metric,d.today)}">${fmtCell(metric,d.today)}</td><td class="${cls}"${centerAttr} title="${fmtCellFull(metric,d.month)}">${fmtCell(metric,d.month)}</td><td class="${cls}"${centerAttr} title="${fmtCellFull(metric,d.last)}">${fmtCell(metric,d.last)}</td>`;
     });
     body+=`</tr>`;
   }
@@ -1896,9 +1925,10 @@ function renderGoalBreakdown(){
     for (const r of rows){
       const convCell=isCo?`${r.conv}%`:`<span class="conv-input goal-input" data-loc="${r.loc}">${r.conv}%</span>`;
       const avgCell=isCo?`<span title="${fmtFull(r.avgOrder)}">${fmt(r.avgOrder)}</span>`:`<span class="avg-input goal-input" data-loc="${r.loc}" title="${fmtFull(r.avgOrder)}">${fmt(r.avgOrder)}</span>`;
-      html+=`<tr><td class="month-col">${r.loc}</td><td title="${fmtFull(r.rem)}">${fmt(r.rem)}</td><td>${convCell}</td><td>${avgCell}</td>
-        <td style="font-weight:700;color:${LOC_COLORS[r.loc]||bg}">${Math.ceil(r.ordersNeeded).toLocaleString()}</td>
-        <td style="font-weight:700;color:${LOC_COLORS[r.loc]||bg}">${Math.ceil(r.estNeeded).toLocaleString()}</td></tr>`;
+      const centerAttr=isCo?` data-center="${r.loc}"`:'';
+      html+=`<tr><td class="brk-name"${centerAttr}>${r.loc}</td><td${centerAttr} title="${fmtFull(r.rem)}">${fmt(r.rem)}</td><td${centerAttr}>${convCell}</td><td${centerAttr}>${avgCell}</td>
+        <td${centerAttr} style="font-weight:700;">${Math.ceil(r.ordersNeeded).toLocaleString()}</td>
+        <td${centerAttr} style="font-weight:700;">${Math.ceil(r.estNeeded).toLocaleString()}</td></tr>`;
     }
     if (isCo){
       const tRem=rows.reduce((s,r)=>s+r.rem,0), tOrd=rows.reduce((s,r)=>s+r.ordersNeeded,0), tEst=rows.reduce((s,r)=>s+r.estNeeded,0);
@@ -2101,7 +2131,7 @@ function drawBars(wrap, groups, opts){
   const xAxis = gEl.append('g').attr('transform',`translate(0,${height})`).call(d3.axisBottom(x0).tickSize(0).tickPadding(16))
     .call(s=>s.select('.domain').remove());
   const xt = xAxis.selectAll('text').attr('fill','#1C2333')
-    .attr('font-weight','600').attr('font-size', CHART.LABEL_HI).style('font-family','var(--serif)');
+    .attr('font-weight','600').attr('font-size', CHART.LABEL_HI).style('font-family','var(--sans)');
   if (rotate) xt.attr('transform','rotate(-20)').attr('text-anchor','end').attr('dy','0.7em');
 
   if (!singleMetric && opts.legend !== false){
@@ -2201,7 +2231,7 @@ function drawEstimateChart(hostId){
   });
   g.append('g').attr('transform',`translate(0,${height})`).call(d3.axisBottom(x0).tickSize(0).tickPadding(16))
     .call(s=>s.select('.domain').remove())
-    .selectAll('text').attr('fill','#1C2333').attr('font-weight','600').attr('font-size',CHART.LABEL_LO).style('font-family','var(--serif)');
+    .selectAll('text').attr('fill','#1C2333').attr('font-weight','600').attr('font-size',CHART.LABEL_LO).style('font-family','var(--sans)');
   const lg=svg.append('g').attr('transform',`translate(${M.left},10)`);
   let lx=0; series.forEach(s=>{ lg.append('rect').attr('x',lx).attr('width',11).attr('height',11).attr('rx',2).attr('fill',s.color).attr('opacity',0.9); lg.append('text').attr('x',lx+16).attr('y',9.5).attr('font-size','9.5px').attr('font-weight','600').attr('fill',CHART.AXIS).text(s.label); lx+=16+s.label.length*6.5+16; });
 }
@@ -2356,7 +2386,7 @@ function drawCentersMonthlyMega(hostId){
   });
   g.append('g').attr('transform',`translate(0,${height})`).call(d3.axisBottom(x0).tickSize(0).tickPadding(16))
     .call(s=>s.select('.domain').remove())
-    .selectAll('text').attr('fill','#1C2333').attr('font-weight','700').attr('font-size','11px').style('font-family','var(--serif)');
+    .selectAll('text').attr('fill','#1C2333').attr('font-weight','700').attr('font-size','11px').style('font-family','var(--sans)');
   const legend=svg.append('g').attr('transform',`translate(${M.left},${height+M.top+38})`);
   let lx=0;
   centers.forEach(c=>{ legend.append('rect').attr('x',lx).attr('width',12).attr('height',12).attr('rx',2).attr('fill',LOC_COLORS[c]);
