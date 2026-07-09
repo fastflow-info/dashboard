@@ -215,11 +215,11 @@
     /* ============ SECTION ============ */
     .section {
       margin-bottom: var(--s6);
-      background: #ffffff;
-      border: 2px solid var(--champagne-hi);
-      border-radius: 14px;
-      overflow: hidden;
-      padding: 0 0 var(--s5) 0;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      overflow: visible;
+      padding: 0;
     }
 
     /* ── Section header: identical to .company-banner-header ── */
@@ -227,14 +227,14 @@
       position: relative;
       overflow: hidden;
       background: linear-gradient(135deg, #0066B3 0%, #004990 100%);
-      border-bottom: none;
-      border-radius: 0;
+      border: 2px solid var(--champagne-hi);
+      border-radius: 14px;
       padding: 18px 28px;
       display: flex;
       align-items: baseline;
       flex-wrap: wrap;
       gap: 0;
-      margin-bottom: var(--s5);
+      margin-bottom: var(--s4);
     }
     /* Small quotation-mark motif inside every section header — matches cb-motif */
     .section-head .sh-motif {
@@ -345,7 +345,7 @@
       cursor: default;
       transition: box-shadow 0.5s var(--ease-luxury);
     }
-    .company-feature:hover { box-shadow: var(--shadow-2); }
+    .company-feature:hover { box-shadow: none; }
     .cf-ring { position: relative; width: 104px; height: 104px; flex: none; }
     .cf-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
     .cf-ring .trk { fill: none; stroke: rgba(28,35,51,0.08); stroke-width: 5.5; }
@@ -360,11 +360,12 @@
 
     /* ============ CARD ============ */
     .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: var(--s6) var(--s5);
+      background: #ffffff;
+      border: 2px solid var(--champagne-hi);
+      border-radius: 14px;
+      padding: var(--s5) var(--s5);
       margin-bottom: var(--s4);
+      overflow: hidden;
     }
     .card > h3 {
       font-family: var(--sans);
@@ -531,53 +532,53 @@
     td[data-center="Tarzana"] * { color: #fff !important; }
     td[data-center="Tarzana"].month-col { background: #fff !important; color: #1C2333 !important; }
     td[data-center="Tarzana"].month-col * { color: #1C2333 !important; }
-    /* ===== REP COLUMN COLORS — all greens, shuffled for visual distinction ===== */
+    /* ===== REP COLUMN COLORS — ALL columns per rep fully colored ===== */
     .matrix-table td.rep-tint { background: rgba(0,133,63,0.06); }
 
-    td[data-rep="Brittany Herrera"]          { background: #00853F !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Brittany Herrera"] *         { color: #fff !important; }
-    td[data-rep="Brittany Herrera"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Brittany Herrera"]            { background: #00853F !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Brittany Herrera"] *           { color: #fff !important; }
+    td[data-rep="Brittany Herrera"].month-col   { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Brittany Herrera"].month-col * { color: #1C2333 !important; }
 
-    td[data-rep="Dylan Falk-Hutchings"]          { background: #5A9E1B !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Dylan Falk-Hutchings"] *         { color: #fff !important; }
-    td[data-rep="Dylan Falk-Hutchings"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Dylan Falk-Hutchings"]            { background: #5A9E1B !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Dylan Falk-Hutchings"] *           { color: #fff !important; }
+    td[data-rep="Dylan Falk-Hutchings"].month-col   { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Dylan Falk-Hutchings"].month-col * { color: #1C2333 !important; }
 
-    td[data-rep="Jeremy Medina (OSR)"]          { background: #007161 !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Jeremy Medina (OSR)"] *         { color: #fff !important; }
-    td[data-rep="Jeremy Medina (OSR)"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Jeremy Medina (OSR)"]            { background: #007161 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Jeremy Medina (OSR)"] *           { color: #fff !important; }
+    td[data-rep="Jeremy Medina (OSR)"].month-col   { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Jeremy Medina (OSR)"].month-col * { color: #1C2333 !important; }
 
-    td[data-rep="Santoie Croxford"]          { background: #3D8B00 !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Santoie Croxford"] *         { color: #fff !important; }
-    td[data-rep="Santoie Croxford"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Santoie Croxford"]            { background: #3D8B00 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Santoie Croxford"] *           { color: #fff !important; }
+    td[data-rep="Santoie Croxford"].month-col   { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Santoie Croxford"].month-col * { color: #1C2333 !important; }
 
-    td[data-rep="Nathaniel Darling"]          { background: #009951 !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Nathaniel Darling"] *         { color: #fff !important; }
-    td[data-rep="Nathaniel Darling"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Nathaniel Darling"]            { background: #009951 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Nathaniel Darling"] *           { color: #fff !important; }
+    td[data-rep="Nathaniel Darling"].month-col   { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Nathaniel Darling"].month-col * { color: #1C2333 !important; }
 
-    td[data-rep="Santa Ana CSR"]          { background: #688F00 !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Santa Ana CSR"] *         { color: #fff !important; }
-    td[data-rep="Santa Ana CSR"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Santa Ana CSR"]            { background: #688F00 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Santa Ana CSR"] *           { color: #fff !important; }
+    td[data-rep="Santa Ana CSR"].month-col   { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Santa Ana CSR"].month-col * { color: #1C2333 !important; }
 
-    td[data-rep="Ryan Flook"]          { background: #1B7A3E !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Ryan Flook"] *         { color: #fff !important; }
-    td[data-rep="Ryan Flook"].month-col { background: #fff !important; color: #1C2333 !important; }
-    td[data-rep="Ryan Flook"].month-col * { color: #1C2333 !important; }
-
-    td[data-rep="Stan Gray"]          { background: #4FAD2E !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Stan Gray"] *         { color: #fff !important; }
-    td[data-rep="Stan Gray"].month-col { background: #fff !important; color: #1C2333 !important; }
-    td[data-rep="Stan Gray"].month-col * { color: #1C2333 !important; }
-
-    td[data-rep="Marcos Reyes"]          { background: #006B3C !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Marcos Reyes"] *         { color: #fff !important; }
-    td[data-rep="Marcos Reyes"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Marcos Reyes"]            { background: #006B3C !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Marcos Reyes"] *           { color: #fff !important; }
+    td[data-rep="Marcos Reyes"].month-col   { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Marcos Reyes"].month-col * { color: #1C2333 !important; }
+
+    td[data-rep="Gilbert Aguilar"]            { background: #2E7D32 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Gilbert Aguilar"] *           { color: #fff !important; }
+    td[data-rep="Gilbert Aguilar"].month-col   { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Gilbert Aguilar"].month-col * { color: #1C2333 !important; }
+
+    td[data-rep="Mark Sabedra"]            { background: #558B2F !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Mark Sabedra"] *           { color: #fff !important; }
+    td[data-rep="Mark Sabedra"].month-col   { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Mark Sabedra"].month-col * { color: #1C2333 !important; }
     .matrix-table td.mx-company-cell   { background: rgba(28,35,51,0.05); font-weight: 700; }
 
     /* Editable cells */
@@ -599,23 +600,27 @@
     .cell-input { width: 90px; text-align: right; border: 1px solid var(--champagne); border-radius: var(--radius); padding: 3px 8px; font-family: var(--sans); font-weight: 600; font-size: 0.8rem; color: var(--ink); }
 
     /* ============ SWITCHER / TABS ============ */
-    /* Pad everything inside section except the full-bleed header */
+    /* Each element inside a section is standalone — no inset needed */
     .section > *:not(.section-head) {
-      margin-left: var(--s5);
-      margin-right: var(--s5);
+      margin-left: 0;
+      margin-right: 0;
     }
-    /* Tab bars also need left/right inset */
     .section > .tab-bar {
-      margin-left: var(--s5);
-      margin-right: var(--s5);
+      margin-left: 0;
+      margin-right: 0;
     }
 
     .tab-bar {
       display: flex;
       flex-wrap: wrap;
       gap: 2px;
-      margin-bottom: var(--s5);
-      border-bottom: 1px solid var(--line);
+      margin-top: 0;
+      margin-bottom: var(--s4);
+      background: #ffffff;
+      border: 2px solid var(--champagne-hi);
+      border-radius: 14px;
+      padding: 6px 10px;
+      overflow: hidden;
     }
     .tab-btn {
       display: inline-flex;
@@ -690,36 +695,30 @@
 
     /* ============ CHART CONTAINER ============ */
     .chart-container {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: var(--s6) var(--s5);
+      background: #ffffff;
+      border: 2px solid var(--champagne-hi);
+      border-radius: 14px;
+      padding: var(--s5) var(--s5);
       margin-bottom: var(--s4);
       margin-top: var(--s4);
       max-width: 100%;
       position: relative;
       overflow: hidden;
       animation: fadeInUp 0.75s var(--ease-luxury) both;
-      transition: border-color 0.7s var(--ease-luxury);
+      transition: none;
     }
-    .chart-container::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, #004990, var(--champagne), #004990);
-      transform: scaleX(0);
-      transform-origin: center;
-      transition: transform 0.8s var(--ease-luxury);
-    }
-    .chart-container:hover::before { transform: scaleX(1); }
+    .chart-container::before { display: none; }
+    .chart-container:hover::before { display: none; }
     .grp { cursor: default; }
-    .grp .bar-actual, .grp .bar-goal { transition: filter 0.4s var(--ease-luxury), opacity 0.4s var(--ease-luxury); }
-    .grp:hover .bar-actual { filter: brightness(1.15) saturate(1.25); }
-    .grp:hover .bar-goal { filter: brightness(1.2); opacity: 0.85 !important; }
-    .grp .val-actual, .grp .val-goal { transition: transform 0.4s var(--ease-luxury), fill 0.3s var(--ease-luxury); transform-box: fill-box; transform-origin: center bottom; }
-    .grp .val-actual-bg, .grp .val-goal-bg { opacity: 0; transition: opacity 0.4s var(--ease-luxury), transform 0.4s var(--ease-luxury); transform-box: fill-box; transform-origin: center bottom; pointer-events: none; }
-    .grp:hover .val-actual { transform: scale(1.55) translateY(-3px); fill: #fff !important; }
-    .grp:hover .val-goal { transform: scale(1.4) translateY(-3px); fill: #fff !important; }
-    .grp:hover .val-actual-bg { opacity: 1; transform: scale(1.55) translateY(-3px); }
-    .grp:hover .val-goal-bg { opacity: 1; transform: scale(1.4) translateY(-3px); }
+    .grp .bar-actual, .grp .bar-goal { transition: none; }
+    .grp:hover .bar-actual { filter: none; }
+    .grp:hover .bar-goal { filter: none; }
+    .grp .val-actual, .grp .val-goal { transition: none; }
+    .grp .val-actual-bg, .grp .val-goal-bg { display: none; pointer-events: none; }
+    .grp:hover .val-actual { transform: none; }
+    .grp:hover .val-goal { transform: none; }
+    .grp:hover .val-actual-bg { opacity: 0; }
+    .grp:hover .val-goal-bg { opacity: 0; }
     .chart-container h3 {
       font-family: var(--sans);
       font-size: 2rem;
@@ -749,16 +748,16 @@
     /* ============ PIPELINE SNAPSHOT ============ */
     .pipeline-stage {
       position: relative;
-      padding-top: var(--s2);
-      background: linear-gradient(180deg,#f6f5f3 0%,#edecea 100%);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 44px 28px 22px;
+      background: #ffffff;
+      border: 2px solid var(--champagne-hi);
+      border-radius: 14px;
+      padding: 36px 28px 22px;
       overflow: hidden;
+      margin-bottom: var(--s4);
     }
     .pipeline-stage svg { min-width: 0 !important; max-width: 880px; margin: 0 auto; display: block; overflow: visible; }
-    .ps-arc { transition: filter 0.4s var(--ease-luxury); cursor: default; }
-    .ps-arc:hover { filter: brightness(1.07) saturate(1.15); }
+    .ps-arc { cursor: default; }
+    .ps-arc:hover { filter: none; }
     .ps-lbl { cursor: default; }
     .ps-caption { text-align: center; margin-top: 12px; font-family: var(--sans); font-size: 0.74rem; color: var(--t2); font-weight: 500; }
     .ps-overlay { position: absolute; top: 30px; right: 24px; width: 208px; display: flex; flex-direction: column; gap: 10px; z-index: 2; }
@@ -782,13 +781,26 @@
        Company Total), condensed spacing, darker/heavier detail text,
        thicker ring strokes, blue outline around the whole card. */
     .company-banner-card { border: 2px solid var(--champagne-hi); border-radius: 14px; overflow: hidden; margin-bottom: var(--s4); }
-    .company-banner-header { position: relative; overflow: hidden; background: linear-gradient(135deg, #0066B3 0%, #004990 100%); padding: 18px 28px; display: flex; align-items: baseline; flex-wrap: wrap; }
+    .company-banner-header { position: relative; overflow: hidden; background: linear-gradient(135deg, #0066B3 0%, #004990 100%); padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .company-banner-header .cb-motif { position: absolute; left: 40px; top: 50%; transform: translateY(-50%); z-index: 0; opacity: 0.22; pointer-events: none; width: 260px; color: #fff; }
     .company-banner-header .cb-title-wrap { position: relative; z-index: 1; display: inline-flex; align-items: baseline; transform: scaleX(0.82); transform-origin: left center; }
     .company-banner-header .cb-main { font-family: var(--sans); font-weight: 900; font-size: 1.7rem; color: #fff; letter-spacing: -0.02em; }
     .company-banner-header .cb-accent { font-family: var(--sans); font-weight: 300; font-size: 1.7rem; color: rgba(255,255,255,0.72); letter-spacing: -0.01em; }
-    .company-banner-body { padding: 40px 36px 36px; background: #fff; }
-    .district-row { display: flex; align-items: flex-start; gap: 20px; }
+    .company-banner-header .cb-ytd-label {
+      position: relative; z-index: 1;
+      font-family: var(--sans);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 20px;
+      padding: 5px 14px;
+      white-space: nowrap;
+    }
+    .company-banner-body { padding: 52px var(--s5) 48px; background: #fff; }
+    .district-row { display: flex; align-items: flex-start; gap: 32px; }
     .district-block { flex: 1 1 0; min-width: 0; }
     .district-block.south-bay-block { flex: 3 1 0; }
     .district-block.valley-block { flex: 2 1 0; }
@@ -799,9 +811,9 @@
     .district-pill-label.company-total { background: var(--ink); max-width: 150px; margin-left: auto; margin-right: auto; }
     .district-divider { width: 1px; align-self: stretch; background: rgba(28,35,51,0.15); flex: none; }
     .district-equals { display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-size: 2rem; font-weight: 900; color: #1C2333; flex: none; padding: 0 6px; align-self: center; }
-    .district-rings { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; }
-    .ov-card { padding: 0; border: none; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; background: transparent; transition: transform 0.6s var(--ease-luxury); cursor: default; }
-    .ov-card:hover { background: transparent; transform: translateY(-3px); }
+    .district-rings { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
+    .ov-card { padding: 0; border: none; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; background: transparent; cursor: default; }
+    .ov-card:hover { background: transparent; transform: none; }
     .ov-card h4 { font-size: 0.76rem; font-weight: 800; color: #1C2333; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 8px; display: flex; align-items: center; gap: 6px; }
     .ov-card h4 .mk { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
     .big-ring { position: relative; width: 180px; height: 180px; margin-bottom: 0; }
@@ -897,34 +909,75 @@
 
     /* ============ ACTIVITY FEED ============ */
     #activity-feed { width: 100%; }
-    .af-table { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 0.82rem; background: #ffffff; border-radius: var(--radius); overflow: hidden; }
-    .af-table thead th { font-family: var(--sans); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--t2); padding: 16px 16px 14px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
-    .af-table thead th:last-child { padding-right: 20px; }
-    .af-table tbody tr { border-bottom: 1px solid rgba(28,35,51,0.05); transition: background 0.18s; }
+    .af-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      background: #ffffff;
+      table-layout: fixed;
+    }
+    .af-table col.col-event   { width: 100px; }
+    .af-table col.col-date    { width: 90px; }
+    .af-table col.col-order   { width: 105px; }
+    .af-table col.col-company { width: 220px; }
+    .af-table col.col-rep     { width: 138px; }
+    .af-table col.col-center  { width: 100px; }
+    .af-table col.col-status  { width: 80px; }
+    .af-table col.col-amount  { width: 80px; }
+    .af-table col.col-link    { width: 96px; }
+
+    .af-table thead tr { background: var(--wash); }
+    .af-table thead th {
+      font-family: var(--sans);
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--t2);
+      padding: 9px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .af-table thead th.col-amount { text-align: right; }
+    .af-table thead th.col-link   { text-align: left; }
+
+    .af-table tbody tr { border-bottom: 1px solid rgba(28,35,51,0.05); transition: background 0.15s; }
     .af-table tbody tr:last-child { border-bottom: none; }
-    .af-table tbody tr:hover { background: rgba(28,35,51,0.025); }
-    .af-table tbody td { padding: 13px 16px; vertical-align: middle; color: var(--ink); text-align: left; }
-    .af-table tbody td:last-child { padding-right: 20px; }
-    .af-pill { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+    .af-table tbody tr:hover { background: rgba(0,102,179,0.03); }
+    .af-table tbody td {
+      padding: 8px 10px;
+      vertical-align: middle;
+      color: var(--ink);
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .af-table tbody td.col-amount { text-align: right; }
+    .af-table tbody td.col-link   { text-align: left; overflow: visible; white-space: nowrap; }
+    .af-pill { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 20px; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
     .af-pill-sale     { background: rgba(0,133,63,0.10);  color: #00853f; }
     .af-pill-estimate { background: rgba(0,102,179,0.10); color: #0066b3; }
     .af-pill-cancelled{ background: rgba(218,33,40,0.10); color: #da2128; }
     .af-pill-unknown  { background: rgba(28,35,51,0.07);  color: var(--t2); }
-    .af-event { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.04em; white-space: nowrap; background: rgba(28,35,51,0.05); color: var(--t2); }
+    .af-event { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 0.63rem; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; background: rgba(28,35,51,0.05); color: var(--t2); }
     .af-event-converted  { background: rgba(0,133,63,0.09);  color: #00853f; }
     .af-event-cancelled  { background: rgba(218,33,40,0.09);  color: #da2128; }
     .af-event-new        { background: rgba(0,102,179,0.09);  color: #0066b3; }
-    .af-event-completed  { background: rgba(0,102,179,0.10); color: #004990; }
-    .af-amt { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); white-space: nowrap; }
+    .af-event-completed  { background: rgba(0,102,179,0.10);  color: #004990; }
+    .af-amt { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 0.78rem; color: var(--ink); white-space: nowrap; }
     .af-amt-zero { color: var(--t2); font-weight: 400; }
-    .af-center-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; flex-shrink: 0; vertical-align: middle; position: relative; top: -1px; }
-    .af-link { font-family: var(--sans); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; color: var(--champagne); text-decoration: none; border-bottom: 1px solid rgba(0,102,179,0.35); transition: color 0.18s, border-color 0.18s; white-space: nowrap; }
-    .af-link:hover { color: var(--ink); border-color: var(--ink); }
+    .af-center-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 5px; flex-shrink: 0; vertical-align: middle; position: relative; top: -1px; }
+    .af-link { font-family: var(--sans); font-size: 0.72rem; font-weight: 700; color: var(--champagne); text-decoration: none; white-space: nowrap; border-bottom: 1px solid rgba(0,102,179,0.3); transition: color 0.15s, border-color 0.15s; }
+    .af-link:hover { color: var(--champagne-hi); border-color: var(--champagne-hi); }
     .af-empty { text-align: center; padding: 48px 0; font-family: var(--sans); font-size: 0.82rem; color: var(--t2); }
-    .af-date { color: var(--t2); font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .af-company { font-weight: 600; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .af-rep { color: var(--t2); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .af-num { color: var(--t2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .af-date { color: var(--t2); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 0.74rem; }
+    .af-company { font-weight: 700; font-size: 0.76rem; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .af-rep { color: var(--t2); font-size: 0.74rem; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .af-num { color: var(--t2); font-variant-numeric: tabular-nums; font-size: 0.74rem; white-space: nowrap; }
   </style>
 </head>
 <body>
@@ -981,13 +1034,6 @@
 
   <!-- 01 · YEAR TO DATE -->
   <section class="section">
-    <div class="section-head">
-      <svg class="sh-motif" viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
-        <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
-        <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
-      </svg>
-      <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">YEAR</span><span class="title-accent">&nbsp;TO DATE</span></span></h2>
-    </div>
     <div id="all-centers-overview"></div>
     <div id="company-trend-chart"></div>
   </section>
@@ -1079,7 +1125,10 @@ const DISTRICTS = {
 };
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const REPS = ['Brittany Herrera', 'Dylan Falk-Hutchings', 'Jeremy Medina (OSR)', 'Santoie Croxford', 'Nathaniel Darling', 'Santa Ana CSR', 'Ryan Flook', 'Stan Gray', 'Marcos Reyes'];
+const REPS = ['Brittany Herrera', 'Dylan Falk-Hutchings', 'Jeremy Medina (OSR)', 'Santoie Croxford', 'Nathaniel Darling', 'Santa Ana CSR', 'Marcos Reyes'];
+
+/* ===== Permanently excluded reps — never shown anywhere ===== */
+const EXCLUDED_REPS = new Set(['ryan flook', 'stan gray']);
 
 /* ===== UPDATED CENTER COLORS — per branding guide ===== */
 const INK = '#1C2333', CHAMP = '#0066B3';
@@ -1093,17 +1142,17 @@ const LOC_COLORS = {
 const DISTRICT_COLORS = { 'South Bay': '#004990', 'Valley': '#97005E' };
 
 /* ===== SALESPERSON COLORS — green family per branding guide ===== */
-/* ===== ALL-GREEN rep palette — shuffled so adjacent reps look clearly distinct ===== */
+/* ===== ALL-GREEN rep palette — shuffled for maximum visual distinction ===== */
 const REP_COLORS = {
-  'Brittany Herrera':       '#00853F',  /* deep forest green     */
+  'Brittany Herrera':       '#00853F',  /* deep forest           */
   'Dylan Falk-Hutchings':   '#5A9E1B',  /* lime-grass            */
   'Jeremy Medina (OSR)':    '#007161',  /* dark teal-green       */
   'Santoie Croxford':       '#3D8B00',  /* vivid mid-green       */
   'Nathaniel Darling':      '#009951',  /* bright emerald        */
   'Santa Ana CSR':          '#688F00',  /* olive-green           */
-  'Ryan Flook':             '#1B7A3E',  /* hunter green          */
-  'Stan Gray':              '#4FAD2E',  /* fresh grass           */
   'Marcos Reyes':           '#006B3C',  /* bottle green          */
+  'Gilbert Aguilar':        '#2E7D32',  /* rich forest           */
+  'Mark Sabedra':           '#558B2F',  /* fern green            */
 };
 
 const TONAL_GRAD = 'linear-gradient(90deg,#004990,#0096D6,#0066B3,#52247F,#97005E)';
@@ -1124,17 +1173,31 @@ const AUTO_REP_PALETTE = [
 ];
 let _autoRepColorIdx = 0;
 function isHouseAccount(name){ return /^house\b/i.test((name||'').trim()); }
+function isExcludedRep(name){ return EXCLUDED_REPS.has(normName(name||'')); }
 function registerNewRep(name, email){
   if (!name || isHouseAccount(name)) return false;
+  if (isExcludedRep(name)) return false;
   if (REP_LOOKUP[normName(name)]) return false;
   REPS.push(name);
   const color = AUTO_REP_PALETTE[_autoRepColorIdx % AUTO_REP_PALETTE.length]; _autoRepColorIdx++;
   REP_COLORS[name] = color;
   REP_LOOKUP[normName(name)] = name;
+  const bare = normName(stripParen(name));
+  if (bare && !REP_LOOKUP[bare]) REP_LOOKUP[bare] = name;
   if (!state.repActual[name]) state.repActual[name] = new Array(12).fill(0);
   if (!state.goals.reps[name]) state.goals.reps[name] = new Array(12).fill(0);
   if (!state.repMeta) state.repMeta = {};
   state.repMeta[name] = { email: email||'', autoAdded: true, addedDate: new Date().toISOString() };
+  /* Inject CSS so this new rep's columns are fully colored */
+  const esc = name.replace(/"/g,'\\"');
+  const style = document.createElement('style');
+  style.textContent = `
+    td[data-rep="${esc}"]            { background: ${color} !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="${esc}"] *           { color: #fff !important; }
+    td[data-rep="${esc}"].month-col   { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="${esc}"].month-col * { color: #1C2333 !important; }
+  `;
+  document.head.appendChild(style);
   return true;
 }
 
@@ -1153,9 +1216,9 @@ const GOALS_2026_DEFAULT = {
     "Santoie Croxford": [125000,125000,125000,125000,125000,125000,125000,125000,125000,125000,125000,125000],
     "Nathaniel Darling": [null,null,null,null,4000,10000,12500,15000,17500,18000,18000,18000],
     "Santa Ana CSR": [null,null,null,null,null,null,8000,10000,10000,12500,15000,20000],
-    "Ryan Flook":    [null,null,null,null,null,null,null,null,null,null,null,null],
-    "Stan Gray":     [null,null,null,null,null,null,null,null,null,null,null,null],
-    "Marcos Reyes":  [null,null,null,null,null,null,null,null,null,null,null,null]
+    "Marcos Reyes":  [null,null,null,null,null,null,null,null,null,null,null,null],
+    "Gilbert Aguilar": [null,null,null,null,null,null,null,null,null,null,null,null],
+    "Mark Sabedra":  [null,null,null,null,null,null,null,null,null,null,null,null]
   }
 };
 
@@ -1397,6 +1460,7 @@ async function fetchActuals(year){
   const newlyAdded = [];
   for (const [name, monthly] of unmatchedAmounts.entries()){
     if (isHouseAccount(name)) continue;
+    if (isExcludedRep(name)) continue;
     const confirmedActive = activeNames.has(normName(name));
     if (!confirmedActive){ continue; }
     if (registerNewRep(name, unmatchedEmails.get(name))){
@@ -1568,9 +1632,10 @@ function buildGoalMatrix(cfg){
     const canEdit=cfg.editable && !isTot && !isTotalRow;
     const salesCell=`<span title="${fmtFull(sales)}">${fmt(sales)}</span>`;
     const goalCell=canEdit?`<span class="goal-input" data-type="${cfg.dataType}" data-key="${k}" data-month="${m}" title="${fmtFull(goal)}">${fmt(goal)}</span>`:`<span title="${fmtFull(goal)}">${fmt(goal)}</span>`;
+    const pctCls = (isRep||isLoc) ? '' : pctClass(p);
     return `<td class="${clsBase} mx-edge"${repAttr}>${salesCell}</td><td class="${clsBase}"${repAttr}>${goalCell}</td>
       <td class="${clsBase}"${repAttr} title="${fmtFull(delta)}">${statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg')}</td>
-      <td class="${clsBase} ${pctClass(p)}"${repAttr}>${p}%</td>`;
+      <td class="${clsBase} ${pctCls}"${repAttr}>${p}%</td>`;
   }
   let body='';
   for (let m=0;m<12;m++){ body+=`<tr><td class="month-col mx-sticky">${MONTHS[m]}</td>`; cols.forEach(k=>{ body+=cellsFor(k,m,false); }); body+=`</tr>`; }
@@ -1918,6 +1983,7 @@ function renderAllCentersOverview(){
         <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
       </svg>
       <span class="cb-title-wrap"><span class="cb-main">COMPANY</span><span class="cb-accent">ANNUAL GOAL SNAPSHOT</span></span>
+      <span class="cb-ytd-label">YEAR TO DATE</span>
     </div>
     <div class="company-banner-body">
       <div class="district-row">
@@ -2148,6 +2214,8 @@ function drawBars(wrap, groups, opts){
   const valFmt = opts.valFmt || (v=>fmt(v));
   const rotate = !!opts.rotateX;
   const singleMetric = opts.singleMetric || null;
+  const bandInner = opts.bandInner !== undefined ? opts.bandInner : CHART.BAND_INNER;
+  const barPad = opts.barPad !== undefined ? opts.barPad : CHART.BAR_PAD;
 
   const M = Object.assign({}, CHART.M, opts.margin||{});
   const width = (opts.width||CHART.W) - M.left - M.right;
@@ -2171,9 +2239,9 @@ function drawBars(wrap, groups, opts){
   const gEl = svg.append('g').attr('transform',`translate(${M.left},${M.top})`);
 
   const x0 = d3.scaleBand().domain(groups.map(g=>g.label)).range([0,width])
-    .paddingInner(CHART.BAND_INNER).paddingOuter(CHART.BAND_INNER*0.5);
+    .paddingInner(bandInner).paddingOuter(bandInner*0.5);
   const subKeys = singleMetric ? [singleMetric] : ['actual','goal'];
-  const x1 = d3.scaleBand().domain(subKeys).range([0,x0.bandwidth()]).padding(CHART.BAR_PAD);
+  const x1 = d3.scaleBand().domain(subKeys).range([0,x0.bandwidth()]).padding(barPad);
   const maxV = d3.max(groups, g=>Math.max(g.actual||0, g.goal||0)) || 1;
   const y = d3.scaleLinear().domain([0, maxV*1.16]).range([height,0]).nice();
 
@@ -2269,8 +2337,18 @@ function ytdActualGoal(getActual, getGoal, keys){
 
 function drawYTDByEntity(hostId, title, keys, colorOf, data, dotColor){
   const shell=chartShell(hostId, title, dotColor); if(!shell) return;
-  const groups=keys.map(k=>({ label:k, actual:data[k].actual, goal:data[k].goal, color:colorOf(k) }));
-  drawBars(shell.wrap, groups, { uid:hostId.replace(/[^a-z0-9]/gi,''), yLabel:'SALES ($)', rotateX:true, width:Math.max(CHART.W, keys.length*150) });
+  const groups=keys.map(k=>({ label:k, actual:data[k]?data[k].actual:0, goal:data[k]?data[k].goal:0, color:colorOf(k) }));
+  drawBars(shell.wrap, groups, {
+    uid: hostId.replace(/[^a-z0-9]/gi,''),
+    yLabel: 'SALES ($)',
+    rotateX: false,
+    showValues: true,
+    legend: true,
+    width: CHART.W,
+    margin: { top:30, right:20, bottom:64, left:76 },
+    bandInner: 0.35,
+    barPad: 0.28
+  });
 }
 
 function drawEntityMonthly(hostId, title, color, getA, getG){
@@ -2615,10 +2693,29 @@ function renderActivityFeed(){
     return dB - dA;
   });
 
-  const thead = `<thead><tr>
-    <th>Event</th><th>Date</th><th>Order #</th><th>Company</th>
-    <th>Rep</th><th>Center</th><th>Status</th><th>Amount</th><th>Link</th>
-  </tr></thead>`;
+  const thead = `
+    <colgroup>
+      <col class="col-event">
+      <col class="col-date">
+      <col class="col-order">
+      <col class="col-company">
+      <col class="col-rep">
+      <col class="col-center">
+      <col class="col-status">
+      <col class="col-amount">
+      <col class="col-link">
+    </colgroup>
+    <thead><tr>
+      <th class="col-event">Event</th>
+      <th class="col-date">Date</th>
+      <th class="col-order">Order #</th>
+      <th class="col-company">Company</th>
+      <th class="col-rep">Rep</th>
+      <th class="col-center">Center</th>
+      <th class="col-status">Status</th>
+      <th class="col-amount">Amount</th>
+      <th class="col-link">Link</th>
+    </tr></thead>`;
 
   const tbodyRows = sorted.map(o=>{
     const ev  = eventLabel(o);
@@ -2628,15 +2725,15 @@ function renderActivityFeed(){
       ? `<span class="af-amt">${fmtFull(amt)}</span>`
       : `<span class="af-amt af-amt-zero">—</span>`;
     return `<tr>
-      <td><span class="af-event ${ev.cls}">${ev.label}</span></td>
-      <td class="af-date">${fmtDate(ev.date)}</td>
-      <td>${orderNumCell(o)}</td>
-      <td>${companyCell(o)}</td>
-      <td>${repCell(o)}</td>
-      <td><span class="af-center-dot" style="background:${dot}"></span>${o._center||'—'}</td>
-      <td>${statusPill(o)}</td>
-      <td>${amtCell}</td>
-      <td>${orderLink(o)}</td>
+      <td class="col-event"><span class="af-event ${ev.cls}">${ev.label}</span></td>
+      <td class="col-date af-date">${fmtDate(ev.date)}</td>
+      <td class="col-order">${orderNumCell(o)}</td>
+      <td class="col-company">${companyCell(o)}</td>
+      <td class="col-rep">${repCell(o)}</td>
+      <td class="col-center"><span class="af-center-dot" style="background:${dot}"></span>${o._center||'—'}</td>
+      <td class="col-status">${statusPill(o)}</td>
+      <td class="col-amount">${amtCell}</td>
+      <td class="col-link">${orderLink(o)}</td>
     </tr>`;
   }).join('');
 
