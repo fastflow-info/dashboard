@@ -6,7 +6,7 @@
   <title>Sales Performance · FASTSIGNS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
@@ -63,9 +63,9 @@
     .page {
       position: relative;
       z-index: 1;
-      max-width: 1560px;
+      max-width: 1716px;
       margin: 0 auto;
-      padding: var(--s6) var(--s7) var(--s8);
+      padding: var(--s6) var(--s6) var(--s8);
     }
 
     ::selection { background: rgba(0,102,179,0.18); }
@@ -178,7 +178,7 @@
       pointer-events: none;
       display: flex;
     }
-    .header .header-motif svg { width: 230px; height: 203px; fill: #DA2128; opacity: 0.22; display: block; }
+    .header .header-motif svg { width: 110px; height: 97px; fill: #DA2128; opacity: 0.22; display: block; }
 
     #data-banner {
       font-size: 0.62rem;
@@ -213,22 +213,92 @@
     }
 
     /* ============ SECTION ============ */
-    .section { margin-bottom: var(--s8); padding-top: var(--s4); }
-    .section-head { margin-bottom: var(--s6); }
-    .section-head-flex {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: var(--s5);
-      flex-wrap: wrap;
+    .section {
+      margin-bottom: var(--s6);
+      background: #ffffff;
+      border: 2px solid var(--champagne-hi);
+      border-radius: 14px;
+      overflow: hidden;
+      padding: 0 0 var(--s5) 0;
     }
-    .section-head-flex .shf-left { flex: 1 1 420px; min-width: 0; }
-    .section-num { font-family: var(--sans); font-style: italic; font-size: 0.95rem; color: var(--champagne); margin-bottom: var(--s2); display: block; }
-    .section-eyebrow { font-size: 0.64rem; font-weight: 600; color: var(--ink); text-transform: uppercase; letter-spacing: 0; margin-bottom: var(--s3); }
-    .section-title { font-family: var(--sans); font-size: clamp(1.8rem, 3.2vw, 2.6rem); font-weight: 400; letter-spacing: 0; color: var(--ink); line-height: 1.1; display: inline-flex; align-items: center; gap: 8px; border: 2.5px solid var(--ink); border-radius: 24px; padding: 12px 24px; background: transparent; }
-    .section-title .title-main { font-weight: 900; font-family: var(--sans); }
-    .section-title .title-accent { font-weight: 400; font-family: var(--sans); color: var(--champagne); font-style: italic; }
-    .section-sub { margin-top: var(--s3); color: var(--t2); font-size: 0.9rem; line-height: 1.7; max-width: 62ch; font-weight: 400; }
+
+    /* ── Section header: identical to .company-banner-header ── */
+    .section-head {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0066B3 0%, #004990 100%);
+      border-bottom: none;
+      border-radius: 0;
+      padding: 18px 28px;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0;
+      margin-bottom: var(--s5);
+    }
+    /* Small quotation-mark motif inside every section header — matches cb-motif */
+    .section-head .sh-motif {
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 0;
+      opacity: 0.22;
+      pointer-events: none;
+      width: 130px;
+      color: #fff;
+    }
+    /* Title wrap — same compressed scaleX as company banner */
+    .section-head .sh-title-wrap {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: baseline;
+      transform: scaleX(0.82);
+      transform-origin: left center;
+    }
+    /* Primary word(s) — all-caps white bold, same as .cb-main */
+    .section-num   { display: none; } /* absorbed into sh-title-wrap */
+    .section-eyebrow { display: none; } /* absorbed into sh-title-wrap */
+    .section-title {
+      font-family: var(--sans);
+      font-weight: 900;
+      font-size: 1.7rem;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: #fff;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      background: transparent;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .section-title .title-main  {
+      font-family: var(--sans);
+      font-weight: 900;
+      font-size: 1.7rem;
+      color: #fff;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .section-title .title-accent {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 1.7rem;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: -0.01em;
+      font-style: normal;
+      text-transform: uppercase;
+    }
+    .section-sub {
+      display: none; /* keep DOM but hide — banner is tight like company snapshot */
+    }
+    .section-head-flex { display: contents; }
+    .section-head-flex .shf-left { display: contents; }
 
     /* ============ ENTITY BADGE — filled pill button per Stan's request ============ */
     /* Used in card/chart h3 for individual entity headings (center or rep breakdowns) */
@@ -333,7 +403,7 @@
       text-align: right;
       font-weight: 600;
       color: var(--t3);
-      border-bottom: 1px solid var(--ink);
+      border-bottom: 1px solid var(--line);
       white-space: nowrap;
       font-size: 0.6rem;
       text-transform: uppercase;
@@ -390,12 +460,14 @@
     .matrix-superhead th.mx-district {
       text-align: center;
       font-size: 0.58rem;
-      font-weight: 600;
-      letter-spacing: 0;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--gc);
-      padding: 6px 10px 10px;
+      color: #fff;
+      background: var(--gc);
+      padding: 8px 10px;
       font-family: var(--sans);
+      border-bottom: none;
     }
     .matrix-grouphead th.mx-group {
       text-align: center;
@@ -423,6 +495,7 @@
     }
     .mx-sticky { position: sticky; left: 0; z-index: 2; background: var(--card); }
     thead .mx-sticky { z-index: 3; background: var(--card); }
+    .matrix-superhead th.mx-sticky { background: var(--card); border-bottom: none; }
     .matrix-table tbody td {
       padding: 10px 12px;
       text-align: right;
@@ -434,7 +507,7 @@
     .matrix-table tbody td.month-col { text-align: left; }
     .matrix-table tbody tr:hover td:not(.mx-sticky) { background: var(--wash); }
     .matrix-table td.mx-edge { border-left: 1px solid var(--line); }
-    .matrix-total td { border-top: 1.5px solid var(--ink); font-weight: 700 !important; }
+    .matrix-total td { border-top: 1px solid var(--line); font-weight: 700 !important; }
     .matrix-total td.month-col { color: var(--ink); }
 
     /* strong center COLUMN colors — entire columns get colored */
@@ -458,45 +531,53 @@
     td[data-center="Tarzana"] * { color: #fff !important; }
     td[data-center="Tarzana"].month-col { background: #fff !important; color: #1C2333 !important; }
     td[data-center="Tarzana"].month-col * { color: #1C2333 !important; }
-    /* Strong rep row colors */
-    td[data-rep="Brittany Herrera"] { background: #00788A !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Brittany Herrera"].month-col { background: #fff !important; color: #1C2333 !important; }
-    td[data-rep="Dylan Falk-Hutchings"] { background: #007161 !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Dylan Falk-Hutchings"].month-col { background: #fff !important; color: #1C2333 !important; }
-    td[data-rep="Jeremy Medina (OSR)"] { background: #00853F !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Jeremy Medina (OSR)"].month-col { background: #fff !important; color: #1C2333 !important; }
-    td[data-rep="Santoie Croxford"] { background: #688F00 !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Santoie Croxford"].month-col { background: #fff !important; color: #1C2333 !important; }
-    td[data-rep="Nathaniel Darling"] { background: #78A22F !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Nathaniel Darling"].month-col { background: #fff !important; color: #1C2333 !important; }
-    td[data-rep="Santa Ana CSR"] { background: #C38600 !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Santa Ana CSR"].month-col { background: #fff !important; color: #1C2333 !important; }
-    .matrix-table td.rep-tint          { background: rgba(0,120,138,0.08); }
-    /* Individual rep row colors — solid, strong, with white text */
-    td[data-rep="Brittany Herrera"] { background: #00788A !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Brittany Herrera"] * { color: #fff !important; }
+    /* ===== REP COLUMN COLORS — all greens, shuffled for visual distinction ===== */
+    .matrix-table td.rep-tint { background: rgba(0,133,63,0.06); }
+
+    td[data-rep="Brittany Herrera"]          { background: #00853F !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Brittany Herrera"] *         { color: #fff !important; }
     td[data-rep="Brittany Herrera"].month-col { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Brittany Herrera"].month-col * { color: #1C2333 !important; }
-    td[data-rep="Dylan Falk-Hutchings"] { background: #007161 !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Dylan Falk-Hutchings"] * { color: #fff !important; }
+
+    td[data-rep="Dylan Falk-Hutchings"]          { background: #5A9E1B !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Dylan Falk-Hutchings"] *         { color: #fff !important; }
     td[data-rep="Dylan Falk-Hutchings"].month-col { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Dylan Falk-Hutchings"].month-col * { color: #1C2333 !important; }
-    td[data-rep="Jeremy Medina (OSR)"] { background: #00853F !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Jeremy Medina (OSR)"] * { color: #fff !important; }
+
+    td[data-rep="Jeremy Medina (OSR)"]          { background: #007161 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Jeremy Medina (OSR)"] *         { color: #fff !important; }
     td[data-rep="Jeremy Medina (OSR)"].month-col { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Jeremy Medina (OSR)"].month-col * { color: #1C2333 !important; }
-    td[data-rep="Santoie Croxford"] { background: #688F00 !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Santoie Croxford"] * { color: #fff !important; }
+
+    td[data-rep="Santoie Croxford"]          { background: #3D8B00 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Santoie Croxford"] *         { color: #fff !important; }
     td[data-rep="Santoie Croxford"].month-col { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Santoie Croxford"].month-col * { color: #1C2333 !important; }
-    td[data-rep="Nathaniel Darling"] { background: #78A22F !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Nathaniel Darling"] * { color: #fff !important; }
+
+    td[data-rep="Nathaniel Darling"]          { background: #009951 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Nathaniel Darling"] *         { color: #fff !important; }
     td[data-rep="Nathaniel Darling"].month-col { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Nathaniel Darling"].month-col * { color: #1C2333 !important; }
-    td[data-rep="Santa Ana CSR"] { background: #C38600 !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="Santa Ana CSR"] * { color: #fff !important; }
+
+    td[data-rep="Santa Ana CSR"]          { background: #688F00 !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Santa Ana CSR"] *         { color: #fff !important; }
     td[data-rep="Santa Ana CSR"].month-col { background: #fff !important; color: #1C2333 !important; }
     td[data-rep="Santa Ana CSR"].month-col * { color: #1C2333 !important; }
+
+    td[data-rep="Ryan Flook"]          { background: #1B7A3E !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Ryan Flook"] *         { color: #fff !important; }
+    td[data-rep="Ryan Flook"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Ryan Flook"].month-col * { color: #1C2333 !important; }
+
+    td[data-rep="Stan Gray"]          { background: #4FAD2E !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Stan Gray"] *         { color: #fff !important; }
+    td[data-rep="Stan Gray"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Stan Gray"].month-col * { color: #1C2333 !important; }
+
+    td[data-rep="Marcos Reyes"]          { background: #006B3C !important; color: #fff !important; font-weight: 600; }
+    td[data-rep="Marcos Reyes"] *         { color: #fff !important; }
+    td[data-rep="Marcos Reyes"].month-col { background: #fff !important; color: #1C2333 !important; }
+    td[data-rep="Marcos Reyes"].month-col * { color: #1C2333 !important; }
     .matrix-table td.mx-company-cell   { background: rgba(28,35,51,0.05); font-weight: 700; }
 
     /* Editable cells */
@@ -518,6 +599,17 @@
     .cell-input { width: 90px; text-align: right; border: 1px solid var(--champagne); border-radius: var(--radius); padding: 3px 8px; font-family: var(--sans); font-weight: 600; font-size: 0.8rem; color: var(--ink); }
 
     /* ============ SWITCHER / TABS ============ */
+    /* Pad everything inside section except the full-bleed header */
+    .section > *:not(.section-head) {
+      margin-left: var(--s5);
+      margin-right: var(--s5);
+    }
+    /* Tab bars also need left/right inset */
+    .section > .tab-bar {
+      margin-left: var(--s5);
+      margin-right: var(--s5);
+    }
+
     .tab-bar {
       display: flex;
       flex-wrap: wrap;
@@ -690,31 +782,37 @@
        Company Total), condensed spacing, darker/heavier detail text,
        thicker ring strokes, blue outline around the whole card. */
     .company-banner-card { border: 2px solid var(--champagne-hi); border-radius: 14px; overflow: hidden; margin-bottom: var(--s4); }
-    .company-banner-header { background: linear-gradient(135deg, #0066B3 0%, #004990 100%); padding: 18px 28px; display: flex; align-items: baseline; flex-wrap: wrap; }
-    .company-banner-header .cb-main { font-family: var(--sans); font-weight: 900; font-size: 1.7rem; color: #fff; letter-spacing: -0.01em; }
-    .company-banner-header .cb-accent { font-family: var(--sans); font-weight: 900; font-size: 1.7rem; color: rgba(255,255,255,0.55); letter-spacing: -0.01em; }
-    .company-banner-body { padding: 24px 28px 20px; background: #fff; }
+    .company-banner-header { position: relative; overflow: hidden; background: linear-gradient(135deg, #0066B3 0%, #004990 100%); padding: 18px 28px; display: flex; align-items: baseline; flex-wrap: wrap; }
+    .company-banner-header .cb-motif { position: absolute; left: 40px; top: 50%; transform: translateY(-50%); z-index: 0; opacity: 0.22; pointer-events: none; width: 260px; color: #fff; }
+    .company-banner-header .cb-title-wrap { position: relative; z-index: 1; display: inline-flex; align-items: baseline; transform: scaleX(0.82); transform-origin: left center; }
+    .company-banner-header .cb-main { font-family: var(--sans); font-weight: 900; font-size: 1.7rem; color: #fff; letter-spacing: -0.02em; }
+    .company-banner-header .cb-accent { font-family: var(--sans); font-weight: 300; font-size: 1.7rem; color: rgba(255,255,255,0.72); letter-spacing: -0.01em; }
+    .company-banner-body { padding: 40px 36px 36px; background: #fff; }
     .district-row { display: flex; align-items: flex-start; gap: 20px; }
     .district-block { flex: 1 1 0; min-width: 0; }
-    .district-block.company-block { flex: 0 0 auto; }
+    .district-block.south-bay-block { flex: 3 1 0; }
+    .district-block.valley-block { flex: 2 1 0; }
+    .district-block.company-block { flex: 1.4 1 0; }
     .district-pill-label { display: block; width: 100%; box-sizing: border-box; text-align: center; padding: 6px 14px; border-radius: 8px; font-family: var(--sans); font-weight: 800; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; margin-bottom: 14px; }
     .district-pill-label.south-bay { background: #004990; }
     .district-pill-label.valley { background: #97005E; }
     .district-pill-label.company-total { background: var(--ink); max-width: 150px; margin-left: auto; margin-right: auto; }
     .district-divider { width: 1px; align-self: stretch; background: rgba(28,35,51,0.15); flex: none; }
-    .district-rings { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .district-equals { display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-size: 2rem; font-weight: 900; color: #1C2333; flex: none; padding: 0 6px; align-self: center; }
+    .district-rings { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; }
     .ov-card { padding: 0; border: none; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; background: transparent; transition: transform 0.6s var(--ease-luxury); cursor: default; }
     .ov-card:hover { background: transparent; transform: translateY(-3px); }
-    .ov-card h4 { font-size: 0.68rem; font-weight: 800; color: #1C2333; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px; display: flex; align-items: center; gap: 6px; }
+    .ov-card h4 { font-size: 0.76rem; font-weight: 800; color: #1C2333; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 8px; display: flex; align-items: center; gap: 6px; }
     .ov-card h4 .mk { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-    .big-ring { position: relative; width: 112px; height: 112px; margin-bottom: 0; }
+    .big-ring { position: relative; width: 180px; height: 180px; margin-bottom: 0; }
     .big-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
     .big-ring .trk { fill: none; stroke: rgba(28,35,51,0.08); stroke-width: 6; }
     .big-ring .fil { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1.3s var(--ease-luxury); }
     .big-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
-    .big-ring-center .amt { font-family: var(--sans); font-size: 1.24rem; font-weight: 900; letter-spacing: -0.02em; color: #1C2333; font-variant-numeric: tabular-nums; line-height: 1; }
-    .big-ring-center .pc { font-family: var(--sans); font-size: 0.6rem; font-weight: 800; font-variant-numeric: tabular-nums; color: #1C2333; }
-    .ov-det { font-size: 0.76rem; line-height: 1.55; color: #1C2333; font-weight: 600; font-family: var(--sans); margin-top: 8px; }
+    .big-ring-center .amt { font-family: var(--sans); font-size: 1.6rem; font-weight: 900; letter-spacing: -0.02em; color: #1C2333; font-variant-numeric: tabular-nums; line-height: 1; }
+    .big-ring-center .pc { font-family: var(--sans); font-size: 0.72rem; font-weight: 800; font-variant-numeric: tabular-nums; color: #1C2333; }
+    .ov-det { font-size: 0.84rem; color: #1C2333; font-weight: 600; font-family: var(--sans); margin-top: 10px; }
+    .ov-det-row { line-height: 1.65; height: 1.65em; }
     .ov-det b { color: var(--ink); font-weight: 800; font-variant-numeric: tabular-nums; }
     .ov-det .dp { font-weight: 800; }
     .dp.pos { color: var(--pos); }
@@ -722,7 +820,7 @@
     .overview-note { margin-top: 20px; font-size: 0.74rem; line-height: 1.6; color: rgba(28,35,51,0.68); font-style: italic; max-width: 100%; }
     @media (max-width: 900px) {
       .district-row { flex-direction: column; }
-      .district-divider { display: none; }
+      .district-divider, .district-equals { display: none; }
     }
 
     /* mini toggle */
@@ -764,30 +862,19 @@
     .month-nav .mn-label.leave-left { transform: translateX(-100%); opacity: 0; transition: transform 0.72s var(--ease-luxury), opacity 0.72s var(--ease-luxury); }
     .month-nav .mn-label.leave-right { transform: translateX(100%); opacity: 0; transition: transform 0.72s var(--ease-luxury), opacity 0.72s var(--ease-luxury); }
 
-    .motif { position: fixed; top: 8%; right: -8%; z-index: 0; pointer-events: none; width: 760px; color: var(--neg); user-select: none; }
+    .motif { position: fixed; top: 8%; right: -8%; z-index: 0; pointer-events: none; width: 760px; color: #DA2128; opacity: 1; user-select: none; }
 
     /* ============ SCROLL TRANSITIONS ============ */
     .section {
       position: relative;
-      background: var(--bg);
       opacity: 0;
       transform: translateY(64px);
-      transition: opacity 1.15s var(--ease-luxury), transform 1.15s var(--ease-luxury), box-shadow 1.15s var(--ease-luxury);
+      transition: opacity 1.15s var(--ease-luxury), transform 1.15s var(--ease-luxury);
       will-change: opacity, transform;
     }
-    .section::before {
-      content: '';
-      position: absolute;
-      left: 50%; top: -1px;
-      width: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--champagne), transparent);
-      transform: translateX(-50%);
-      opacity: 0;
-      transition: width 1.4s var(--ease-luxury), opacity 1.4s var(--ease-luxury);
-      pointer-events: none;
-    }
-    .section.revealed { opacity: 1; transform: translateY(0); box-shadow: 0 -32px 60px -40px rgba(28,35,51,0.16); }
-    .section.revealed::before { width: 100%; opacity: 1; }
+    .section::before { display: none; }
+    .section.revealed { opacity: 1; transform: translateY(0); }
+    .section.revealed::before { display: none; }
     .section .section-head, .section > [id] { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease-luxury), transform 1s var(--ease-luxury); will-change: opacity, transform; }
     .section.revealed .section-head { opacity: 1; transform: none; transition-delay: 0.12s; }
     .section.revealed > [id]:nth-of-type(1) { opacity: 1; transform: none; transition-delay: 0.28s; }
@@ -810,14 +897,14 @@
 
     /* ============ ACTIVITY FEED ============ */
     #activity-feed { width: 100%; }
-    .af-table { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 0.82rem; background: transparent; }
-    .af-table thead th { font-family: var(--sans); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--t2); padding: 0 16px 14px 0; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
-    .af-table thead th:last-child { padding-right: 0; }
+    .af-table { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 0.82rem; background: #ffffff; border-radius: var(--radius); overflow: hidden; }
+    .af-table thead th { font-family: var(--sans); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--t2); padding: 16px 16px 14px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+    .af-table thead th:last-child { padding-right: 20px; }
     .af-table tbody tr { border-bottom: 1px solid rgba(28,35,51,0.05); transition: background 0.18s; }
     .af-table tbody tr:last-child { border-bottom: none; }
     .af-table tbody tr:hover { background: rgba(28,35,51,0.025); }
-    .af-table tbody td { padding: 13px 16px 13px 0; vertical-align: middle; color: var(--ink); text-align: left; }
-    .af-table tbody td:last-child { padding-right: 0; }
+    .af-table tbody td { padding: 13px 16px; vertical-align: middle; color: var(--ink); text-align: left; }
+    .af-table tbody td:last-child { padding-right: 20px; }
     .af-pill { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
     .af-pill-sale     { background: rgba(0,133,63,0.10);  color: #00853f; }
     .af-pill-estimate { background: rgba(0,102,179,0.10); color: #0066b3; }
@@ -882,10 +969,11 @@
   <!-- 00 · RIGHT NOW -->
   <section class="section">
     <div class="section-head">
-      <span class="section-num">00</span>
-      <p class="section-eyebrow">Right Now</p>
-      <h2 class="section-title"><span class="title-main">Pipeline</span> <span class="title-accent">Snapshot</span></h2>
-      <p class="section-sub">Every order fetched this year, grouped by exactly where it stands at this moment live from CoreBridge, not a historical rollup. Each ring shows how much money is sitting in that stage right now.</p>
+      <svg class="sh-motif" viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
+        <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
+      </svg>
+      <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">PIPELINE</span><span class="title-accent">&nbsp;SNAPSHOT</span></span></h2>
     </div>
     <div id="pipeline-switcher" class="tab-bar"></div>
     <div id="pipeline-snapshot"></div>
@@ -894,8 +982,11 @@
   <!-- 01 · YEAR TO DATE -->
   <section class="section">
     <div class="section-head">
-      <span class="section-num">01</span>
-      <p class="section-eyebrow">Year to Date</p>
+      <svg class="sh-motif" viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
+        <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
+      </svg>
+      <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">YEAR</span><span class="title-accent">&nbsp;TO DATE</span></span></h2>
     </div>
     <div id="all-centers-overview"></div>
     <div id="company-trend-chart"></div>
@@ -904,10 +995,11 @@
   <!-- 02 · MONTHLY SALES -->
   <section class="section">
     <div class="section-head">
-      <span class="section-num">02</span>
-      <p class="section-eyebrow">Monthly Sales</p>
-      <h2 class="section-title"><span class="title-main">Monthly Sales ·</span> <span class="title-accent">Goal vs Actual</span></h2>
-      <p class="section-sub">Click any <strong>Goal</strong> cell to edit it in place. Delta and % update automatically. Sales figures come straight from CoreBridge and aren't hand-editable.</p>
+      <svg class="sh-motif" viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
+        <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
+      </svg>
+      <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">MONTHLY SALES</span><span class="title-accent">&nbsp;GOAL VS ACTUAL</span></span></h2>
     </div>
     <div id="centers-switcher" class="tab-bar"></div>
     <div id="all-centers-matrix"></div>
@@ -918,9 +1010,11 @@
   <!-- 03 · DAILY -->
   <section class="section">
     <div class="section-head">
-      <span class="section-num">03</span>
-      <p class="section-eyebrow">Daily</p>
-      <h2 class="section-title"><span class="title-main">Daily Sales ·</span> <span class="title-accent">By Center</span></h2>
+      <svg class="sh-motif" viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
+        <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
+      </svg>
+      <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">DAILY SALES</span><span class="title-accent">&nbsp;BY CENTER</span></span></h2>
     </div>
     <div id="daily-matrix"></div>
     <div id="estimate-chart"></div>
@@ -929,9 +1023,11 @@
   <!-- 04 · SALESPEOPLE -->
   <section class="section">
     <div class="section-head">
-      <span class="section-num">04</span>
-      <p class="section-eyebrow">2026 Tracker · Salespeople</p>
-      <h2 class="section-title"><span class="title-main">Salespeople ·</span> <span class="title-accent">Goal vs Actual</span></h2>
+      <svg class="sh-motif" viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
+        <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
+      </svg>
+      <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">SALESPEOPLE</span><span class="title-accent">&nbsp;GOAL VS ACTUAL</span></span></h2>
     </div>
     <div id="reps-switcher" class="tab-bar"></div>
     <div id="salespeople-matrix"></div>
@@ -943,10 +1039,11 @@
   <!-- 05 · GOAL BREAKDOWN -->
   <section class="section">
     <div class="section-head">
-      <span class="section-num">05</span>
-      <p class="section-eyebrow">2026 Tracker · What It Takes</p>
-      <h2 class="section-title"><span class="title-main">Goal</span> <span class="title-accent">Breakdown</span></h2>
-      <p class="section-sub">Working backward from each center's remaining goal: how many orders and estimates are needed, based on the trailing 90-day conversion rate and average order size.</p>
+      <svg class="sh-motif" viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
+        <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
+      </svg>
+      <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">GOAL</span><span class="title-accent">&nbsp;BREAKDOWN</span></span></h2>
     </div>
     <div id="goal-breakdown-tabs" class="tab-bar"></div>
     <div id="goal-breakdown-tables"></div>
@@ -955,10 +1052,11 @@
   <!-- 06 · ACTIVITY FEED -->
   <section class="section">
     <div class="section-head">
-      <span class="section-num">06</span>
-      <p class="section-eyebrow">Live Activity</p>
-      <h2 class="section-title"><span class="title-main">Recent</span> <span class="title-accent">Orders</span></h2>
-      <p class="section-sub">The 25 most-recently modified orders across all five centers — any status, pulled live from CoreBridge.</p>
+      <svg class="sh-motif" viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
+        <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
+      </svg>
+      <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">RECENT</span><span class="title-accent">&nbsp;ORDERS</span></span></h2>
     </div>
     <div id="activity-feed"></div>
   </section>
@@ -981,7 +1079,7 @@ const DISTRICTS = {
 };
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const REPS = ['Brittany Herrera', 'Dylan Falk-Hutchings', 'Jeremy Medina (OSR)', 'Santoie Croxford', 'Nathaniel Darling', 'Santa Ana CSR'];
+const REPS = ['Brittany Herrera', 'Dylan Falk-Hutchings', 'Jeremy Medina (OSR)', 'Santoie Croxford', 'Nathaniel Darling', 'Santa Ana CSR', 'Ryan Flook', 'Stan Gray', 'Marcos Reyes'];
 
 /* ===== UPDATED CENTER COLORS — per branding guide ===== */
 const INK = '#1C2333', CHAMP = '#0066B3';
@@ -992,16 +1090,20 @@ const LOC_COLORS = {
   'Thousand Oaks': '#52247F',  /* BLUE 1 Pantone 2617 */
   'Tarzana':       '#97005E'   /* RED 1 Pantone 235 */
 };
-const DISTRICT_COLORS = { 'South Bay': '#004990', 'Valley': '#411D66' };
+const DISTRICT_COLORS = { 'South Bay': '#004990', 'Valley': '#97005E' };
 
 /* ===== SALESPERSON COLORS — green family per branding guide ===== */
+/* ===== ALL-GREEN rep palette — shuffled so adjacent reps look clearly distinct ===== */
 const REP_COLORS = {
-  'Brittany Herrera':       '#00788A',  /* Green 1 */
-  'Dylan Falk-Hutchings':   '#007161',  /* Green 2 */
-  'Jeremy Medina (OSR)':    '#00853F',  /* Green 3 */
-  'Santoie Croxford':       '#688F00',  /* Green 4 */
-  'Nathaniel Darling':      '#78A22F',  /* Green 5 */
-  'Santa Ana CSR':          '#C38600'   /* Green 6 */
+  'Brittany Herrera':       '#00853F',  /* deep forest green     */
+  'Dylan Falk-Hutchings':   '#5A9E1B',  /* lime-grass            */
+  'Jeremy Medina (OSR)':    '#007161',  /* dark teal-green       */
+  'Santoie Croxford':       '#3D8B00',  /* vivid mid-green       */
+  'Nathaniel Darling':      '#009951',  /* bright emerald        */
+  'Santa Ana CSR':          '#688F00',  /* olive-green           */
+  'Ryan Flook':             '#1B7A3E',  /* hunter green          */
+  'Stan Gray':              '#4FAD2E',  /* fresh grass           */
+  'Marcos Reyes':           '#006B3C',  /* bottle green          */
 };
 
 const TONAL_GRAD = 'linear-gradient(90deg,#004990,#0096D6,#0066B3,#52247F,#97005E)';
@@ -1013,8 +1115,13 @@ const DAYS_ELAPSED = Math.max(1, Math.floor((NOW - JAN1)/86400000) + 1);
 const YEAR_PCT = Math.round((DAYS_ELAPSED/365)*100);
 const DATE_RANGE_TXT = 'Jan 1 – ' + NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 
-/* ===== Auto-detect new salespeople from CoreBridge ===== */
-const AUTO_REP_PALETTE = ['#00788A','#007161','#00853F','#688F00','#78A22F','#C38600','#004990','#0066B3','#52247F','#97005E'];
+/* ===== Auto-detect new salespeople — all greens, shuffled so no two adjacent match ===== */
+const AUTO_REP_PALETTE = [
+  '#00853F','#5A9E1B','#007161','#3D8B00','#009951','#688F00',
+  '#1B7A3E','#4FAD2E','#006B3C','#78A22F','#2E7D32','#558B2F',
+  '#33691E','#1B5E20','#43A047','#66BB6A','#00897B','#2E8B57',
+  '#4CAF50','#388E3C'
+];
 let _autoRepColorIdx = 0;
 function isHouseAccount(name){ return /^house\b/i.test((name||'').trim()); }
 function registerNewRep(name, email){
@@ -1045,7 +1152,10 @@ const GOALS_2026_DEFAULT = {
     "Jeremy Medina (OSR)": [null,null,10000,15000,20000,20000,25000,25000,25000,30000,30000,30000],
     "Santoie Croxford": [125000,125000,125000,125000,125000,125000,125000,125000,125000,125000,125000,125000],
     "Nathaniel Darling": [null,null,null,null,4000,10000,12500,15000,17500,18000,18000,18000],
-    "Santa Ana CSR": [null,null,null,null,null,null,8000,10000,10000,12500,15000,20000]
+    "Santa Ana CSR": [null,null,null,null,null,null,8000,10000,10000,12500,15000,20000],
+    "Ryan Flook":    [null,null,null,null,null,null,null,null,null,null,null,null],
+    "Stan Gray":     [null,null,null,null,null,null,null,null,null,null,null,null],
+    "Marcos Reyes":  [null,null,null,null,null,null,null,null,null,null,null,null]
   }
 };
 
@@ -1441,10 +1551,10 @@ function buildGoalMatrix(cfg){
   }
   let head=superRow+`<tr class="matrix-grouphead"><th class="month-col mx-sticky" rowspan="2">Month</th>`;
   cols.forEach((k,i)=>{ const c=colorOf(k);
-    head+=`<th colspan="4" class="mx-group ${k==='__TOTAL__'?'mx-company':''}" style="--gc:${c};${i>0?'border-left:1px solid var(--line);':''}">${labelOf(k)}</th>`; });
+    head+=`<th colspan="4" class="mx-group ${k==='__TOTAL__'?'mx-company':'mx-group-filled'}" style="--gc:${c}">${labelOf(k)}</th>`; });
   head+=`</tr><tr class="matrix-subhead">`;
-  cols.forEach((k,i)=>{ const c=colorOf(k);
-    head+=`<th style="${i>0?'border-left:1px solid var(--line);':''}">Sales</th><th>Goal</th><th>Delta</th><th>%</th>`; });
+  cols.forEach((k,i)=>{ const c=colorOf(k); const filled=k==='__TOTAL__'?'':'mx-subhead-filled';
+    head+=`<th class="${filled}" style="--gc:${c}">Sales</th><th class="${filled}" style="--gc:${c}">Goal</th><th class="${filled}" style="--gc:${c}">Delta</th><th class="${filled}" style="--gc:${c}">%</th>`; });
   head+=`</tr>`;
 
   function cellsFor(k,m,isTotalRow){
@@ -1763,7 +1873,7 @@ function renderAllCentersOverview(){
   let ca=0,cg=0; for(const loc of LOCATIONS){ ca+=totals[loc].actual; cg+=totals[loc].goal; }
   const cp=pct(ca,cg);
 
-  const R=52, C=2*Math.PI*R;
+  const R=84, C=2*Math.PI*R;
   const ringTargets=[];
 
   function ringCard(label, color, actual, goal, uid){
@@ -1775,9 +1885,9 @@ function renderAllCentersOverview(){
       <div class="ov-card" title="${label} — Year to Date&#10;${fmtFull(actual)} posted so far this year&#10;Annual goal ${fmtFull(goal)} · ${percent}% of target&#10;Remaining ${fmtFull(rem)}&#10;${onPace?'Ahead of':'Behind'} the ${YEAR_PCT}% year mark">
         <h4><span class="mk" style="background:${color}"></span>${label}</h4>
         <div class="big-ring">
-          <svg viewBox="0 0 148 148">
-            <circle class="trk" cx="74" cy="74" r="${R}"></circle>
-            <circle class="fil" cx="74" cy="74" r="${R}" data-uid="${uid}" style="stroke:${color};stroke-dasharray:${C.toFixed(1)};stroke-dashoffset:${C.toFixed(1)};"></circle>
+          <svg viewBox="0 0 196 196">
+            <circle class="trk" cx="98" cy="98" r="${R}"></circle>
+            <circle class="fil" cx="98" cy="98" r="${R}" data-uid="${uid}" style="stroke:${color};stroke-dasharray:${C.toFixed(1)};stroke-dashoffset:${C.toFixed(1)};"></circle>
           </svg>
           <div class="big-ring-center">
             <span class="amt">${fmt(actual)}</span>
@@ -1785,8 +1895,9 @@ function renderAllCentersOverview(){
           </div>
         </div>
         <div class="ov-det">
-          Goal <b>${fmt(goal)}</b> · Remaining <b>${fmt(rem)}</b><br>
-          <span class="dp ${onPace?'pos':'neg'}">${onPace?'↑ on pace':'↓ behind pace'}</span>
+          <div class="ov-det-row">Goal = <b>${fmt(goal)}</b></div>
+          <div class="ov-det-row">Remaining = <b>${fmt(rem)}</b></div>
+          <div class="ov-det-row dp ${onPace?'pos':'neg'}">${onPace?'↑ On pace':'↓ Behind pace'}</div>
         </div>
       </div>`;
   }
@@ -1801,19 +1912,25 @@ function renderAllCentersOverview(){
 
   const card=document.createElement('div'); card.className='company-banner-card';
   card.innerHTML=`
-    <div class="company-banner-header"><span class="cb-main">COMPANY</span><span class="cb-accent">ANNUAL GOAL SNAPSHOT</span></div>
+    <div class="company-banner-header">
+      <svg class="cb-motif" viewBox="0 0 1100 970" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M 96,173 H 486 V 542 H 353 C 313,542 334,554 334,575 C 334,635 376,745 424,841 L 264,841 C 140,715 96,550 96,410 V 173 Z"/>
+        <path d="M 573,173 H 963 V 542 H 830 C 790,542 811,554 811,575 C 811,635 853,745 901,841 L 741,841 C 617,715 573,550 573,410 V 173 Z"/>
+      </svg>
+      <span class="cb-title-wrap"><span class="cb-main">COMPANY</span><span class="cb-accent">ANNUAL GOAL SNAPSHOT</span></span>
+    </div>
     <div class="company-banner-body">
       <div class="district-row">
-        <div class="district-block">
+        <div class="district-block south-bay-block">
           <span class="district-pill-label south-bay">South Bay</span>
           <div class="district-rings">${southBayHTML}</div>
         </div>
         <div class="district-divider"></div>
-        <div class="district-block">
+        <div class="district-block valley-block">
           <span class="district-pill-label valley">Valley</span>
           <div class="district-rings">${valleyHTML}</div>
         </div>
-        <div class="district-divider"></div>
+        <div class="district-equals" aria-hidden="true">=</div>
         <div class="district-block company-block">
           <span class="district-pill-label company-total">Company</span>
           <div class="district-rings">${companyHTML}</div>
@@ -2523,7 +2640,7 @@ function renderActivityFeed(){
     </tr>`;
   }).join('');
 
-  host.innerHTML = `<table class="af-table">${thead}<tbody>${tbodyRows}</tbody></table>`;
+  host.innerHTML = `<div class="card" style="padding:0;overflow:hidden;"><table class="af-table">${thead}<tbody>${tbodyRows}</tbody></table></div>`;
 }
 
 function renderCharts(){
