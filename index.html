@@ -285,10 +285,10 @@
     /* ============ SECTION ============ */
     .section {
       margin-bottom: var(--s6);
-      background: transparent;
-      border: none;
+      background: #ffffff;
+      border: 2px solid var(--champagne-hi);
       border-radius: 0;
-      overflow: visible;
+      overflow: hidden;
       padding: 0;
     }
 
@@ -303,7 +303,7 @@
       display: flex;
       align-items: center;
       margin-bottom: 0;
-      height: 108px;
+      height: 100px;
     }
     /* The SVG header artwork fills the full banner */
     .section-head .sh-svg-bg {
@@ -328,7 +328,7 @@
     .section-title {
       font-family: var(--sans-cond);
       font-weight: 900;
-      font-size: 2rem;
+      font-size: 4.5rem;
       letter-spacing: -0.02em;
       line-height: 1;
       color: #fff;
@@ -346,7 +346,7 @@
     .section-title .title-main {
       font-family: var(--sans-cond);
       font-weight: 900;
-      font-size: 2rem;
+      font-size: 4.5rem;
       color: #fff;
       letter-spacing: -0.02em;
       text-transform: uppercase;
@@ -354,7 +354,7 @@
     .section-title .title-accent {
       font-family: var(--sans-cond);
       font-weight: 300;
-      font-size: 2rem;
+      font-size: 4.5rem;
       color: rgba(255,255,255,0.72);
       letter-spacing: -0.01em;
       font-style: normal;
@@ -522,13 +522,14 @@
     /* ===== MATRIX — exact reference image style ===== */
     .matrix-scroll { overflow-x: auto; }
     .matrix-table {
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0;
       font-size: 0.82rem;
       min-width: 1080px;
       width: 100%;
       background: #fff;
     }
-    .matrix-table th, .matrix-table td { white-space: nowrap; }
+    .matrix-table th, .matrix-table td { white-space: nowrap; box-sizing: border-box; }
 
     /* ── District banner: full-width stretched, pill-shaped ends ── */
     .mx-district-row th { padding: 0; border: none; background: #fff; }
@@ -640,7 +641,29 @@
       border-right: 3px solid #fff;
     }
 
-    /* ── Empty future-month rows ── */
+    /* ── Per-center colored column outline — thin 1px with gap between groups ── */
+    .mx-col-first {
+      border-left: 1px solid var(--col-color, transparent) !important;
+    }
+    .mx-col-last {
+      border-right: 1px solid var(--col-color, transparent) !important;
+    }
+    .mx-sub-cell.mx-col-first,
+    .mx-cell.mx-col-first,
+    .mx-total-cell.mx-col-first { border-left: 1px solid var(--col-color, transparent) !important; }
+    .mx-sub-cell.mx-col-last,
+    .mx-cell.mx-col-last,
+    .mx-total-cell.mx-col-last  { border-right: 1px solid var(--col-color, transparent) !important; }
+
+    /* Gap between groups via extra right padding on last col, extra left on first col */
+    .mx-col-last.mx-cell,
+    .mx-col-last.mx-sub-cell,
+    .mx-col-last.mx-total-cell { padding-right: 16px; }
+    .mx-col-first.mx-cell,
+    .mx-col-first.mx-sub-cell,
+    .mx-col-first.mx-total-cell { padding-left: 16px; }
+
+
     .mx-row-empty .mx-cell { background: #f0f1f3; }
     .mx-row-empty .mx-month-pill-inner { opacity: 0.45; }
 
@@ -672,6 +695,7 @@
       color: #fff;
       border-left: 1px solid rgba(255,255,255,0.2);
       border-top: 2px solid rgba(28,35,51,0.1);
+      border-bottom: 1px solid var(--col-color, transparent);
     }
     .mx-total-pct { border-right: 3px solid #fff; }
 
@@ -729,7 +753,7 @@
       flex-wrap: wrap;
       gap: 2px;
       margin-top: 0;
-      margin-bottom: 0;
+      margin-bottom: var(--s3);
       background: #ffffff;
       border: none;
       border-radius: 0;
@@ -898,7 +922,7 @@
     .company-banner-header {
       position: relative;
       overflow: hidden;
-      height: 108px;
+      height: 100px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1143,19 +1167,7 @@
   <!-- 00 · RIGHT NOW -->
   <section class="section">
     <div class="section-head">
-      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 108" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
-  <defs>
-    <clipPath id="cp-hdr1">
-      <rect x="0" y="0" width="432.2" height="108"/>
-    </clipPath>
-  </defs>
-  <rect width="1440" height="108" fill="#005CB9"/>
-  <rect x="-0.1" y="15.8" width="52.5" height="92.2" fill="#152E44" clip-path="url(#cp-hdr1)"/>
-  <g clip-path="url(#cp-hdr1)">
-    <path fill="#1E466F" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5 l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/>
-    <path fill="#1E466F" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0 L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/>
-  </g>
-</svg>
+      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;"><defs><rect id="sh-sr-1" y="177.4" width="432.2" height="108"/><clipPath id="sh-sc-1"><use xlink:href="#sh-sr-1"/></clipPath><rect id="sh-mr-1" width="432.2" height="108"/><clipPath id="sh-mc-1"><use xlink:href="#sh-mr-1"/></clipPath></defs><g clip-path="url(#sh-sc-1)"><path fill="#2D6540" d="M14.6,229.7C14.6,229.7,14.6,229.7,14.6,229.7l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,265.8,20.6,242.1,14.6,229.7"/><path fill="#2D6540" d="M165.3,165.8C165.3,165.8,165.3,165.8,165.3,165.8l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,201.9,171.2,178.1,165.3,165.8"/></g><rect width="1440" height="108" fill="#005CB9"/><rect x="-0.1" y="15.8" clip-path="url(#sh-mc-1)" fill="#152E44" width="52.5" height="92.2"/><g clip-path="url(#sh-mc-1)"><path fill="#1E466F" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/><path fill="#1E466F" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/></g></svg>
       <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">PIPELINE</span><span class="title-accent">&nbsp;SNAPSHOT</span></span></h2>
     </div>
     <div id="pipeline-switcher" class="tab-bar"></div>
@@ -1171,19 +1183,7 @@
   <!-- 02 · MONTHLY SALES -->
   <section class="section">
     <div class="section-head">
-      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 108" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
-  <defs>
-    <clipPath id="cp-hdr5">
-      <rect x="0" y="0" width="432.2" height="108"/>
-    </clipPath>
-  </defs>
-  <rect width="1440" height="108" fill="#67B3E4"/>
-  <rect x="-0.1" y="15.8" width="52.5" height="92.2" fill="#3A6677" clip-path="url(#cp-hdr5)"/>
-  <g clip-path="url(#cp-hdr5)">
-    <path fill="#518EAC" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5 l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/>
-    <path fill="#518EAC" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0 L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/>
-  </g>
-</svg>
+      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;"><defs><rect id="sh-sr-2" y="177.4" width="432.2" height="108"/><clipPath id="sh-sc-2"><use xlink:href="#sh-sr-2"/></clipPath><rect id="sh-mr-2" width="432.2" height="108"/><clipPath id="sh-mc-2"><use xlink:href="#sh-mr-2"/></clipPath></defs><g clip-path="url(#sh-sc-2)"><path fill="#518EAC" d="M14.6,229.7C14.6,229.7,14.6,229.7,14.6,229.7l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,265.8,20.6,242.1,14.6,229.7"/><path fill="#518EAC" d="M165.3,165.8C165.3,165.8,165.3,165.8,165.3,165.8l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,201.9,171.2,178.1,165.3,165.8"/></g><rect width="1440" height="108" fill="#67B3E4"/><rect x="-0.1" y="15.8" clip-path="url(#sh-mc-2)" fill="#3A6677" width="52.5" height="92.2"/><g clip-path="url(#sh-mc-2)"><path fill="#518EAC" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/><path fill="#518EAC" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/></g></svg>
       <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">MONTHLY SALES</span><span class="title-accent">&nbsp;GOAL VS ACTUAL</span></span></h2>
     </div>
     <div id="centers-switcher" class="tab-bar"></div>
@@ -1195,19 +1195,7 @@
   <!-- 03 · DAILY -->
   <section class="section">
     <div class="section-head">
-      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 108" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
-  <defs>
-    <clipPath id="cp-hdr6">
-      <rect x="0" y="0" width="432.2" height="108"/>
-    </clipPath>
-  </defs>
-  <rect width="1440" height="108" fill="#0E7845"/>
-  <rect x="-0.1" y="15.8" width="52.5" height="92.2" fill="#1D3F27" clip-path="url(#cp-hdr6)"/>
-  <g clip-path="url(#cp-hdr6)">
-    <path fill="#2D6540" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5 l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/>
-    <path fill="#2D6540" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0 L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/>
-  </g>
-</svg>
+      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;"><defs><rect id="sh-sr-3" y="177.4" width="432.2" height="108"/><clipPath id="sh-sc-3"><use xlink:href="#sh-sr-3"/></clipPath><rect id="sh-mr-3" width="432.2" height="108"/><clipPath id="sh-mc-3"><use xlink:href="#sh-mr-3"/></clipPath></defs><g clip-path="url(#sh-sc-3)"><path fill="#2D6540" d="M14.6,229.7C14.6,229.7,14.6,229.7,14.6,229.7l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,265.8,20.6,242.1,14.6,229.7"/><path fill="#2D6540" d="M165.3,165.8C165.3,165.8,165.3,165.8,165.3,165.8l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,201.9,171.2,178.1,165.3,165.8"/></g><rect width="1440" height="108" fill="#005CB9"/><rect x="-0.1" y="15.8" clip-path="url(#sh-mc-3)" fill="#152E44" width="52.5" height="92.2"/><g clip-path="url(#sh-mc-3)"><path fill="#1E466F" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/><path fill="#1E466F" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/></g></svg>
       <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">DAILY SALES</span><span class="title-accent">&nbsp;BY CENTER</span></span></h2>
     </div>
     <div id="daily-matrix"></div>
@@ -1217,19 +1205,7 @@
   <!-- 04 · SALESPEOPLE -->
   <section class="section">
     <div class="section-head">
-      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 108" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
-  <defs>
-    <clipPath id="cp-hdr7">
-      <rect x="0" y="0" width="432.2" height="108"/>
-    </clipPath>
-  </defs>
-  <rect width="1440" height="108" fill="#0E7845"/>
-  <rect x="-0.1" y="15.8" width="52.5" height="92.2" fill="#1D3F27" clip-path="url(#cp-hdr7)"/>
-  <g clip-path="url(#cp-hdr7)">
-    <path fill="#2D6540" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5 l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/>
-    <path fill="#2D6540" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0 L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/>
-  </g>
-</svg>
+      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;"><defs><rect id="sh-sr-4" y="177.4" width="432.2" height="108"/><clipPath id="sh-sc-4"><use xlink:href="#sh-sr-4"/></clipPath><rect id="sh-mr-4" width="432.2" height="108"/><clipPath id="sh-mc-4"><use xlink:href="#sh-mr-4"/></clipPath></defs><g clip-path="url(#sh-sc-4)"><path fill="#ED7933" d="M14.6,229.7C14.6,229.7,14.6,229.7,14.6,229.7l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,265.8,20.6,242.1,14.6,229.7"/><path fill="#ED7933" d="M165.3,165.8C165.3,165.8,165.3,165.8,165.3,165.8l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,201.9,171.2,178.1,165.3,165.8"/></g><rect width="1440" height="108" fill="#0E7845"/><rect x="-0.1" y="15.8" clip-path="url(#sh-mc-4)" fill="#1D3F27" width="52.5" height="92.2"/><g clip-path="url(#sh-mc-4)"><path fill="#2D6540" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/><path fill="#2D6540" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/></g></svg>
       <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">STATEMENT</span><span class="title-accent">&nbsp;MAKERS</span></span></h2>
     </div>
     <div id="reps-switcher" class="tab-bar"></div>
@@ -1242,19 +1218,7 @@
   <!-- 05 · GOAL BREAKDOWN -->
   <section class="section">
     <div class="section-head">
-      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 108" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
-  <defs>
-    <clipPath id="cp-hdr8">
-      <rect x="0" y="0" width="432.2" height="108"/>
-    </clipPath>
-  </defs>
-  <rect width="1440" height="108" fill="#F49A3A"/>
-  <rect x="-0.1" y="15.8" width="52.5" height="92.2" fill="#AB5428" clip-path="url(#cp-hdr8)"/>
-  <g clip-path="url(#cp-hdr8)">
-    <path fill="#ED7933" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5 l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/>
-    <path fill="#ED7933" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0 L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/>
-  </g>
-</svg>
+      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;"><defs><rect id="sh-sr-5" y="177.4" width="432.2" height="108"/><clipPath id="sh-sc-5"><use xlink:href="#sh-sr-5"/></clipPath><rect id="sh-mr-5" width="432.2" height="108"/><clipPath id="sh-mc-5"><use xlink:href="#sh-mr-5"/></clipPath></defs><g clip-path="url(#sh-sc-5)"><path fill="#2D6540" d="M14.6,229.7C14.6,229.7,14.6,229.7,14.6,229.7l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,265.8,20.6,242.1,14.6,229.7"/><path fill="#2D6540" d="M165.3,165.8C165.3,165.8,165.3,165.8,165.3,165.8l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,201.9,171.2,178.1,165.3,165.8"/></g><rect width="1440" height="108" fill="#005CB9"/><rect x="-0.1" y="15.8" clip-path="url(#sh-mc-5)" fill="#152E44" width="52.5" height="92.2"/><g clip-path="url(#sh-mc-5)"><path fill="#1E466F" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/><path fill="#1E466F" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/></g></svg>
       <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">GOAL</span><span class="title-accent">&nbsp;BREAKDOWN</span></span></h2>
     </div>
     <div id="goal-breakdown-tabs" class="tab-bar"></div>
@@ -1264,19 +1228,7 @@
   <!-- 06 · ACTIVITY FEED -->
   <section class="section">
     <div class="section-head">
-      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 108" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
-  <defs>
-    <clipPath id="cp-hdr9">
-      <rect x="0" y="0" width="432.2" height="108"/>
-    </clipPath>
-  </defs>
-  <rect width="1440" height="108" fill="#67B3E4"/>
-  <rect x="-0.1" y="15.8" width="52.5" height="92.2" fill="#3A6677" clip-path="url(#cp-hdr9)"/>
-  <g clip-path="url(#cp-hdr9)">
-    <path fill="#518EAC" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5 l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/>
-    <path fill="#518EAC" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0 L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/>
-  </g>
-</svg>
+      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;"><defs><rect id="sh-sr-6" y="177.4" width="432.2" height="108"/><clipPath id="sh-sc-6"><use xlink:href="#sh-sr-6"/></clipPath><rect id="sh-mr-6" width="432.2" height="108"/><clipPath id="sh-mc-6"><use xlink:href="#sh-mr-6"/></clipPath></defs><g clip-path="url(#sh-sc-6)"><path fill="#518EAC" d="M14.6,229.7C14.6,229.7,14.6,229.7,14.6,229.7l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,265.8,20.6,242.1,14.6,229.7"/><path fill="#518EAC" d="M165.3,165.8C165.3,165.8,165.3,165.8,165.3,165.8l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,201.9,171.2,178.1,165.3,165.8"/></g><rect width="1440" height="108" fill="#67B3E4"/><rect x="-0.1" y="15.8" clip-path="url(#sh-mc-6)" fill="#3A6677" width="52.5" height="92.2"/><g clip-path="url(#sh-mc-6)"><path fill="#518EAC" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/><path fill="#518EAC" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/></g></svg>
       <h2 class="section-title"><span class="sh-title-wrap"><span class="title-main">FASTFLOW</span><span class="title-accent">&nbsp;FEED</span></span></h2>
     </div>
     <div id="activity-feed"></div>
@@ -1306,7 +1258,7 @@ const VISIBLE_MONTHS = MONTHS.map((_,i) => i <= CURRENT_MONTH); /* true = show, 
 const REPS = ['Brittany Herrera', 'Dylan Falk-Hutchings', 'Jeremy Medina (OSR)', 'Santoie Croxford', 'Nathaniel Darling', 'Santa Ana CSR', 'Marcos Reyes'];
 
 /* ===== Permanently excluded reps — never shown anywhere ===== */
-const EXCLUDED_REPS = new Set(['ryan flook', 'stan gray']);
+const EXCLUDED_REPS = new Set(['ryan flook', 'stan gray', 'gilbert aguilar']);
 
 /* ===== UPDATED CENTER COLORS — per branding guide ===== */
 const INK = '#1C2333', CHAMP = '#0066B3';
@@ -1329,7 +1281,6 @@ const REP_COLORS = {
   'Nathaniel Darling':      '#009951',  /* bright emerald        */
   'Santa Ana CSR':          '#688F00',  /* olive-green           */
   'Marcos Reyes':           '#006B3C',  /* bottle green          */
-  'Gilbert Aguilar':        '#2E7D32',  /* rich forest           */
   'Mark Sabedra':           '#558B2F',  /* fern green            */
 };
 
@@ -1366,16 +1317,6 @@ function registerNewRep(name, email){
   if (!state.goals.reps[name]) state.goals.reps[name] = new Array(12).fill(0);
   if (!state.repMeta) state.repMeta = {};
   state.repMeta[name] = { email: email||'', autoAdded: true, addedDate: new Date().toISOString() };
-  /* Inject CSS so this new rep's columns are fully colored */
-  const esc = name.replace(/"/g,'\\"');
-  const style = document.createElement('style');
-  style.textContent = `
-    td[data-rep="${esc}"]            { background: ${color} !important; color: #fff !important; font-weight: 600; }
-    td[data-rep="${esc}"] *           { color: #fff !important; }
-    td[data-rep="${esc}"].month-col   { background: #fff !important; color: #1C2333 !important; }
-    td[data-rep="${esc}"].month-col * { color: #1C2333 !important; }
-  `;
-  document.head.appendChild(style);
   return true;
 }
 
@@ -1395,7 +1336,6 @@ const GOALS_2026_DEFAULT = {
     "Nathaniel Darling": [null,null,null,null,4000,10000,12500,15000,17500,18000,18000,18000],
     "Santa Ana CSR": [null,null,null,null,null,null,8000,10000,10000,12500,15000,20000],
     "Marcos Reyes":  [null,null,null,null,null,null,null,null,null,null,null,null],
-    "Gilbert Aguilar": [null,null,null,null,null,null,null,null,null,null,null,null],
     "Mark Sabedra":  [null,null,null,null,null,null,null,null,null,null,null,null]
   }
 };
@@ -1795,11 +1735,11 @@ function buildGoalMatrix(cfg){
     superRow+=`</tr>`;
   }
 
-  /* ── ROW 2: Center name headers — square, solid color ── */
+  /* ── ROW 2: Center name headers — square, solid color, with top colored border ── */
   let centerRow=`<tr><td class="mx-corner mx-sticky"></td>`;
   cols.forEach(k=>{
     const c=colorOf(k);
-    centerRow+=`<td colspan="4" class="mx-center-head" style="background:${c}">${labelOf(k).toUpperCase()}</td>`;
+    centerRow+=`<td colspan="4" class="mx-center-head" style="background:${c};border-top:1px solid ${c};border-left:1px solid ${c};border-right:1px solid ${c};">${labelOf(k).toUpperCase()}</td>`;
   });
   centerRow+=`</tr>`;
 
@@ -1807,10 +1747,10 @@ function buildGoalMatrix(cfg){
   let subRow=`<tr class="mx-sub-row"><td class="mx-corner mx-sticky mx-month-head-cell"></td>`;
   cols.forEach(k=>{
     const c=colorOf(k);
-    subRow+=`<td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${c}">Sales</span></td>
+    subRow+=`<td class="mx-sub-cell mx-col-first" style="--col-color:${c}"><span class="mx-sub-label" style="--sub-color:${c}">Sales</span></td>
              <td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${c}">Goal</span></td>
              <td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${c}">Delta</span></td>
-             <td class="mx-sub-cell mx-sub-cell-last"><span class="mx-sub-label" style="--sub-color:${c}">%</span></td>`;
+             <td class="mx-sub-cell mx-sub-cell-last mx-col-last" style="--col-color:${c}"><span class="mx-sub-label" style="--sub-color:${c}">%</span></td>`;
   });
   subRow+=`</tr>`;
 
@@ -1829,10 +1769,10 @@ function buildGoalMatrix(cfg){
       ?`<span class="goal-input" data-type="${cfg.dataType}" data-key="${k}" data-month="${m}" title="${fmtFull(goal)}">${fmt(goal)}</span>`
       :`<span title="${fmtFull(goal)}">${fmt(goal)}</span>`;
     const deltaCell=statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg');
-    return `<td class="mx-cell"${repAttr}>${salesCell}</td>
+    return `<td class="mx-cell mx-col-first" style="--col-color:${colorOf(k)}"${repAttr}>${salesCell}</td>
             <td class="mx-cell"${repAttr}>${goalCell}</td>
             <td class="mx-cell"${repAttr}>${deltaCell}</td>
-            <td class="mx-cell mx-pct"${repAttr}>${p}%</td>`;
+            <td class="mx-cell mx-pct mx-col-last" style="--col-color:${colorOf(k)}"${repAttr}>${p}%</td>`;
   }
 
   /* ── BODY: month rows ── */
@@ -1859,10 +1799,10 @@ function buildGoalMatrix(cfg){
     const isLoc=cfg.dataType==='loc' && !isTot;
     const repAttr=isRep?` data-rep="${k}"`:isLoc?` data-center="${k}"` :'';
     const c=colorOf(k);
-    body+=`<td class="mx-total-cell" style="background:${c}"${repAttr}>${fmt(s)}</td>
+    body+=`<td class="mx-total-cell mx-col-first" style="background:${c};--col-color:${c}"${repAttr}>${fmt(s)}</td>
            <td class="mx-total-cell" style="background:${c}"${repAttr}>${fmt(g)}</td>
            <td class="mx-total-cell" style="background:${c}"${repAttr}>${statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg')}</td>
-           <td class="mx-total-cell mx-total-pct" style="background:${c}"${repAttr}>${p}%</td>`;
+           <td class="mx-total-cell mx-total-pct mx-col-last" style="background:${c};--col-color:${c}"${repAttr}>${p}%</td>`;
   });
   body+=`</tr>`;
 
@@ -2192,19 +2132,7 @@ function renderAllCentersOverview(){
   const card=document.createElement('div'); card.className='company-banner-card';
   card.innerHTML=`
     <div class="company-banner-header">
-      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 108" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
-  <defs>
-    <clipPath id="cp-hdr10">
-      <rect x="0" y="0" width="432.2" height="108"/>
-    </clipPath>
-  </defs>
-  <rect width="1440" height="108" fill="#005CB9"/>
-  <rect x="-0.1" y="15.8" width="52.5" height="92.2" fill="#152E44" clip-path="url(#cp-hdr10)"/>
-  <g clip-path="url(#cp-hdr10)">
-    <path fill="#1E466F" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5 l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/>
-    <path fill="#1E466F" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0 L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8 c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1 c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/>
-  </g>
-</svg>
+      <svg class="sh-svg-bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;"><defs><rect id="sh-sr-7" y="177.4" width="432.2" height="108"/><clipPath id="sh-sc-7"><use xlink:href="#sh-sr-7"/></clipPath><rect id="sh-mr-7" width="432.2" height="108"/><clipPath id="sh-mc-7"><use xlink:href="#sh-mr-7"/></clipPath></defs><g clip-path="url(#sh-sc-7)"><path fill="#2D6540" d="M14.6,229.7C14.6,229.7,14.6,229.7,14.6,229.7l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,265.8,20.6,242.1,14.6,229.7"/><path fill="#2D6540" d="M165.3,165.8C165.3,165.8,165.3,165.8,165.3,165.8l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,201.9,171.2,178.1,165.3,165.8"/></g><rect width="1440" height="108" fill="#005CB9"/><rect x="-0.1" y="15.8" clip-path="url(#sh-mc-7)" fill="#152E44" width="52.5" height="92.2"/><g clip-path="url(#sh-mc-7)"><path fill="#1E466F" d="M14.6,52.4C14.6,52.3,14.6,52.3,14.6,52.4l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0l25.7,60.5l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C34.3,88.4,20.6,64.7,14.6,52.4"/><path fill="#1E466F" d="M165.3-11.6C165.3-11.6,165.3-11.6,165.3-11.6l-33-77.7l130.8-55.5l28.5,67.3c0,0,0,0,0,0c0,0,0,0,0,0L317.3-17l-18.2,7.7c-8.2,3.5-16.4,7-24.6,10.4c-1.9,0.8-3,1.7-4.7,3.1c-2.5,2-0.2,8.6,0.7,11c1.5,4.2,3.7,8.1,6.1,11.8c6,9.1,13.4,17.3,21,25.1c7.5,7.7,15.4,15,23.6,22c5,4.4,10.2,8.7,15.4,12.8c0.5,0.4,1,0.8,1.5,1.2l-52,22.1c-44-17.2-75.7-46.1-93.8-74.2C184.9,24.5,171.2,0.8,165.3-11.6"/></g></svg>
       <h2 class="section-title" style="margin:0;"><span class="sh-title-wrap"><span class="title-main">COMPANY</span><span class="title-accent">&nbsp;ANNUAL GOAL SNAPSHOT</span></span></h2>
       <span class="cb-ytd-label">YEAR TO DATE</span>
     </div>
@@ -2278,14 +2206,14 @@ function renderDailyMatrix(){
 
   let centerRow=`<tr><td class="mx-corner mx-sticky"></td>`;
   allCols.forEach(k=>{ const c=colorOf(k);
-    centerRow+=`<td colspan="3" class="mx-center-head" style="background:${c}">${labelOf(k).toUpperCase()}</td>`; });
+    centerRow+=`<td colspan="3" class="mx-center-head" style="background:${c};border-top:1px solid ${c};border-left:1px solid ${c};border-right:1px solid ${c};">${labelOf(k).toUpperCase()}</td>`; });
   centerRow+=`</tr>`;
 
   let subRow=`<tr class="mx-sub-row"><td class="mx-corner mx-sticky mx-month-head-cell"></td>`;
   allCols.forEach(k=>{ const c=colorOf(k);
-    subRow+=`<td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${c}">Today</span></td>
+    subRow+=`<td class="mx-sub-cell mx-col-first" style="--col-color:${c}"><span class="mx-sub-label" style="--sub-color:${c}">Today</span></td>
              <td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${c}">Month</span></td>
-             <td class="mx-sub-cell mx-sub-cell-last"><span class="mx-sub-label" style="--sub-color:${c}">Last</span></td>`; });
+             <td class="mx-sub-cell mx-sub-cell-last mx-col-last" style="--col-color:${c}"><span class="mx-sub-label" style="--sub-color:${c}">Last</span></td>`; });
   subRow+=`</tr>`;
 
   let head=superRow+centerRow+subRow;
@@ -2294,8 +2222,9 @@ function renderDailyMatrix(){
     body+=`<tr class="mx-row-data"><td class="mx-sticky mx-month-pill"><span class="mx-month-pill-inner">${metric}</span></td>`;
     allCols.forEach(k=>{
       const d=dataAt(k,metric);
+      const c=colorOf(k);
       const centerAttr=k==='__TOTAL__'?'':` data-center="${k}"`;
-      body+=`<td class="mx-cell"${centerAttr}>${fmtCell(metric,d.today)}</td><td class="mx-cell"${centerAttr}>${fmtCell(metric,d.month)}</td><td class="mx-cell mx-pct"${centerAttr}>${fmtCell(metric,d.last)}</td>`;
+      body+=`<td class="mx-cell mx-col-first" style="--col-color:${c}"${centerAttr}>${fmtCell(metric,d.today)}</td><td class="mx-cell"${centerAttr}>${fmtCell(metric,d.month)}</td><td class="mx-cell mx-pct mx-col-last" style="--col-color:${c}"${centerAttr}>${fmtCell(metric,d.last)}</td>`;
     });
     body+=`</tr>`;
   }
@@ -2386,7 +2315,7 @@ const CHART = {
   M: { top: 30, right: 20, bottom: 56, left: 76 },
   FONT: "'DIN Pro', 'DIN', system-ui, sans-serif",
   AXIS: '#1C2333', GRID: 'rgba(28,35,51,0.06)', DOMAIN: 'rgba(28,35,51,0.18)',
-  LABEL_HI: '11px', LABEL_LO: '10px', VAL: '10px', VAL_LO: '9px'
+  LABEL_HI: '13px', LABEL_LO: '12px', VAL: '12px', VAL_LO: '11px'
 };
 
 /* chart shell — badge on chart h3 headings */
@@ -2556,9 +2485,9 @@ function drawBars(wrap, groups, opts){
   if (!singleMetric && opts.legend !== false){
     const lg = svg.append('g').attr('transform',`translate(${M.left},10)`);
     lg.append('rect').attr('width',11).attr('height',11).attr('rx',2).attr('fill', INK).attr('opacity',0.85);
-    lg.append('text').attr('x',16).attr('y',9.5).attr('font-size','9.5px').attr('font-weight','600').attr('fill',CHART.AXIS).text('Actual');
+    lg.append('text').attr('x',16).attr('y',9.5).attr('font-size','12px').attr('font-weight','600').attr('fill',CHART.AXIS).text('Actual');
     lg.append('rect').attr('x',68).attr('width',11).attr('height',11).attr('rx',2).attr('fill','none').attr('stroke',INK).attr('stroke-width',1.6).attr('stroke-dasharray','3,3').attr('opacity',0.6);
-    lg.append('text').attr('x',84).attr('y',9.5).attr('font-size','9.5px').attr('font-weight','600').attr('fill',CHART.AXIS).text('Goal');
+    lg.append('text').attr('x',84).attr('y',9.5).attr('font-size','12px').attr('font-weight','600').attr('fill',CHART.AXIS).text('Goal');
   }
   return { svg, gEl, x0, x1, y, width, height };
 }
@@ -2662,7 +2591,7 @@ function drawEstimateChart(hostId){
     .call(s=>s.select('.domain').remove())
     .selectAll('text').attr('fill','#1C2333').attr('font-weight','600').attr('font-size',CHART.LABEL_LO).style('font-family','var(--sans)');
   const lg=svg.append('g').attr('transform',`translate(${M.left},10)`);
-  let lx=0; series.forEach(s=>{ lg.append('rect').attr('x',lx).attr('width',11).attr('height',11).attr('rx',2).attr('fill',s.color).attr('opacity',0.9); lg.append('text').attr('x',lx+16).attr('y',9.5).attr('font-size','9.5px').attr('font-weight','600').attr('fill',CHART.AXIS).text(s.label); lx+=16+s.label.length*6.5+16; });
+  let lx=0; series.forEach(s=>{ lg.append('rect').attr('x',lx).attr('width',12).attr('height',12).attr('rx',2).attr('fill',s.color).attr('opacity',0.9); lg.append('text').attr('x',lx+17).attr('y',10.5).attr('font-size','12px').attr('font-weight','600').attr('fill',CHART.AXIS).text(s.label); lx+=17+s.label.length*7+16; });
 }
 
 /* ---- Per-rep monthly chart ---- */
@@ -2813,7 +2742,7 @@ function drawCentersMonthlyMega(hostId){
   g.append('g').call(d3.axisLeft(y).ticks(6).tickFormat(v=>fmt(v)))
     .call(s=>s.select('.domain').remove())
     .call(s=>s.selectAll('line').remove())
-    .call(s=>s.selectAll('text').attr('fill',CHART.AXIS).attr('font-size','11px').attr('font-weight','500'));
+    .call(s=>s.selectAll('text').attr('fill',CHART.AXIS).attr('font-size','14px').attr('font-weight','500'));
 
   /* Month groups — only show months up to current calendar month */
   const monthGroups=g.selectAll('.mgrp')
@@ -2850,7 +2779,7 @@ function drawCentersMonthlyMega(hostId){
       .attr('x', x1(c) + x1.bandwidth()/2)
       .attr('y', d=>y(state.locActual[c][d.i]||0) - 5)
       .attr('text-anchor','middle')
-      .attr('font-size','10px')
+      .attr('font-size','15px')
       .attr('font-weight','700')
       .attr('fill', LOC_COLORS[c])
       .attr('opacity', 0)
@@ -2872,14 +2801,14 @@ function drawCentersMonthlyMega(hostId){
     .call(d3.axisBottom(x0).tickSize(0).tickPadding(14))
     .call(s=>s.select('.domain').remove())
     .selectAll('text')
-    .attr('fill','#1C2333').attr('font-weight','700').attr('font-size','13px');
+    .attr('fill','#1C2333').attr('font-weight','700').attr('font-size','16px');
 
   /* Legend */
   const legend=svg.append('g').attr('transform',`translate(${M.left},${H-18})`);
   let lx=0;
   centers.forEach(c=>{
     legend.append('rect').attr('x',lx).attr('width',13).attr('height',13).attr('rx',2).attr('fill',LOC_COLORS[c]);
-    legend.append('text').attr('x',lx+18).attr('y',11).attr('font-size','12px').attr('font-weight','600').attr('fill',CHART.AXIS).text(c);
+    legend.append('text').attr('x',lx+18).attr('y',11).attr('font-size','15px').attr('font-weight','600').attr('fill',CHART.AXIS).text(c);
     lx+=18+c.length*7.2+24;
   });
 }
