@@ -300,7 +300,24 @@
     .section > * + * {
       border-top: none;
     }
-    /* EXCEPT after a tab-bar: add transparent gap + restore border */
+    /* Section-head: inset shadow so outline shows ON TOP of the SVG bg */
+    .section > .section-head {
+      box-shadow: inset 0 0 0 3px var(--section-color, var(--champagne-hi));
+      border: none;
+      margin-bottom: 14px;
+    }
+    /* Restore border on whatever follows section-head (gap shows through) */
+    .section > .section-head + * {
+      border-top: 2px solid var(--section-color, var(--champagne-hi));
+    }
+    /* When tab-bar follows section-head: connect them, tab-bar owns the gap */
+    .section > .section-head:has(+ .tab-bar) {
+      margin-bottom: 0;
+    }
+    .section > .section-head + .tab-bar {
+      border-top: none;
+    }
+    /* Tab-bar: transparent gap below + matching border */
     .section > .tab-bar {
       margin-bottom: 14px;
       border: 2px solid var(--section-color, var(--champagne-hi));
@@ -308,11 +325,6 @@
     }
     .section > .tab-bar + * {
       border-top: 2px solid var(--champagne-hi);
-    }
-    /* Section-head: inset shadow so outline shows ON TOP of the SVG bg */
-    .section > .section-head {
-      box-shadow: inset 0 0 0 3px var(--section-color, var(--champagne-hi));
-      border: none;
     }
 
     /* ── Section header: identical to .company-banner-header ── */
@@ -416,7 +428,12 @@
     .entity-badge.outlined {
       background: transparent;
       border: 1.5px solid var(--badge-color, var(--ink));
-      color: var(--badge-color, var(--ink));
+      color: var(--ink);
+      font-family: var(--sans-cond);
+      font-weight: 900;
+      font-size: 0.82rem;
+      letter-spacing: 0.01em;
+      padding: 6px 16px 6px 12px;
     }
     .entity-badge.outlined .badge-dot { background: var(--badge-color, var(--ink)); }
 
@@ -616,13 +633,13 @@
     /* ── Month label — plain text with underline ── */
     .mx-month-pill {
       background: #fff !important;
-      padding: 5px 4px 5px 2px;
+      padding: 5px 10px 5px 2px;
       border-bottom: 1.5px solid #bbb;
     }
     .mx-month-pill-inner {
-      font-family: var(--sans);
-      font-size: 0.78rem;
-      font-weight: 400;
+      font-family: var(--sans-cond);
+      font-size: 0.82rem;
+      font-weight: 700;
       color: var(--ink);
       white-space: nowrap;
     }
@@ -653,7 +670,7 @@
     .matrix-table .mx-sub-cell.mx-ol-r { border-right: 2px solid var(--oc); }
 
     /* Gap between center groups — white spacing via col width */
-    .mx-gap-col { width: 16px; min-width: 16px; max-width: 16px; }
+    .mx-gap-col { width: 8px; min-width: 8px; max-width: 8px; }
     .mx-val-col { width: 72px; min-width: 72px; max-width: 72px; }
     .mx-delta-col { width: 80px; min-width: 80px; max-width: 80px; }
     .mx-pct-col { width: 50px; min-width: 50px; max-width: 50px; }
@@ -2237,40 +2254,53 @@ function renderDailyMatrix(){
   const fmtCell=(metric,v)=>metric.startsWith('$')?fmt(v):Math.round(v).toLocaleString();
   const fmtCellFull=(metric,v)=>metric.startsWith('$')?fmtFull(v):Math.round(v).toLocaleString();
 
+  let colgroup='<colgroup><col style="width:150px;min-width:150px">';
+  allCols.forEach((k,i)=>{
+    if (i>0) colgroup+='<col class="mx-gap-col">';
+    colgroup+='<col class="mx-val-col"><col class="mx-val-col"><col class="mx-val-col">';
+  });
+  colgroup+='</colgroup>';
+
   let superRow=`<tr class="mx-district-row"><td class="mx-corner mx-sticky"></td>`;
   [{label:'South Bay',members:DISTRICTS['South Bay'],color:DISTRICT_COLORS['South Bay']},{label:'Valley',members:DISTRICTS['Valley'],color:DISTRICT_COLORS['Valley']}]
-    .forEach(g=>{ superRow+=`<td colspan="${g.members.length*3}"><div class="mx-district-banner" style="--dist-color:${g.color}">${g.label}</div></td>`; });
-  superRow+=`<td colspan="3"><div class="mx-district-banner" style="--dist-color:${INK}">Total</div></td></tr>`;
+    .forEach((g,gi)=>{
+      if (gi>0) superRow+=`<td></td>`;
+      const span = g.members.length * 3 + (g.members.length - 1);
+      superRow+=`<td colspan="${span}"><div class="mx-district-banner" style="--dist-color:${g.color}">${g.label}</div></td>`;
+    });
+  superRow+=`<td></td><td colspan="3"><div class="mx-district-banner" style="--dist-color:${INK}">Total</div></td></tr>`;
 
   let centerRow=`<tr><td class="mx-corner mx-sticky"></td>`;
-  allCols.forEach(k=>{ const c=colorOf(k);
-    centerRow+=`<td colspan="3" class="mx-center-head" style="background:${c};border-top:1px solid ${c};border-left:1px solid ${c};border-right:1px solid ${c};">${labelOf(k).toUpperCase()}</td>`; });
+  allCols.forEach((k,i)=>{ const c=colorOf(k);
+    const gap = i>0 ? '<td></td>' : '';
+    centerRow+=`${gap}<td colspan="3" class="mx-center-head mx-ol" style="background:${c};--oc:${c}">${labelOf(k).toUpperCase()}</td>`; });
   centerRow+=`</tr>`;
 
   let subRow=`<tr class="mx-sub-row"><td class="mx-corner mx-sticky mx-month-head-cell"></td>`;
-  allCols.forEach(k=>{ const c=colorOf(k);
-    subRow+=`<td class="mx-sub-cell mx-col-first"><span class="mx-sub-label" style="--sub-color:${c}">Today</span></td>
+  allCols.forEach((k,i)=>{ const c=colorOf(k);
+    const gap = i>0 ? '<td></td>' : '';
+    subRow+=`${gap}<td class="mx-sub-cell mx-ol-l mx-ol" style="--oc:${c}"><span class="mx-sub-label" style="--sub-color:${c}">Today</span></td>
              <td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${c}">Month</span></td>
-             <td class="mx-sub-cell mx-sub-cell-last mx-col-last"><span class="mx-sub-label" style="--sub-color:${c}">Last</span></td>`; });
+             <td class="mx-sub-cell mx-sub-cell-last mx-ol-r mx-ol" style="--oc:${c}"><span class="mx-sub-label" style="--sub-color:${c}">Last</span></td>`; });
   subRow+=`</tr>`;
 
   let head=superRow+centerRow+subRow;
   let body='';
   for (const metric of metrics){
     body+=`<tr class="mx-row-data"><td class="mx-sticky mx-month-pill"><span class="mx-month-pill-inner">${metric}</span></td>`;
-    allCols.forEach(k=>{
+    allCols.forEach((k,ki)=>{
       const d=dataAt(k,metric);
       const c=colorOf(k);
       const centerAttr=k==='__TOTAL__'?'':` data-center="${k}"`;
-      const bg_unused = null; // removed
-      body+=`<td class="mx-cell mx-col-first"${centerAttr}>${fmtCell(metric,d.today)}</td><td class="mx-cell"${centerAttr}>${fmtCell(metric,d.month)}</td><td class="mx-cell mx-col-last"${centerAttr}>${fmtCell(metric,d.last)}</td>`;
+      const gap = ki>0 ? '<td></td>' : '';
+      body+=`${gap}<td class="mx-cell mx-ol-l mx-ol" style="--oc:${c}"${centerAttr}>${fmtCell(metric,d.today)}</td><td class="mx-cell"${centerAttr}>${fmtCell(metric,d.month)}</td><td class="mx-cell mx-ol-r mx-ol" style="--oc:${c}"${centerAttr}>${fmtCell(metric,d.last)}</td>`;
     });
     body+=`</tr>`;
   }
   const card=document.createElement('div'); card.className='card matrix-card';
   card.innerHTML=`<h3>${entityBadgeHTML('Daily Sales · Today vs This Month vs Last Month', INK, true)}
     <span class="tag ${isLive?'live':''}">${isLive?'Live CoreBridge':'Sample data'}</span></h3>
-    <div class="table-wrapper matrix-scroll"><table class="matrix-table"><thead>${head}</thead><tbody>${body}</tbody></table></div>`;
+    <div class="table-wrapper matrix-scroll"><table class="matrix-table">${colgroup}${head}<tbody>${body}</tbody></table></div>`;
   host.appendChild(card);
 }
 
