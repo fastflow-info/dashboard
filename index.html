@@ -1462,6 +1462,7 @@ function saleDate(o){
       || cbDate(o[CB.SALES_DATE_FALLBACK]) || cbDate(o.dateCreated||o.DateCreated);
 }
 function orderAmount(o){ return cbNum(o[CB.SALES_AMOUNT_FIELD] ?? o.orderTotal ?? o.OrderTotal); }
+function netCompletedAmount(o){ return cbNum(o.orderSubTotal||o.OrderSubTotal) + cbNum(o.orderShipping||o.OrderShipping) + cbNum(o.orderPostage||o.OrderPostage); }
 function orderRep(o){ return o.orderSalesPerson||o.OrderSalesPerson||''; }
 function normName(s){ return (s||'').toString().replace(/\s+/g,' ').trim().toLowerCase(); }
 function stripParen(s){ return (s||'').replace(/\s*\([^)]*\)\s*/g,' ').replace(/\s+/g,' ').trim(); }
@@ -1539,20 +1540,31 @@ async function fetchActuals(year){
     for (const o of rows){
       const kind=classifyRow(o); const c=L.center;
       const statusUp=(o.status||o.Status||'').toString().toUpperCase().trim();
+      const statusLow=statusUp.toLowerCase();
       if (pipeline[c][statusUp]){ pipeline[c][statusUp].count+=1; pipeline[c][statusUp].amount+=orderAmount(o); }
-      if (kind==='sale'){
-        const d=saleDate(o);
-        if (d && d.getFullYear()===year){
-          const m=d.getMonth(), amt=orderAmount(o);
-          byLoc[c][m]+=amt;
-          const repRaw=orderRep(o);
-          const repKey=REP_LOOKUP[normName(repRaw)];
-          if (repKey) byRep[repKey][m]+=amt;
-          else if (repRaw){
-            unmatchedReps.set(repRaw, (unmatchedReps.get(repRaw)||0)+1);
-            if (!unmatchedAmounts.has(repRaw)) unmatchedAmounts.set(repRaw, new Array(12).fill(0));
-            unmatchedAmounts.get(repRaw)[m]+=amt;
-            if (!unmatchedEmails.has(repRaw)) unmatchedEmails.set(repRaw, o.orderSalesPersonEmail||o.OrderSalesPersonEmail||'');
+      /* YTD Sales = Net Completed Orders (portal formula):
+         (COMPLETED + CLOSED with dateCompleted) minus (VOIDED with dateCompleted)
+         Amount = orderSubTotal + orderShipping + orderPostage */
+      const done=completedDate(o);
+      if (done && done.getFullYear()===year){
+        const isComp=(statusLow==='completed'||statusLow==='closed');
+        const isVoidedPost=(statusLow==='voided');
+        if (isComp||isVoidedPost){
+          const m=done.getMonth();
+          const amt=netCompletedAmount(o);
+          const sign=isVoidedPost?-1:1;
+          const applied=Math.abs(amt)*sign;
+          byLoc[c][m]+=applied;
+          if (isComp){
+            const repRaw=orderRep(o);
+            const repKey=REP_LOOKUP[normName(repRaw)];
+            if (repKey) byRep[repKey][m]+=applied;
+            else if (repRaw){
+              unmatchedReps.set(repRaw, (unmatchedReps.get(repRaw)||0)+1);
+              if (!unmatchedAmounts.has(repRaw)) unmatchedAmounts.set(repRaw, new Array(12).fill(0));
+              unmatchedAmounts.get(repRaw)[m]+=applied;
+              if (!unmatchedEmails.has(repRaw)) unmatchedEmails.set(repRaw, o.orderSalesPersonEmail||o.OrderSalesPersonEmail||'');
+            }
           }
         }
       }
@@ -1566,8 +1578,7 @@ async function fetchActuals(year){
       bucketDay(c,'Converted Estimates',convertedDate(o),null);
       bucketDay(c,'New Orders',convertedDate(o),null);
       bucketDay(c,'Canceled Estimates',cancelledDate(o),null);
-      const done=completedDate(o);
-      if (done){ bucketDay(c,'Net Completed',done,null); bucketDay(c,'$ Collected',done,orderAmount(o)); }
+      if (done && statusLow!=='voided'){ bucketDay(c,'Net Completed',done,null); bucketDay(c,'$ Collected',done,netCompletedAmount(o)); }
     }
   }
   const newlyAdded = [];
