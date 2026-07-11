@@ -519,20 +519,20 @@
     .status-pill.stat-neg  { background: var(--neg); color: #fff !important; }
     .status-pill.stat-warn { background: var(--warn); color: #fff !important; }
 
-    /* ===== MATRIX — exact reference image style ===== */
+    /* ===== MATRIX — outline-per-center design ===== */
     .matrix-scroll { overflow-x: auto; }
     .matrix-table {
       border-collapse: separate;
       border-spacing: 0;
+      table-layout: fixed;
       font-size: 0.82rem;
-      min-width: 1080px;
-      width: 100%;
+      width: 1480px;
       background: #fff;
     }
     .matrix-table th, .matrix-table td { white-space: nowrap; box-sizing: border-box; }
 
-    /* ── District banner: full-width stretched, pill-shaped ends ── */
-    .mx-district-row th { padding: 0; border: none; background: #fff; }
+    /* ── District banner: full-width pill ── */
+    .mx-district-row td { padding: 0; border: none; background: #fff; }
     .mx-district-banner {
       display: block;
       text-align: center;
@@ -544,38 +544,30 @@
       color: #fff;
       padding: 12px 20px;
       border-radius: 100px;
-      margin: 10px 6px;
+      margin: 10px 2px;
       background: var(--dist-color);
     }
 
     /* ── Corner spacer ── */
-    .mx-corner { background: #fff; border: none; padding: 0; width: 120px; }
+    .mx-corner { background: #fff; border: none; padding: 0; width: 90px; min-width: 90px; }
 
-    /* ── Center name: square, solid color, white bold text ── */
+    /* ── Center name header: solid color, white bold text ── */
     .mx-center-head {
       text-align: center;
-      font-family: var(--sans);
+      font-family: var(--sans-cond);
       font-size: 0.88rem;
       font-weight: 900;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      font-family: var(--sans-cond);
       color: #fff;
-      padding: 10px 8px;
-      border-left: 3px solid #fff;
-      border-right: 3px solid #fff;
-      border-radius: 0;
+      padding: 10px 4px;
     }
 
-    /* ── Sub-column header row: white bg, each label is a small rounded pill ── */
+    /* ── Sub-column header row ── */
     .mx-sub-row { background: #fff; }
-    .mx-sub-row td.mx-month-head-cell {
-      background: #fff;
-      padding: 6px 8px;
-      border: none;
-    }
+    .mx-sub-row td.mx-month-head-cell { background: #fff; padding: 4px 4px; border: none; font-size: 0.72rem; font-weight: 700; }
     .mx-sub-label {
-      display: inline-block;
+      display: flex; align-items: center; justify-content: center;
       background: var(--sub-color);
       color: #fff;
       font-family: var(--sans);
@@ -583,125 +575,104 @@
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 100px;
+      padding: 3px 4px;
+      height: 24px;
       white-space: nowrap;
     }
     .mx-sub-cell {
-      background: #fff;
-      padding: 5px 6px;
+      padding: 2px 1px;
       text-align: center;
-      border-left: 1px solid rgba(28,35,51,0.06);
-      border-bottom: 1px solid rgba(28,35,51,0.06);
+      border: none;
+      background: #fff;
     }
-    .mx-sub-cell-last {
-      border-right: 3px solid #fff;
-    }
+    .mx-sub-cell-last { }
 
     /* ── Sticky left column ── */
     .mx-sticky { position: sticky; left: 0; z-index: 2; }
     thead .mx-sticky { z-index: 3; }
 
-    /* ── Month label — dark rounded pill ── */
+    /* ── Month label — plain text with underline ── */
     .mx-month-pill {
       background: #fff !important;
-      padding: 5px 6px;
-      border-bottom: 1px solid rgba(28,35,51,0.06);
-      border-right: 2px solid #fff;
+      padding: 5px 4px 5px 2px;
+      border-bottom: 1.5px solid #bbb;
     }
     .mx-month-pill-inner {
-      display: inline-block;
-      background: #2C3444;
-      color: #fff;
-      font-family: var(--sans-cond);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      padding: 4px 14px;
-      border-radius: 100px;
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--ink);
       white-space: nowrap;
     }
 
-    /* ── Body data cells ── */
+    /* ── Body data cells — underline only ── */
     .mx-cell {
-      padding: 7px 10px;
+      padding: 5px 4px;
       text-align: center;
       font-variant-numeric: tabular-nums;
       font-weight: 600;
       font-size: 0.8rem;
       color: var(--ink);
       background: #ffffff;
-      border-bottom: 1px solid rgba(28,35,51,0.06);
-      border-left: 1px solid rgba(28,35,51,0.06);
-    }
-    .mx-pct {
-      color: rgba(28,35,51,0.6);
-      font-weight: 500;
-      font-size: 0.76rem;
-      border-right: 3px solid #fff;
+      border-bottom: 1.5px solid #bbb;
+      border-top: none;
     }
 
-    /* ── Per-center colored column outline — thin 1px with gap between groups ── */
-    .mx-col-first {
-      border-left: 1px solid var(--col-color, transparent) !important;
-    }
-    .mx-col-last {
-      border-right: 1px solid var(--col-color, transparent) !important;
-    }
-    .mx-sub-cell.mx-col-first,
-    .mx-cell.mx-col-first,
-    .mx-total-cell.mx-col-first { border-left: 1px solid var(--col-color, transparent) !important; }
-    .mx-sub-cell.mx-col-last,
-    .mx-cell.mx-col-last,
-    .mx-total-cell.mx-col-last  { border-right: 1px solid var(--col-color, transparent) !important; }
+    /* ── Center group outline ── */
+    .mx-ol { --oc: #1C2333; }
+    .matrix-table td.mx-ol-l { border-left: 2px solid var(--oc); }
+    .matrix-table td.mx-ol-r { border-right: 2px solid var(--oc); }
+    .matrix-table td.mx-ol-t { border-top: 2px solid var(--oc); }
+    .matrix-table td.mx-ol-b { border-bottom: 2px solid var(--oc); }
+    /* Center name head gets outline top + sides */
+    .matrix-table .mx-center-head.mx-ol { border-top: 2px solid var(--oc); border-left: 2px solid var(--oc); border-right: 2px solid var(--oc); }
+    /* Sub-row edges */
+    .matrix-table .mx-sub-cell.mx-ol-l { border-left: 2px solid var(--oc); }
+    .matrix-table .mx-sub-cell.mx-ol-r { border-right: 2px solid var(--oc); }
 
-    /* Gap between groups via extra right padding on last col, extra left on first col */
-    .mx-col-last.mx-cell,
-    .mx-col-last.mx-sub-cell,
-    .mx-col-last.mx-total-cell { padding-right: 16px; }
-    .mx-col-first.mx-cell,
-    .mx-col-first.mx-sub-cell,
-    .mx-col-first.mx-total-cell { padding-left: 16px; }
+    /* Gap between center groups — white spacing via col width */
+    .mx-gap-col { width: 16px; min-width: 16px; max-width: 16px; }
+    .mx-val-col { width: 72px; min-width: 72px; max-width: 72px; }
+    .mx-delta-col { width: 80px; min-width: 80px; max-width: 80px; }
+    .mx-pct-col { width: 50px; min-width: 50px; max-width: 50px; }
 
-
-    .mx-row-empty .mx-cell { background: #f0f1f3; }
+    /* Empty future rows */
+    .mx-row-empty .mx-cell { background: #d8d8d8; border-bottom-color: transparent; border-radius: 3px; }
     .mx-row-empty .mx-month-pill-inner { opacity: 0.45; }
+    .mx-row-empty .mx-month-pill { border-bottom-color: transparent; }
 
     /* ── Total row ── */
     .mx-total-label-cell {
       background: #fff;
-      padding: 5px 6px;
-      border-top: 2px solid rgba(28,35,51,0.1);
-      border-right: 2px solid #fff;
+      padding: 5px 4px 5px 2px;
     }
     .mx-total-label-inner {
-      display: inline-block;
-      background: #1C2333;
-      color: #fff;
-      font-family: var(--sans-cond);
-      font-size: 0.72rem;
+      font-family: var(--sans);
+      font-size: 0.82rem;
       font-weight: 900;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 100px;
+      color: var(--ink);
     }
     .mx-total-cell {
-      padding: 7px 10px;
+      padding: 5px 4px;
       text-align: center;
       font-variant-numeric: tabular-nums;
       font-weight: 700;
       font-size: 0.8rem;
       color: #fff;
-      border-left: 1px solid rgba(255,255,255,0.2);
-      border-top: 2px solid rgba(28,35,51,0.1);
-      border-bottom: 1px solid var(--col-color, transparent);
+      border-top: none;
+      border-radius: 3px;
     }
-    .mx-total-pct { border-right: 3px solid #fff; }
 
     /* ── Row hover ── */
-    .mx-row-data:hover .mx-cell { background: rgba(0,102,179,0.035); }
+    .mx-row-data:hover .mx-cell { filter: brightness(0.94); }
 
+    /* ── Legacy col spacing for daily matrix ── */
+    .mx-col-first { border-left: 8px solid #fff !important; }
+    .mx-col-last  { border-right: 8px solid #fff !important; }
+    .mx-sub-cell.mx-col-first { border-left: 8px solid #fff !important; }
+    .mx-sub-cell.mx-col-last  { border-right: 8px solid #fff !important; }
+    .mx-total-cell.mx-col-first { border-left: 8px solid #fff !important; }
+    .mx-total-cell.mx-col-last  { border-right: 8px solid #fff !important; }
 
 
     /* Editable cells */
@@ -1724,39 +1695,51 @@ function buildGoalMatrix(cfg){
   const actualAt=(k,m)=>k==='__TOTAL__'?cfg.entities.reduce((s,e)=>s+cfg.getActual(e,m),0):cfg.getActual(k,m);
   const goalAt=(k,m)=>k==='__TOTAL__'?cfg.entities.reduce((s,e)=>s+(cfg.getGoal(e,m)||0),0):(cfg.getGoal(k,m)||0);
 
-  /* ── ROW 1: District pill banners — full width, pill-shaped, stretched ── */
+  /* ── COLGROUP: fixed widths ── */
+  let colgroup='<colgroup><col style="width:90px;min-width:90px">';
+  cols.forEach((k,i)=>{
+    if (i>0) colgroup+='<col class="mx-gap-col">';
+    colgroup+='<col class="mx-val-col"><col class="mx-val-col"><col class="mx-delta-col"><col class="mx-pct-col">';
+  });
+  colgroup+='</colgroup>';
+
+  /* ── ROW 1: District pill banners ── */
   let superRow='';
   if (cfg.groups){
     superRow=`<tr class="mx-district-row"><td class="mx-corner mx-sticky"></td>`;
-    cfg.groups.forEach(g=>{
-      superRow+=`<td colspan="${g.members.length*4}"><div class="mx-district-banner" style="--dist-color:${g.color}">${g.label}</div></td>`;
+    cfg.groups.forEach((g,gi)=>{
+      if (gi>0) superRow+=`<td></td>`;
+      const span = g.members.length * 4 + (g.members.length - 1);
+      superRow+=`<td colspan="${span}"><div class="mx-district-banner" style="--dist-color:${g.color}">${g.label}</div></td>`;
     });
-    if (hasTotal) superRow+=`<td colspan="4"><div class="mx-district-banner" style="--dist-color:${INK}">TOTAL</div></td>`;
+    if (hasTotal) superRow+=`<td></td><td colspan="4"><div class="mx-district-banner" style="--dist-color:${INK}">TOTAL</div></td>`;
     superRow+=`</tr>`;
   }
 
-  /* ── ROW 2: Center name headers — square, solid color, with top colored border ── */
+  /* ── ROW 2: Center name headers with outline top + sides ── */
   let centerRow=`<tr><td class="mx-corner mx-sticky"></td>`;
-  cols.forEach(k=>{
+  cols.forEach((k,i)=>{
     const c=colorOf(k);
-    centerRow+=`<td colspan="4" class="mx-center-head" style="background:${c};border-top:1px solid ${c};border-left:1px solid ${c};border-right:1px solid ${c};">${labelOf(k).toUpperCase()}</td>`;
+    if (i>0) centerRow+=`<td></td>`;
+    centerRow+=`<td colspan="4" class="mx-center-head mx-ol" style="background:${c};--oc:${c}">${labelOf(k).toUpperCase()}</td>`;
   });
   centerRow+=`</tr>`;
 
-  /* ── ROW 3: Sub-column labels — white bg, each label is its own pill ── */
-  let subRow=`<tr class="mx-sub-row"><td class="mx-corner mx-sticky mx-month-head-cell"></td>`;
-  cols.forEach(k=>{
+  /* ── ROW 3: Sub-column labels with outline sides ── */
+  let subRow=`<tr class="mx-sub-row"><td class="mx-corner mx-sticky mx-month-head-cell">Month</td>`;
+  cols.forEach((k,i)=>{
     const c=colorOf(k);
-    subRow+=`<td class="mx-sub-cell mx-col-first" style="--col-color:${c}"><span class="mx-sub-label" style="--sub-color:${c}">Sales</span></td>
+    if (i>0) subRow+=`<td></td>`;
+    subRow+=`<td class="mx-sub-cell mx-ol-l mx-ol" style="--oc:${c}"><span class="mx-sub-label" style="--sub-color:${c}">Sales</span></td>
              <td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${c}">Goal</span></td>
              <td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${c}">Delta</span></td>
-             <td class="mx-sub-cell mx-sub-cell-last mx-col-last" style="--col-color:${c}"><span class="mx-sub-label" style="--sub-color:${c}">%</span></td>`;
+             <td class="mx-sub-cell mx-sub-cell-last mx-ol-r mx-ol" style="--oc:${c}"><span class="mx-sub-label" style="--sub-color:${c}">%</span></td>`;
   });
   subRow+=`</tr>`;
 
   const head = `<thead>${superRow}${centerRow}${subRow}</thead>`;
 
-  function cellsFor(k,m){
+  function cellsFor(k,m,ki){
     const sales=actualAt(k,m), goal=goalAt(k,m);
     const delta=sales-goal, p=pct(sales,goal);
     const isTot=k==='__TOTAL__';
@@ -1764,18 +1747,20 @@ function buildGoalMatrix(cfg){
     const isLoc=cfg.dataType==='loc' && !isTot;
     const repAttr=isRep?` data-rep="${k}"`:isLoc?` data-center="${k}"` :'';
     const canEdit=cfg.editable && !isTot;
+    const c=colorOf(k);
+    const gap = ki>0 ? '<td></td>' : '';
     const salesCell=`<span title="${fmtFull(sales)}">${fmt(sales)}</span>`;
     const goalCell=canEdit
       ?`<span class="goal-input" data-type="${cfg.dataType}" data-key="${k}" data-month="${m}" title="${fmtFull(goal)}">${fmt(goal)}</span>`
       :`<span title="${fmtFull(goal)}">${fmt(goal)}</span>`;
     const deltaCell=statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg');
-    return `<td class="mx-cell mx-col-first" style="--col-color:${colorOf(k)}"${repAttr}>${salesCell}</td>
+    return `${gap}<td class="mx-cell mx-ol-l mx-ol" style="--oc:${c}"${repAttr}>${salesCell}</td>
             <td class="mx-cell"${repAttr}>${goalCell}</td>
             <td class="mx-cell"${repAttr}>${deltaCell}</td>
-            <td class="mx-cell mx-pct mx-col-last" style="--col-color:${colorOf(k)}"${repAttr}>${p}%</td>`;
+            <td class="mx-cell mx-ol-r mx-ol" style="--oc:${c}"${repAttr}>${p}%</td>`;
   }
 
-  /* ── BODY: month rows ── */
+  /* ── BODY: month rows — only show up to current month ── */
   let body='';
   for (let m=0;m<12;m++){
     if(!VISIBLE_MONTHS[m]) continue;
@@ -1783,14 +1768,14 @@ function buildGoalMatrix(cfg){
     const rowCls=hasData?'mx-row-data':'mx-row-empty';
     body+=`<tr class="${rowCls}">
       <td class="mx-sticky mx-month-pill"><span class="mx-month-pill-inner">${MONTHS[m]}</span></td>`;
-    cols.forEach(k=>{ body+=cellsFor(k,m); });
+    cols.forEach((k,ki)=>{ body+=cellsFor(k,m,ki); });
     body+=`</tr>`;
   }
 
   /* ── TOTAL row ── */
   body+=`<tr class="mx-total-row">
     <td class="mx-sticky mx-total-label-cell"><span class="mx-total-label-inner">Total</span></td>`;
-  cols.forEach(k=>{
+  cols.forEach((k,ki)=>{
     let s=0,g=0;
     for(let m=0;m<12;m++){ s+=actualAt(k,m); g+=goalAt(k,m); }
     const delta=s-g, p=pct(s,g);
@@ -1799,14 +1784,15 @@ function buildGoalMatrix(cfg){
     const isLoc=cfg.dataType==='loc' && !isTot;
     const repAttr=isRep?` data-rep="${k}"`:isLoc?` data-center="${k}"` :'';
     const c=colorOf(k);
-    body+=`<td class="mx-total-cell mx-col-first" style="background:${c};--col-color:${c}"${repAttr}>${fmt(s)}</td>
-           <td class="mx-total-cell" style="background:${c}"${repAttr}>${fmt(g)}</td>
-           <td class="mx-total-cell" style="background:${c}"${repAttr}>${statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg')}</td>
-           <td class="mx-total-cell mx-total-pct mx-col-last" style="background:${c};--col-color:${c}"${repAttr}>${p}%</td>`;
+    const gap = ki>0 ? '<td></td>' : '';
+    body+=`${gap}<td class="mx-total-cell mx-ol-l mx-ol-b mx-ol" style="background:${c};--oc:${c}"${repAttr}>${fmt(s)}</td>
+           <td class="mx-total-cell mx-ol-b mx-ol" style="background:${c};--oc:${c}"${repAttr}>${fmt(g)}</td>
+           <td class="mx-total-cell mx-ol-b mx-ol" style="background:${c};--oc:${c}"${repAttr}>${statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg')}</td>
+           <td class="mx-total-cell mx-total-pct mx-ol-r mx-ol-b mx-ol" style="background:${c};--oc:${c}"${repAttr}>${p}%</td>`;
   });
   body+=`</tr>`;
 
-  card.innerHTML=`<div class="table-wrapper matrix-scroll"><table class="matrix-table">${head}<tbody>${body}</tbody></table></div>`;
+  card.innerHTML=`<div class="table-wrapper matrix-scroll"><table class="matrix-table">${colgroup}${head}<tbody>${body}</tbody></table></div>`;
   return card;
 }
 
@@ -2211,9 +2197,9 @@ function renderDailyMatrix(){
 
   let subRow=`<tr class="mx-sub-row"><td class="mx-corner mx-sticky mx-month-head-cell"></td>`;
   allCols.forEach(k=>{ const c=colorOf(k);
-    subRow+=`<td class="mx-sub-cell mx-col-first" style="--col-color:${c}"><span class="mx-sub-label" style="--sub-color:${c}">Today</span></td>
+    subRow+=`<td class="mx-sub-cell mx-col-first"><span class="mx-sub-label" style="--sub-color:${c}">Today</span></td>
              <td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${c}">Month</span></td>
-             <td class="mx-sub-cell mx-sub-cell-last mx-col-last" style="--col-color:${c}"><span class="mx-sub-label" style="--sub-color:${c}">Last</span></td>`; });
+             <td class="mx-sub-cell mx-sub-cell-last mx-col-last"><span class="mx-sub-label" style="--sub-color:${c}">Last</span></td>`; });
   subRow+=`</tr>`;
 
   let head=superRow+centerRow+subRow;
@@ -2224,7 +2210,8 @@ function renderDailyMatrix(){
       const d=dataAt(k,metric);
       const c=colorOf(k);
       const centerAttr=k==='__TOTAL__'?'':` data-center="${k}"`;
-      body+=`<td class="mx-cell mx-col-first" style="--col-color:${c}"${centerAttr}>${fmtCell(metric,d.today)}</td><td class="mx-cell"${centerAttr}>${fmtCell(metric,d.month)}</td><td class="mx-cell mx-pct mx-col-last" style="--col-color:${c}"${centerAttr}>${fmtCell(metric,d.last)}</td>`;
+      const bg_unused = null; // removed
+      body+=`<td class="mx-cell mx-col-first"${centerAttr}>${fmtCell(metric,d.today)}</td><td class="mx-cell"${centerAttr}>${fmtCell(metric,d.month)}</td><td class="mx-cell mx-col-last"${centerAttr}>${fmtCell(metric,d.last)}</td>`;
     });
     body+=`</tr>`;
   }
