@@ -285,11 +285,34 @@
     /* ============ SECTION ============ */
     .section {
       margin-bottom: var(--s6);
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      overflow: visible;
+      padding: 0;
+    }
+    /* Every direct child gets its own white card with blue outline */
+    .section > * {
       background: #ffffff;
       border: 2px solid var(--champagne-hi);
-      border-radius: 0;
-      overflow: hidden;
-      padding: 0;
+    }
+    /* Connect all adjacent siblings (remove double borders) */
+    .section > * + * {
+      border-top: none;
+    }
+    /* EXCEPT after a tab-bar: add transparent gap + restore border */
+    .section > .tab-bar {
+      margin-bottom: 14px;
+      border: 2px solid var(--section-color, var(--champagne-hi));
+      border-top: none;
+    }
+    .section > .tab-bar + * {
+      border-top: 2px solid var(--champagne-hi);
+    }
+    /* Section-head: inset shadow so outline shows ON TOP of the SVG bg */
+    .section > .section-head {
+      box-shadow: inset 0 0 0 3px var(--section-color, var(--champagne-hi));
+      border: none;
     }
 
     /* ── Section header: identical to .company-banner-header ── */
@@ -297,13 +320,12 @@
       position: relative;
       overflow: hidden;
       background: transparent;
-      border: none;
       border-radius: 0;
       padding: 0 40px 0 88px;
       display: flex;
       align-items: center;
       margin-bottom: 0;
-      height: 100px;
+      height: 75px;
     }
     /* The SVG header artwork fills the full banner */
     .section-head .sh-svg-bg {
@@ -328,7 +350,7 @@
     .section-title {
       font-family: var(--sans-cond);
       font-weight: 900;
-      font-size: 4.5rem;
+      font-size: 3.5rem;
       letter-spacing: -0.02em;
       line-height: 1;
       color: #fff;
@@ -346,7 +368,7 @@
     .section-title .title-main {
       font-family: var(--sans-cond);
       font-weight: 900;
-      font-size: 4.5rem;
+      font-size: 3.5rem;
       color: #fff;
       letter-spacing: -0.02em;
       text-transform: uppercase;
@@ -354,7 +376,7 @@
     .section-title .title-accent {
       font-family: var(--sans-cond);
       font-weight: 300;
-      font-size: 4.5rem;
+      font-size: 3.5rem;
       color: rgba(255,255,255,0.72);
       letter-spacing: -0.01em;
       font-style: normal;
@@ -724,7 +746,7 @@
       flex-wrap: wrap;
       gap: 2px;
       margin-top: 0;
-      margin-bottom: var(--s3);
+      margin-bottom: 0;
       background: #ffffff;
       border: none;
       border-radius: 0;
@@ -893,7 +915,7 @@
     .company-banner-header {
       position: relative;
       overflow: hidden;
-      height: 100px;
+      height: 75px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1003,8 +1025,10 @@
     .section::before { display: none; }
     .section.revealed { opacity: 1; transform: translateY(0); }
     .section.revealed::before { display: none; }
-    .section .section-head, .section > [id] { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease-luxury), transform 1s var(--ease-luxury); will-change: opacity, transform; }
+    .section > [id] { overflow: hidden; }
+    .section .section-head, .section > [id], .section > .tab-bar { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease-luxury), transform 1s var(--ease-luxury); will-change: opacity, transform; }
     .section.revealed .section-head { opacity: 1; transform: none; transition-delay: 0.12s; }
+    .section.revealed > .tab-bar { opacity: 1; transform: none; transition-delay: 0.20s; }
     .section.revealed > [id]:nth-of-type(1) { opacity: 1; transform: none; transition-delay: 0.28s; }
     .section.revealed > [id]:nth-of-type(2) { opacity: 1; transform: none; transition-delay: 0.40s; }
     .section.revealed > [id]:nth-of-type(3) { opacity: 1; transform: none; transition-delay: 0.50s; }
@@ -3092,8 +3116,17 @@ function initScrollReveal(){
   });
 }
 
-if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', ()=>{ init(); initScrollReveal(); });
-else { init(); initScrollReveal(); }
+if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', ()=>{ init(); initScrollReveal(); initSectionColors(); });
+else { init(); initScrollReveal(); initSectionColors(); }
+
+function initSectionColors(){
+  document.querySelectorAll('.section').forEach(sec=>{
+    const rect = sec.querySelector('.section-head .sh-svg-bg rect[width="1440"]');
+    if(rect){
+      sec.style.setProperty('--section-color', rect.getAttribute('fill'));
+    }
+  });
+}
 
 })();
 </script>
