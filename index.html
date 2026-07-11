@@ -1480,6 +1480,13 @@ async function fetchLocationRows(tenant, locationId, year){
     StartDate: start.toISOString(), EndDate: end.toISOString(), IncludeProductDetails:false
   });
 }
+async function fetchCompletedRows(tenant, locationId, year){
+  const start=new Date(year,0,1), end=new Date(year,11,31,23,59,59);
+  return searchOrders(tenant, {
+    OrderLocationId: locationId, DateFilterFor:'completed',
+    StartDate: start.toISOString(), EndDate: end.toISOString(), IncludeProductDetails:false
+  });
+}
 async function fetchActuals(year){
   const [locs, activeResult] = await Promise.all([discoverLocations(), fetchActiveSalespersons()]);
   const { activeNames, knownNames } = activeResult;
@@ -1524,6 +1531,7 @@ async function fetchActuals(year){
   const completedDate = o=>cbDate(o.dateCompleted||o.DateCompleted);
 
   const locRowsList = await Promise.all(locs.map(L => fetchLocationRows(L.tenant, L.locationId, year)));
+  const compRowsList = await Promise.all(locs.map(L => fetchCompletedRows(L.tenant, L.locationId, year)));
   { const tagged = [];
     for (let li=0; li<locs.length; li++){
       for (const o of locRowsList[li]) tagged.push({ ...o, _center: locs[li].center, _tenant: locs[li].tenant });
@@ -1535,16 +1543,12 @@ async function fetchActuals(year){
     });
     window._activityRows = tagged.slice(0, 25);
   }
+  /* --- YTD Sales from completed fetch (Net Completed Orders, portal-matched) --- */
   for (let li=0; li<locs.length; li++){
-    const L = locs[li], rows = locRowsList[li];
+    const L = locs[li], rows = compRowsList[li];
     for (const o of rows){
-      const kind=classifyRow(o); const c=L.center;
-      const statusUp=(o.status||o.Status||'').toString().toUpperCase().trim();
-      const statusLow=statusUp.toLowerCase();
-      if (pipeline[c][statusUp]){ pipeline[c][statusUp].count+=1; pipeline[c][statusUp].amount+=orderAmount(o); }
-      /* YTD Sales = Net Completed Orders (portal formula):
-         (COMPLETED + CLOSED with dateCompleted) minus (VOIDED with dateCompleted)
-         Amount = orderSubTotal + orderShipping + orderPostage */
+      const c=L.center;
+      const statusLow=(o.status||o.Status||'').toString().toLowerCase();
       const done=completedDate(o);
       if (done && done.getFullYear()===year){
         const isComp=(statusLow==='completed'||statusLow==='closed');
@@ -1568,6 +1572,16 @@ async function fetchActuals(year){
           }
         }
       }
+    }
+  }
+  /* --- Pipeline, estimates, daily from modified fetch --- */
+  for (let li=0; li<locs.length; li++){
+    const L = locs[li], rows = locRowsList[li];
+    for (const o of rows){
+      const kind=classifyRow(o); const c=L.center;
+      const statusUp=(o.status||o.Status||'').toString().toUpperCase().trim();
+      const statusLow=statusUp.toLowerCase();
+      if (pipeline[c][statusUp]){ pipeline[c][statusUp].count+=1; pipeline[c][statusUp].amount+=orderAmount(o); }
       if (kind==='estimate'){
         const d=createdDate(o);
         if (d && d.getFullYear()===year){ const m=d.getMonth(); est[c].newCount[m]+=1; est[c].newDollars[m]+=orderAmount(o); }
@@ -1578,7 +1592,9 @@ async function fetchActuals(year){
       bucketDay(c,'Converted Estimates',convertedDate(o),null);
       bucketDay(c,'New Orders',convertedDate(o),null);
       bucketDay(c,'Canceled Estimates',cancelledDate(o),null);
-      if (done && statusLow!=='voided'){ bucketDay(c,'Net Completed',done,null); bucketDay(c,'$ Collected',done,netCompletedAmount(o)); }
+      const done=completedDate(o);
+      const stLow=(o.status||o.Status||'').toString().toLowerCase();
+      if (done && stLow!=='voided'){ bucketDay(c,'Net Completed',done,null); bucketDay(c,'$ Collected',done,netCompletedAmount(o)); }
     }
   }
   const newlyAdded = [];
@@ -2175,6 +2191,7 @@ function renderAllCentersOverview(){
         </div>
       </div>
       <p class="overview-note">"Sales" above is the total posted so far this year (${DATA_YEAR}); "Goal" is the full ${DATA_YEAR} annual target for all 12 months — so these percentages climb as the year goes on and only reach 100% once December's numbers are in.</p>
+      <p class="overview-note" style="margin-top:4px;font-size:0.62rem;opacity:0.55;">Net Completed Orders — includes shipping &amp; postage, excludes tax.</p>
     </div>`;
   host.appendChild(card);
 
