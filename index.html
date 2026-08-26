@@ -300,6 +300,13 @@
     .section > * + * {
       border-top: none;
     }
+    /* Any direct section-child that's currently empty (a disabled chart, or one emptied
+       for the active tab) collapses to zero height but still counted as a sibling —
+       its own border would then sit flush against the previous card's border, doubling
+       up the line between them. Hiding empty ones removes that border entirely. */
+    .section > *:empty {
+      display: none;
+    }
     /* Section-head: inset shadow so outline shows ON TOP of the SVG bg */
     .section > .section-head {
       box-shadow: inset 0 0 0 3px var(--section-color, var(--champagne-hi));
@@ -337,7 +344,7 @@
       display: flex;
       align-items: center;
       margin-bottom: 0;
-      height: 75px;
+      height: 50px;
     }
     /* The SVG header artwork fills the full banner */
     .section-head .sh-svg-bg {
@@ -353,7 +360,7 @@
       position: relative;
       z-index: 2;
       display: inline-flex;
-      align-items: baseline;
+      align-items: center;
       transform: scaleX(0.82);
       transform-origin: left center;
     }
@@ -362,12 +369,13 @@
     .section-title {
       font-family: var(--sans-cond);
       font-weight: 900;
-      font-size: 3.5rem;
+      font-size: 2.8rem;
       letter-spacing: -0.02em;
       line-height: 1;
       color: #fff;
       border: none;
       border-radius: 0;
+      margin: 0;
       padding: 0;
       background: transparent;
       display: inline-flex;
@@ -380,7 +388,7 @@
     .section-title .title-main {
       font-family: var(--sans-cond);
       font-weight: 900;
-      font-size: 3.5rem;
+      font-size: 2.8rem;
       color: #fff;
       letter-spacing: -0.02em;
       text-transform: uppercase;
@@ -388,7 +396,7 @@
     .section-title .title-accent {
       font-family: var(--sans-cond);
       font-weight: 300;
-      font-size: 3.5rem;
+      font-size: 2.8rem;
       color: rgba(255,255,255,0.72);
       letter-spacing: -0.01em;
       font-style: normal;
@@ -588,7 +596,7 @@
     }
 
     /* ── Corner spacer ── */
-    .mx-corner { background: #fff; border: none; padding: 0; width: 90px; min-width: 90px; }
+    .mx-corner { background: #fff; border: none; padding: 0; width: 70px; min-width: 70px; }
 
     /* ── Center name header: solid color, white bold text ── */
     .mx-center-head {
@@ -642,15 +650,16 @@
       font-weight: 700;
       color: var(--ink);
       white-space: nowrap;
+      text-transform: uppercase;
     }
 
     /* ── Body data cells — underline only ── */
     .mx-cell {
-      padding: 5px 4px;
+      padding: 5px 3px;
       text-align: center;
       font-variant-numeric: tabular-nums;
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.74rem;
       color: var(--ink);
       background: #ffffff;
       border-bottom: 1.5px solid #bbb;
@@ -670,17 +679,35 @@
     .matrix-table .mx-sub-cell.mx-ol-r { border-right: 2px solid var(--oc); }
 
     /* Gap between center groups — white spacing via col width */
-    .mx-gap-col { width: 8px; min-width: 8px; max-width: 8px; }
-    .mx-val-col { width: 72px; min-width: 72px; max-width: 72px; }
-    .mx-delta-col { width: 80px; min-width: 80px; max-width: 80px; }
-    .mx-pct-col { width: 50px; min-width: 50px; max-width: 50px; }
+    .mx-gap-col { width: 6px; min-width: 6px; max-width: 6px; }
+    .mx-equals-gap-col { width: 40px; min-width: 40px; max-width: 40px; }
+    .mx-district-equals-overlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--sans);
+      font-size: 2rem;
+      font-weight: 900;
+      color: #1C2333;
+      pointer-events: none;
+    }
+    .mx-val-col { width: 60px; min-width: 60px; max-width: 60px; }
+    .mx-delta-col { width: 68px; min-width: 68px; max-width: 68px; }
+    .mx-pct-col { width: 42px; min-width: 42px; max-width: 42px; }
+    /* Narrower status pills specifically inside the matrix tables, to fit the tighter delta column */
+    .matrix-table .status-pill { padding: 3px 6px; font-size: 0.7rem; }
 
     /* Empty future rows */
     .mx-row-empty .mx-cell { background: #d8d8d8; border-bottom-color: transparent; border-radius: 3px; }
     .mx-row-empty .mx-month-pill-inner { opacity: 0.45; }
     .mx-row-empty .mx-month-pill { border-bottom-color: transparent; }
 
-    /* ── Total row ── */
+    /* ── Total row — matches the styling of the Sales/Goal/Delta/% sub-header
+       pill row above (colored fill per center, white bold text) ── */
     .mx-total-label-cell {
       background: #fff;
       padding: 5px 4px 5px 2px;
@@ -692,18 +719,71 @@
       color: var(--ink);
     }
     .mx-total-cell {
-      padding: 5px 4px;
+      padding: 2px 1px;
       text-align: center;
-      font-variant-numeric: tabular-nums;
-      font-weight: 700;
-      font-size: 0.8rem;
-      color: #fff;
+      background: #fff;
       border-top: none;
-      border-radius: 3px;
+    }
+    .mx-total-val {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--oc);
+      color: #fff;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 0.6rem;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+      padding: 3px 4px;
+      height: 24px;
+      white-space: nowrap;
     }
 
     /* ── Row hover ── */
     .mx-row-data:hover .mx-cell { filter: brightness(0.94); }
+
+    /* ── Leaderboard table (Salespeople · YTD Goal vs Actual, one row per rep) ── */
+    .leaderboard-table { width: 100%; border-collapse: collapse; }
+    .leaderboard-table thead th {
+      background: var(--champagne);
+      color: #fff;
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .leaderboard-table thead th.lb-name { text-align: left; }
+    .leaderboard-table .lb-row td {
+      padding: 10px 12px;
+      font-family: var(--sans);
+      font-variant-numeric: tabular-nums;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--ink);
+      text-align: center;
+      border-bottom: 1px solid var(--line);
+    }
+    .leaderboard-table .lb-name {
+      text-align: left;
+      font-weight: 700;
+      display: table-cell;
+      white-space: nowrap;
+    }
+    .lb-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+    .leaderboard-table .lb-goal { color: var(--t3); font-weight: 600; }
+    .leaderboard-table .lb-pct { font-weight: 800; }
+    .leaderboard-table .lb-row:hover td { background: rgba(0,0,0,0.02); }
+    .leaderboard-table .lb-total-row td {
+      background: var(--champagne);
+      color: #fff;
+      font-weight: 800;
+      border-bottom: none;
+    }
+    .leaderboard-table .lb-total-row .lb-goal { color: rgba(255,255,255,0.75); }
 
     /* ── Legacy col spacing for daily matrix ── */
     .mx-col-first { border-left: 8px solid #fff !important; }
@@ -932,7 +1012,7 @@
     .company-banner-header {
       position: relative;
       overflow: hidden;
-      height: 75px;
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -955,19 +1035,14 @@
       margin-right: 28px;
     }
     .company-banner-body { padding: 52px var(--s5) 48px; background: #fff; }
-    .district-row { display: flex; align-items: flex-start; gap: 32px; }
-    .district-block { flex: 1 1 0; min-width: 0; }
-    .district-block.south-bay-block { flex: 3 1 0; }
-    .district-block.valley-block { flex: 2 1 0; }
-    .district-block.company-block { flex: 1.4 1 0; }
-    .district-pill-label { display: block; width: 100%; box-sizing: border-box; text-align: center; padding: 6px 14px; border-radius: 8px; font-family: var(--sans); font-weight: 800; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; margin-bottom: 14px; }
+    .district-row { display: grid; column-gap: 28px; row-gap: 16px; align-items: start; }
+    .district-pill-label { grid-row: 1; display: block; width: 100%; box-sizing: border-box; text-align: center; padding: 8px 14px; border-radius: 8px; font-family: var(--sans); font-weight: 800; font-size: 0.92rem; letter-spacing: 0.05em; text-transform: uppercase; color: #fff; margin: 0; }
     .district-pill-label.south-bay { background: #004990; }
     .district-pill-label.valley { background: #97005E; }
     .district-pill-label.company-total { background: var(--ink); max-width: 150px; margin-left: auto; margin-right: auto; }
-    .district-divider { width: 1px; align-self: stretch; background: rgba(28,35,51,0.15); flex: none; }
-    .district-equals { display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-size: 2rem; font-weight: 900; color: #1C2333; flex: none; padding: 0 6px; align-self: center; }
-    .district-rings { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
-    .ov-card { padding: 0; border: none; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; background: transparent; cursor: default; }
+    .district-divider { grid-row: 1 / 3; width: 2px; align-self: stretch; background: #000; }
+    .district-equals { grid-row: 1 / 3; display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-size: 2rem; font-weight: 900; color: #1C2333; align-self: center; }
+    .ov-card { grid-row: 2; justify-self: center; padding: 0; border: none; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; background: transparent; cursor: default; }
     .ov-card:hover { background: transparent; transform: none; }
     .ov-card h4 { font-size: 0.76rem; font-weight: 800; color: #1C2333; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 8px; display: flex; align-items: center; gap: 6px; }
     .ov-card h4 .mk { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
@@ -986,8 +1061,9 @@
     .dp.neg { color: var(--neg); }
     .overview-note { margin-top: 20px; font-size: 0.74rem; line-height: 1.6; color: rgba(28,35,51,0.68); font-style: italic; max-width: 100%; }
     @media (max-width: 900px) {
-      .district-row { flex-direction: column; }
+      .district-row { display: flex; flex-direction: column; gap: 24px; }
       .district-divider, .district-equals { display: none; }
+      .ov-card { justify-self: unset; }
     }
 
     /* mini toggle */
@@ -1176,6 +1252,16 @@
     </svg>
   </div>
 
+  <!-- 01 · YEAR TO DATE -->
+  <section class="section">
+    <div id="all-centers-overview"></div>
+    <!-- REMOVED PER MO (save for later) — paired with the disabled drawCompanyTrend() call.
+         Left in the DOM as an empty sibling, it still picked up its own 2px border via
+         ".section > *", which (at zero height) doubled up against the card above it.
+    <div id="company-trend-chart"></div>
+    -->
+  </section>
+
   <!-- 00 · RIGHT NOW -->
   <section class="section">
     <div class="section-head">
@@ -1184,12 +1270,6 @@
     </div>
     <div id="pipeline-switcher" class="tab-bar"></div>
     <div id="pipeline-snapshot"></div>
-  </section>
-
-  <!-- 01 · YEAR TO DATE -->
-  <section class="section">
-    <div id="all-centers-overview"></div>
-    <div id="company-trend-chart"></div>
   </section>
 
   <!-- 02 · MONTHLY SALES -->
@@ -1267,7 +1347,7 @@ const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct
 /* Hide months after the current calendar month — reveal automatically as year progresses */
 const CURRENT_MONTH = new Date().getMonth(); /* 0-based: July = 6 */
 const VISIBLE_MONTHS = MONTHS.map((_,i) => i <= CURRENT_MONTH); /* true = show, false = hide */
-const REPS = ['Brittany Herrera', 'Dylan Falk-Hutchings', 'Jeremy Medina (OSR)', 'Santoie Croxford', 'Nathaniel Darling', 'Santa Ana CSR', 'Marcos Reyes'];
+const REPS = ['Brittany Herrera', 'Dylan Falk-Hutchings', 'Jeremy Medina (OSR)', 'Santoie Croxford', 'Nathaniel Darling', 'Santa Ana CSR', 'Marcos Reyes', 'Mark Sabedra'];
 
 /* ===== Permanently excluded reps — never shown anywhere ===== */
 const EXCLUDED_REPS = new Set(['ryan flook', 'stan gray', 'gilbert aguilar']);
@@ -1764,7 +1844,7 @@ function buildGoalMatrix(cfg){
   const goalAt=(k,m)=>k==='__TOTAL__'?cfg.entities.reduce((s,e)=>s+(cfg.getGoal(e,m)||0),0):(cfg.getGoal(k,m)||0);
 
   /* ── COLGROUP: fixed widths ── */
-  let colgroup='<colgroup><col style="width:90px;min-width:90px">';
+  let colgroup='<colgroup><col style="width:70px;min-width:70px">';
   cols.forEach((k,i)=>{
     if (i>0) colgroup+='<col class="mx-gap-col">';
     colgroup+='<col class="mx-val-col"><col class="mx-val-col"><col class="mx-delta-col"><col class="mx-pct-col">';
@@ -1835,7 +1915,7 @@ function buildGoalMatrix(cfg){
     const hasData=cols.some(k=>actualAt(k,m)>0);
     const rowCls=hasData?'mx-row-data':'mx-row-empty';
     body+=`<tr class="${rowCls}">
-      <td class="mx-sticky mx-month-pill"><span class="mx-month-pill-inner">${MONTHS[m]}</span></td>`;
+      <td class="mx-sticky mx-month-pill"><span class="mx-month-pill-inner">${MONTHS_SHORT[m]}</span></td>`;
     cols.forEach((k,ki)=>{ body+=cellsFor(k,m,ki); });
     body+=`</tr>`;
   }
@@ -1853,10 +1933,10 @@ function buildGoalMatrix(cfg){
     const repAttr=isRep?` data-rep="${k}"`:isLoc?` data-center="${k}"` :'';
     const c=colorOf(k);
     const gap = ki>0 ? '<td></td>' : '';
-    body+=`${gap}<td class="mx-total-cell mx-ol-l mx-ol-b mx-ol" style="background:${c};--oc:${c}"${repAttr}>${fmt(s)}</td>
-           <td class="mx-total-cell mx-ol-b mx-ol" style="background:${c};--oc:${c}"${repAttr}>${fmt(g)}</td>
-           <td class="mx-total-cell mx-ol-b mx-ol" style="background:${c};--oc:${c}"${repAttr}>${statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg')}</td>
-           <td class="mx-total-cell mx-total-pct mx-ol-r mx-ol-b mx-ol" style="background:${c};--oc:${c}"${repAttr}>${p}%</td>`;
+    body+=`${gap}<td class="mx-total-cell mx-ol-l mx-ol" style="--oc:${c}"${repAttr}><span class="mx-total-val">${fmt(s)}</span></td>
+           <td class="mx-total-cell mx-ol" style="--oc:${c}"${repAttr}><span class="mx-total-val">${fmt(g)}</span></td>
+           <td class="mx-total-cell mx-ol" style="--oc:${c}"${repAttr}><span class="mx-total-val">${statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg')}</span></td>
+           <td class="mx-total-cell mx-total-pct mx-ol-r mx-ol" style="--oc:${c}"${repAttr}><span class="mx-total-val">${p}%</span></td>`;
   });
   body+=`</tr>`;
 
@@ -2095,18 +2175,177 @@ function renderCentersMatrix(){
   }
   wireMatrixEditables(host);
 }
+function repLeaderboardRowsHTML(month){
+  let teamActual=0, teamGoal=0;
+  const rows = REPS.map(rep=>{
+    const actual = state.repActual[rep][month] || 0;
+    const goal = state.goals.reps[rep][month] || 0;
+    teamActual+=actual; teamGoal+=goal;
+    const delta = actual - goal;
+    const pct = goal>0 ? Math.round(actual/goal*100) : (actual>0?100:0);
+    return {rep, actual, goal, delta, pct, color: REP_COLORS[rep]||INK};
+  });
+  const teamDelta = teamActual - teamGoal;
+  const teamPct = teamGoal>0 ? Math.round(teamActual/teamGoal*100) : 0;
+
+  const rowsHTML = rows.map(r=>`
+    <tr class="lb-row">
+      <td class="lb-name"><span class="lb-dot" style="background:${r.color}"></span>${r.rep}</td>
+      <td class="lb-val">${fmt(r.actual)}</td>
+      <td class="lb-val lb-goal">${fmt(r.goal)}</td>
+      <td class="lb-val">${statusPill((r.delta>=0?'+':'')+fmt(r.delta), r.delta>=0?'stat-pos':'stat-neg')}</td>
+      <td class="lb-val lb-pct">${r.pct}%</td>
+    </tr>`).join('');
+
+  return rowsHTML + `
+    <tr class="lb-row lb-total-row">
+      <td class="lb-name">Team Total</td>
+      <td class="lb-val">${fmt(teamActual)}</td>
+      <td class="lb-val lb-goal">${fmt(teamGoal)}</td>
+      <td class="lb-val">${statusPill((teamDelta>=0?'+':'')+fmt(teamDelta), teamDelta>=0?'stat-pos':'stat-neg')}</td>
+      <td class="lb-val lb-pct">${teamPct}%</td>
+    </tr>`;
+}
+
+function buildRepLeaderboard(){
+  const card=document.createElement('div'); card.className='card matrix-card';
+  card.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:20px;">
+      <h3 style="margin:0;">${entityBadgeHTML('Salespeople · Goal vs Actual', INK, true)}</h3>
+      <div class="month-nav">
+        <button class="mn-arrow" id="lb-prev" aria-label="Previous month">&#8592;</button>
+        <div class="mn-window" id="lb-window">
+          <div class="mn-label settle">${MONTHS[breakdownMonth]}<span class="mn-year">${DATA_YEAR}</span></div>
+        </div>
+        <button class="mn-arrow" id="lb-next" aria-label="Next month">&#8594;</button>
+      </div>
+    </div>
+    <div class="table-wrapper">
+      <table class="leaderboard-table">
+        <thead><tr>
+          <th class="lb-name">Salesperson</th>
+          <th class="lb-val">Sales</th>
+          <th class="lb-val">Goal</th>
+          <th class="lb-val">Delta</th>
+          <th class="lb-val">%</th>
+        </tr></thead>
+        <tbody id="lb-tbody">${repLeaderboardRowsHTML(breakdownMonth)}</tbody>
+      </table>
+    </div>`;
+
+  const prevBtn=card.querySelector('#lb-prev');
+  const nextBtn=card.querySelector('#lb-next');
+  const windowEl=card.querySelector('#lb-window');
+  const tbody=card.querySelector('#lb-tbody');
+  function syncArrows(){ prevBtn.disabled = breakdownMonth<=0; nextBtn.disabled = breakdownMonth>=CURRENT_MONTH; }
+  syncArrows();
+  function go(dir){
+    const target = breakdownMonth + dir;
+    if (target < 0 || target > CURRENT_MONTH) return;
+    breakdownMonth = target;
+    (dir>0?nextBtn:prevBtn).classList.remove('flash'); void (dir>0?nextBtn:prevBtn).offsetWidth;
+    (dir>0?nextBtn:prevBtn).classList.add('flash');
+    slideMonthLabel(windowEl, dir);
+    tbody.innerHTML = repLeaderboardRowsHTML(breakdownMonth);
+    syncArrows();
+  }
+  prevBtn.addEventListener('click',()=>go(-1));
+  nextBtn.addEventListener('click',()=>go(1));
+
+  return card;
+}
+
+const MONTH_PALETTE = ['#004990','#0066B3','#0096D6','#52247F','#97005E','#00853F','#004990','#0066B3','#0096D6','#52247F','#97005E','#00853F'];
+
+function buildRepsByMonthMatrix(){
+  const visibleMonthIdxs = MONTHS.map((_,i)=>i).filter(i=>VISIBLE_MONTHS[i]);
+  const groups = [...visibleMonthIdxs.map(m=>({label:MONTHS_SHORT[m].toUpperCase(), isYTD:false, m, color:MONTH_PALETTE[m]})), {label:'YTD', isYTD:true, color:INK}];
+
+  const CORNER_W=210, VAL_W=60, DELTA_W=68, PCT_W=42, GAP_W=6;
+  const groupWidth = VAL_W*2 + DELTA_W + PCT_W;
+  const tableWidth = CORNER_W + groups.length*groupWidth + (groups.length-1)*GAP_W;
+
+  let colgroup = `<colgroup><col style="width:${CORNER_W}px;min-width:${CORNER_W}px">`;
+  groups.forEach((g,i)=>{
+    if (i>0) colgroup+='<col class="mx-gap-col">';
+    colgroup+=`<col style="width:${VAL_W}px;min-width:${VAL_W}px"><col style="width:${VAL_W}px;min-width:${VAL_W}px"><col style="width:${DELTA_W}px;min-width:${DELTA_W}px"><col style="width:${PCT_W}px;min-width:${PCT_W}px">`;
+  });
+  colgroup+='</colgroup>';
+
+  let centerRow=`<tr><td class="mx-corner mx-sticky"></td>`;
+  groups.forEach((g,i)=>{
+    const gap = i>0 ? '<td></td>' : '';
+    centerRow+=`${gap}<td colspan="4" class="mx-center-head mx-ol" style="background:${g.color};--oc:${g.color}">${g.label}</td>`;
+  });
+  centerRow+='</tr>';
+
+  let subRow=`<tr class="mx-sub-row"><td class="mx-corner mx-sticky mx-month-head-cell">Salesperson</td>`;
+  groups.forEach((g,i)=>{
+    const gap = i>0 ? '<td></td>' : '';
+    subRow+=`${gap}<td class="mx-sub-cell mx-ol-l mx-ol" style="--oc:${g.color}"><span class="mx-sub-label" style="--sub-color:${g.color}">Sales</span></td>
+             <td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${g.color}">Goal</span></td>
+             <td class="mx-sub-cell"><span class="mx-sub-label" style="--sub-color:${g.color}">Delta</span></td>
+             <td class="mx-sub-cell mx-sub-cell-last mx-ol-r mx-ol" style="--oc:${g.color}"><span class="mx-sub-label" style="--sub-color:${g.color}">%</span></td>`;
+  });
+  subRow+='</tr>';
+
+  let head = centerRow+subRow;
+  let body='';
+  REPS.forEach(rep=>{
+    body+=`<tr class="mx-row-data"><td class="mx-sticky mx-month-pill"><span class="mx-month-pill-inner">${rep}</span></td>`;
+    let ytdActual=0, ytdGoal=0;
+    groups.forEach((g,i)=>{
+      const gap = i>0 ? '<td></td>' : '';
+      let actual, goal;
+      if (g.isYTD){ actual=ytdActual; goal=ytdGoal; }
+      else { actual=state.repActual[rep][g.m]||0; goal=state.goals.reps[rep][g.m]||0; ytdActual+=actual; ytdGoal+=goal; }
+      const delta = actual-goal;
+      const pct = goal>0 ? Math.round(actual/goal*100) : (actual>0?100:0);
+      const goalCell = g.isYTD
+        ? `<span title="${fmtFull(goal)}">${fmt(goal)}</span>`
+        : `<span class="goal-input" data-type="rep" data-key="${rep}" data-month="${g.m}" title="${fmtFull(goal)}">${fmt(goal)}</span>`;
+      body+=`${gap}<td class="mx-cell mx-ol-l mx-ol" style="--oc:${g.color}">${fmt(actual)}</td>
+             <td class="mx-cell">${goalCell}</td>
+             <td class="mx-cell">${statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg')}</td>
+             <td class="mx-cell mx-ol-r mx-ol" style="--oc:${g.color}">${pct}%</td>`;
+    });
+    body+='</tr>';
+  });
+
+  body+=`<tr><td class="mx-sticky mx-total-label-cell"><span class="mx-total-label-inner">Team Total</span></td>`;
+  let teamYtdA=0, teamYtdG=0;
+  groups.forEach((g,i)=>{
+    const gap = i>0 ? '<td></td>' : '';
+    let actual=0, goal=0;
+    if (g.isYTD){ actual=teamYtdA; goal=teamYtdG; }
+    else { REPS.forEach(rep=>{ actual+=state.repActual[rep][g.m]||0; goal+=state.goals.reps[rep][g.m]||0; }); teamYtdA+=actual; teamYtdG+=goal; }
+    const delta = actual-goal;
+    const pct = goal>0 ? Math.round(actual/goal*100) : (actual>0?100:0);
+    body+=`${gap}<td class="mx-total-cell mx-ol-l mx-ol" style="--oc:${g.color}"><span class="mx-total-val">${fmt(actual)}</span></td>
+           <td class="mx-total-cell mx-ol" style="--oc:${g.color}"><span class="mx-total-val">${fmt(goal)}</span></td>
+           <td class="mx-total-cell mx-ol" style="--oc:${g.color}"><span class="mx-total-val">${statusPill((delta>=0?'+':'')+fmt(delta), delta>=0?'stat-pos':'stat-neg')}</span></td>
+           <td class="mx-total-cell mx-total-pct mx-ol-r mx-ol" style="--oc:${g.color}"><span class="mx-total-val">${pct}%</span></td>`;
+  });
+  body+='</tr>';
+
+  const card=document.createElement('div'); card.className='card matrix-card';
+  card.innerHTML=`<h3>${entityBadgeHTML('Salespeople · Goal vs Actual by Month', INK, true)}</h3>
+    <div class="table-wrapper matrix-scroll">
+      <table class="matrix-table" style="width:${tableWidth}px;">${colgroup}${head}<tbody>${body}</tbody></table>
+    </div>`;
+  return card;
+}
+
 function renderSalespeopleMatrix(){
   const host=document.getElementById('salespeople-matrix'); if(!host) return;
   host.innerHTML='';
   buildSwitcher('reps-switcher', ['All','Team Total',...REPS],
     repsView, k=>REP_COLORS[k]||INK, pick=>{ repsView=pick; renderSalespeopleMatrix(); renderRepChart(); });
   if (repsView==='All'){
-    host.appendChild(buildGoalMatrix({
-      entities:REPS, colorOf:k=>REP_COLORS[k]||INK,
-      getActual:(rep,m)=>state.repActual[rep][m], getGoal:(rep,m)=>state.goals.reps[rep][m]||0,
-      editable:true, dataType:'rep', totalColumn:true, totalLabel:'Team',
-      title:'Salespeople · Goal vs Actual', dotColor:INK
-    }));
+    /* REMOVED PER MO (save for later) — the month-nav leaderboard table, now redundant
+       with the transposed months-as-columns matrix below it.
+    host.appendChild(buildRepLeaderboard());
+    */
+    host.appendChild(buildRepsByMonthMatrix());
   } else if (repsView==='Team Total'){
     host.appendChild(buildSingleTable({
       title:'Team Total · Goal vs Actual', color:INK, editable:false, dataType:'rep', key:'',
@@ -2149,13 +2388,13 @@ function renderAllCentersOverview(){
   const R=84, C=2*Math.PI*R;
   const ringTargets=[];
 
-  function ringCard(label, color, actual, goal, uid){
+  function ringCard(label, color, actual, goal, uid, col){
     const percent=pct(actual,goal);
     const rem=Math.max(0,goal-actual);
     const onPace = percent>=YEAR_PCT;
     ringTargets.push({uid,percent});
     return `
-      <div class="ov-card" title="${label} — Year to Date&#10;${fmtFull(actual)} posted so far this year&#10;Annual goal ${fmtFull(goal)} · ${percent}% of target&#10;Remaining ${fmtFull(rem)}&#10;${onPace?'Ahead of':'Behind'} the ${YEAR_PCT}% year mark">
+      <div class="ov-card" style="grid-column:${col};" title="${label} — Year to Date&#10;${fmtFull(actual)} posted so far this year&#10;Annual goal ${fmtFull(goal)} · ${percent}% of target&#10;Remaining ${fmtFull(rem)}&#10;${onPace?'Ahead of':'Behind'} the ${YEAR_PCT}% year mark">
         <h4><span class="mk" style="background:${color}"></span>${label}</h4>
         <div class="big-ring">
           <svg viewBox="0 0 196 196">
@@ -2175,13 +2414,25 @@ function renderAllCentersOverview(){
       </div>`;
   }
 
-  const southBayHTML = DISTRICTS['South Bay'].map(loc=>
-    ringCard(loc, LOC_COLORS[loc], totals[loc].actual, totals[loc].goal, 'ring-'+loc.replace(/\s+/g,''))
+  /* Flat grid: N South Bay ring-columns, 1 divider column, M Valley ring-columns,
+     1 equals column, 1 Company ring-column — every ring column is the same width
+     (minmax(0,1fr)) so all 6 circles + gaps end up evenly spaced. */
+  const sbLocs = DISTRICTS['South Bay'];
+  const valLocs = DISTRICTS['Valley'];
+  const sbCols = sbLocs.map((_,i)=>i+1);
+  const dividerCol = sbLocs.length + 1;
+  const valCols = valLocs.map((_,i)=>dividerCol + 1 + i);
+  const equalsCol = dividerCol + 1 + valLocs.length;
+  const companyCol = equalsCol + 1;
+  const gridTemplate = `repeat(${sbLocs.length}, minmax(0,1fr)) auto repeat(${valLocs.length}, minmax(0,1fr)) auto minmax(0,1fr)`;
+
+  const southBayHTML = sbLocs.map((loc,i)=>
+    ringCard(loc, LOC_COLORS[loc], totals[loc].actual, totals[loc].goal, 'ring-'+loc.replace(/\s+/g,''), sbCols[i])
   ).join('');
-  const valleyHTML = DISTRICTS['Valley'].map(loc=>
-    ringCard(loc, LOC_COLORS[loc], totals[loc].actual, totals[loc].goal, 'ring-'+loc.replace(/\s+/g,''))
+  const valleyHTML = valLocs.map((loc,i)=>
+    ringCard(loc, LOC_COLORS[loc], totals[loc].actual, totals[loc].goal, 'ring-'+loc.replace(/\s+/g,''), valCols[i])
   ).join('');
-  const companyHTML = ringCard('Company', INK, ca, cg, 'ring-company-total');
+  const companyHTML = ringCard('Company', INK, ca, cg, 'ring-company-total', companyCol);
 
   const card=document.createElement('div'); card.className='company-banner-card';
   card.innerHTML=`
@@ -2191,21 +2442,15 @@ function renderAllCentersOverview(){
       <span class="cb-ytd-label">YEAR TO DATE</span>
     </div>
     <div class="company-banner-body">
-      <div class="district-row">
-        <div class="district-block south-bay-block">
-          <span class="district-pill-label south-bay">South Bay</span>
-          <div class="district-rings">${southBayHTML}</div>
-        </div>
-        <div class="district-divider"></div>
-        <div class="district-block valley-block">
-          <span class="district-pill-label valley">Valley</span>
-          <div class="district-rings">${valleyHTML}</div>
-        </div>
-        <div class="district-equals" aria-hidden="true">=</div>
-        <div class="district-block company-block">
-          <span class="district-pill-label company-total">Company</span>
-          <div class="district-rings">${companyHTML}</div>
-        </div>
+      <div class="district-row" style="grid-template-columns:${gridTemplate};">
+        <span class="district-pill-label south-bay" style="grid-column:1 / ${dividerCol};">South Bay</span>
+        ${southBayHTML}
+        <div class="district-divider" style="grid-column:${dividerCol};"></div>
+        <span class="district-pill-label valley" style="grid-column:${dividerCol+1} / ${equalsCol};">Valley</span>
+        ${valleyHTML}
+        <div class="district-equals" style="grid-column:${equalsCol};" aria-hidden="true">=</div>
+        <span class="district-pill-label company-total" style="grid-column:${companyCol};">Company</span>
+        ${companyHTML}
       </div>
       <p class="overview-note">"Sales" above is the total posted so far this year (${DATA_YEAR}); "Goal" is the full ${DATA_YEAR} annual target for all 12 months — so these percentages climb as the year goes on and only reach 100% once December's numbers are in.</p>
       <p class="overview-note" style="margin-top:4px;font-size:0.62rem;opacity:0.55;">Net Completed Orders — excludes shipping, postage, and tax.</p>
@@ -2256,10 +2501,22 @@ function renderDailyMatrix(){
 
   let colgroup='<colgroup><col style="width:150px;min-width:150px">';
   allCols.forEach((k,i)=>{
-    if (i>0) colgroup+='<col class="mx-gap-col">';
+    if (i>0) colgroup += (k==='__TOTAL__' ? '<col class="mx-equals-gap-col">' : '<col class="mx-gap-col">');
     colgroup+='<col class="mx-val-col"><col class="mx-val-col"><col class="mx-val-col">';
   });
   colgroup+='</colgroup>';
+
+  /* Stretch this table to the same 1480px width as the other matrix table (so it fills
+     the card the same way), then scale the equals-overlay math to match — table-layout:fixed
+     stretches every column by the same uniform factor when the declared width exceeds the
+     natural sum of its <col> widths, so multiplying by that factor keeps the mark aligned. */
+  const CORNER_W=150, VAL_W=60, GAP_W=6, EQUALS_GAP_W=40;
+  const naturalWidth = CORNER_W + allCols.length*3*VAL_W + (allCols.length-2)*GAP_W + EQUALS_GAP_W;
+  const tableWidth = 1480;
+  const scale = tableWidth / naturalWidth;
+  /* Left edge of the equals-gap column = corner + every entity/gap up through Tarzana */
+  const equalsLeft = CORNER_W + (allCols.length-1)*3*VAL_W + (allCols.length-2)*GAP_W;
+  const equalsCenter = (equalsLeft + EQUALS_GAP_W/2) * scale;
 
   let superRow=`<tr class="mx-district-row"><td class="mx-corner mx-sticky"></td>`;
   [{label:'South Bay',members:DISTRICTS['South Bay'],color:DISTRICT_COLORS['South Bay']},{label:'Valley',members:DISTRICTS['Valley'],color:DISTRICT_COLORS['Valley']}]
@@ -2300,7 +2557,10 @@ function renderDailyMatrix(){
   const card=document.createElement('div'); card.className='card matrix-card';
   card.innerHTML=`<h3>${entityBadgeHTML('Daily Sales · Today vs This Month vs Last Month', INK, true)}
     <span class="tag ${isLive?'live':''}">${isLive?'Live CoreBridge':'Sample data'}</span></h3>
-    <div class="table-wrapper matrix-scroll"><table class="matrix-table">${colgroup}${head}<tbody>${body}</tbody></table></div>`;
+    <div class="table-wrapper matrix-scroll" style="position:relative;">
+      <table class="matrix-table" style="width:${tableWidth}px;">${colgroup}${head}<tbody>${body}</tbody></table>
+      <div class="mx-district-equals-overlay" style="left:${equalsCenter}px;" aria-hidden="true">=</div>
+    </div>`;
   host.appendChild(card);
 }
 
@@ -2616,7 +2876,8 @@ function drawEstimateChart(hostId){
   const wrap=card.querySelector('.chart-wrap');
 
   const series=[{key:'new',label:'New',color:'#004990',data:newC},{key:'conv',label:'Converted',color:'#00853F',data:conv},{key:'canc',label:'Cancelled',color:'#DA2128',data:canc}];
-  const M=Object.assign({},CHART.M,{bottom:52}), width=CHART.W-M.left-M.right, height=CHART.H-M.top-M.bottom;
+  const CHART_H_LOCAL=330;
+  const M=Object.assign({},CHART.M,{bottom:52}), width=CHART.W-M.left-M.right, height=CHART_H_LOCAL-M.top-M.bottom;
   const svg=d3.select(wrap).append('svg').attr('viewBox',`0 0 ${width+M.left+M.right} ${height+M.top+M.bottom}`).attr('width','100%').style('font-family',CHART.FONT);
   const defs=svg.append('defs');
   const estHoverGradId = 'hoverbadge-est';
@@ -2646,8 +2907,8 @@ function drawEstimateChart(hostId){
       .attr('y', d=>y(s.data[d.i])-20).attr('width', d=>String(s.data[d.i]?s.data[d.i].toLocaleString():'').length*6.8+16)
       .attr('height', 19).attr('rx', 6).attr('fill', `url(#${estHoverGradId})`).attr('opacity', 0);
     const valText = grp.append('text').attr('class','val-actual')
-      .attr('x', x1(s.key)+x1.bandwidth()/2).attr('y', d=>y(s.data[d.i])-6)
-      .attr('text-anchor','middle').attr('font-size','9.5px').attr('font-weight','700')
+      .attr('x', x1(s.key)+x1.bandwidth()/2).attr('y', d=>y(s.data[d.i])-8)
+      .attr('text-anchor','middle').attr('font-size','14px').attr('font-weight','800')
       .attr('fill', s.color).attr('opacity',0)
       .text(d=> s.data[d.i] ? s.data[d.i].toLocaleString() : '');
     whenVisible(wrap, ()=>{
@@ -2886,10 +3147,14 @@ function drawCentersMonthlyMega(hostId){
 function renderCenterChart(){
   const megaHost=document.getElementById('centers-monthly-mega');
   if (centersView==='All Centers'){
+    /* REMOVED PER MO (save for later) — YTD Actual vs Goal · By Center, and the All Centers monthly mega chart
     drawYTDByEntity('centers-chart','YTD Actual vs Goal · By Center',
       [...DISTRICTS['South Bay'], ...DISTRICTS['Valley']], k=>LOC_COLORS[k],
       ytdActualGoal((k,m)=>state.locActual[k][m], (k,m)=>state.goals.locations[k][m], LOCATIONS), INK);
     drawCentersMonthlyMega('centers-monthly-mega');
+    */
+    const chartHost=document.getElementById('centers-chart'); if(chartHost) chartHost.innerHTML='';
+    if(megaHost) megaHost.innerHTML='';
   } else if (centersView==='Company Total'){
     drawEntityMonthly('centers-chart','Company Total · Monthly Actual vs Goal', '#0066B3',
       m=>LOCATIONS.reduce((s,l)=>s+state.locActual[l][m],0),
@@ -2906,10 +3171,15 @@ function renderRepChart(){
   const monthlyHost=document.getElementById('rep-monthly-chart');
   const breakdownHost=document.getElementById('rep-breakdown-chart');
   if (repsView==='All'){
+    /* REMOVED PER MO (save for later) — YTD Actual vs Goal · By Salesperson, and Salespeople Breakdown
     drawYTDByEntity('salespeople-chart','YTD Actual vs Goal · By Salesperson',
       REPS, k=>REP_COLORS[k]||INK,
       ytdActualGoal((k,m)=>state.repActual[k][m], (k,m)=>state.goals.reps[k][m], REPS), INK);
-    drawRepMonthlyChart(); drawRepBreakdownChart();
+    drawRepBreakdownChart();
+    */
+    const chartHost=document.getElementById('salespeople-chart'); if(chartHost) chartHost.innerHTML='';
+    if(breakdownHost) breakdownHost.innerHTML='';
+    drawRepMonthlyChart();
   } else if (repsView==='Team Total'){
     drawEntityMonthly('salespeople-chart','Team Total · Monthly Actual vs Goal', INK,
       m=>REPS.reduce((s,r)=>s+state.repActual[r][m],0),
@@ -3036,7 +3306,9 @@ function renderActivityFeed(){
 
 function renderCharts(){
   renderCenterChart();
+  /* REMOVED PER MO (save for later) — Company · Monthly Actual vs Goal trend chart
   drawCompanyTrend('company-trend-chart');
+  */
   drawEstimateChart('estimate-chart');
   renderRepChart();
 }
