@@ -1,4 +1,35 @@
 <!DOCTYPE html>
+<!--
+  ============================================================
+  HELM — FASTSIGNS production priority dashboard
+  Version : 2026-10-06 · "Stan's Review"
+  Date    : Tuesday, October 6, 2026
+  Based on: 2026-10-06 · "Outline Redraw"
+  Changed in this version (from Stan's walkthrough):
+    - Valley never turns red: picking Valley tints the header in
+      Valley's maroon (#97005E, Tarzana's), South Bay in #004990.
+    - One Machine Queues board — the compact one Stan preferred,
+      now titled "Machine Queues". The large board is retired.
+    - Cutting pre-due: a line on a cutter (Kern, Kongsberg, Vision
+      2550) due by the next working day is flagged red today
+      ("Cut today") — on compact cards, in Every Line Item, At Risk,
+      the run sheet, copied email cards, and red squares on the
+      cutters' rows in Machine Load. Friday reaches through Monday.
+      Nothing else turns red before it is due.
+    - At Risk: only Today (and cut-today) is red; tomorrow and two
+      days out read in black.
+    - Late jumps out: in Every Line Item, At Risk and the Machine
+      Load list, late status is a red box with white type, as on
+      the sales dashboard.
+    - Machine Load: click a square to list its jobs under the grid
+      (click again or × to close); click a machine's name to narrow
+      the page to that machine.
+    - Hasn't Moved: an "Overdue only" switch beside 3/7/14/30 days,
+      for orders that are behind and still haven't moved.
+  Not in this file: the nightly email to Stan and Fernando — it
+  needs Stan's pick of contents and a Sheets + Apps Script sender.
+  ============================================================
+-->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -46,10 +77,13 @@ window.__warmLoc = (function(){
   --ink-soft:   #4A4C55;
   --ink-faint:  #9A9BA3;
   --red:        #DA2128;
+  /* district identities — matched to the sales dashboard */
+  --valley:     #97005E;   /* same as Tarzana    */
+  --southbay:   #004990;   /* same as Long Beach */
   --red-deep:   #9E1219;
   --blue:       #1A4C7E;
   --blue-deep:  #0A2340;
-  --paper:      #FDFCFA;
+  --paper:      #FFFFFF;   /* pure white page (was #FDFCFA off-white) */
   --rule:       rgba(14,15,19,0.13);
   --rule-soft:  rgba(14,15,19,0.10);
   --line:       rgba(14,15,19,0.12);   /* every table rule, one value */
@@ -194,6 +228,7 @@ body{
 .tb-l2-left{display:flex;align-items:center;gap:20px}
 
 .topbar .district-seg{margin-left:0}
+
 .topbar .centers{display:flex;gap:0;flex-wrap:nowrap;align-items:center}
 
 /* no boxes and no fills in the header — a rule under the word is the whole
@@ -307,6 +342,102 @@ body{
 @media (max-width:760px){
   .scope-menu{justify-content:flex-start;gap:24px;padding:0 20px}
   .scope-menu.open{overflow-x:auto}
+}
+
+/* ===== SUBSTATUS — an outlined trigger at the end of the third bar ===== */
+.scope-menu .scope-sep{width:1px;height:14px;background:var(--rule);flex:none;margin:0 -6px}
+.scope-menu .sub-trigger{
+  display:inline-flex;align-items:center;gap:10px;
+  height:auto;padding:7px 11px 7px 13px;
+  border:1px solid color-mix(in srgb, var(--ink) 30%, transparent);border-radius:2px;
+  font-weight:500;max-width:320px;
+  transition:border-color .35s var(--ease-premium), background .35s var(--ease-premium),
+             color .35s var(--ease-premium);
+}
+.scope-menu .sub-trigger::after{display:none}
+.scope-menu .sub-trigger:hover{border-color:var(--ink)}
+.scope-menu .sub-trigger .k{color:var(--ink);opacity:.75;flex:none}
+.scope-menu .sub-trigger .x{display:none;font-size:14px;line-height:1;margin:-2px -2px 0 2px;opacity:.8}
+.scope-menu .sub-trigger.on .x{display:inline}
+.scope-menu .sub-trigger .x:hover{opacity:1}
+/* the chevron's dot — a substatus is on */
+.scope-toggle{position:relative}
+.scope-toggle.filtered::after{
+  content:'';position:absolute;top:3px;right:1px;width:5px;height:5px;border-radius:50%;
+  background:var(--red);
+}
+.scope-menu .sub-trigger .v{overflow:hidden;text-overflow:ellipsis;font-weight:700}
+.scope-menu .sub-trigger svg{width:10px;height:10px;flex:none;transition:transform .45s var(--ease-premium)}
+.scope-menu .sub-trigger svg path{fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.scope-menu .sub-trigger[aria-expanded="true"]{border-color:var(--ink)}
+.scope-menu .sub-trigger[aria-expanded="true"] svg{transform:rotate(180deg)}
+.scope-menu .sub-trigger.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.scope-menu .sub-trigger.on .k{color:var(--paper);opacity:.75}
+
+/* the menu itself — a full-width panel on paper under the third bar, the
+   substatuses set out in columns by family, like a maker's model menu */
+.sub-menu{
+  position:absolute;left:0;right:0;
+  top:calc(100% + var(--topbar-l2, 40px));
+  z-index:69;
+  background:var(--paper);color:var(--ink);
+  border-top:1px solid var(--rule);
+  box-shadow:0 22px 40px -22px rgba(14,15,19,0.28);
+  max-height:0;overflow:hidden;opacity:0;visibility:hidden;
+  transition:max-height .55s var(--ease-premium), opacity .35s var(--ease-premium),
+             visibility 0s linear .55s;
+}
+.sub-menu.open{
+  max-height:min(72vh, 720px);overflow-y:auto;opacity:1;visibility:visible;
+  transition:max-height .55s var(--ease-premium), opacity .35s var(--ease-premium), visibility 0s;
+}
+.sub-menu::-webkit-scrollbar{width:3px}
+.sub-menu::-webkit-scrollbar-thumb{background:rgba(14,15,19,0.18)}
+.sub-menu-in{max-width:1320px;margin:0 auto;padding:30px 54px 38px}
+.sub-menu-top{
+  display:flex;align-items:baseline;justify-content:space-between;gap:24px;
+  padding-bottom:18px;margin-bottom:26px;border-bottom:1px solid var(--rule);
+}
+.sub-note{font-size:9.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
+.sub-cols{columns:4 230px;column-gap:48px}
+.sub-fam{break-inside:avoid;margin-bottom:26px}
+.sub-fam h4{
+  /* family titles in Riviera navy, set tight and a size up so they read as
+     headings over the uppercase items beneath them */
+  margin:0 0 6px;font-size:13.5px;font-weight:700;letter-spacing:0;text-transform:none;
+  color:var(--blue);
+}
+.sub-menu button{
+  position:relative;
+  display:flex;align-items:baseline;justify-content:space-between;gap:14px;width:100%;
+  background:transparent;border:0;cursor:pointer;text-align:left;color:var(--ink);
+  padding:8px 0;border-bottom:1px solid var(--rule-soft, rgba(14,15,19,0.06));
+  transition:padding-left .4s var(--ease-premium);
+}
+.sub-menu button:hover{padding-left:8px}
+.sub-menu .nm{
+  font-family:var(--sans);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  line-height:1.35;color:var(--ink);transition:color .35s var(--ease-premium);
+}
+.sub-menu button:hover .nm{color:var(--red)}
+.sub-menu .amt{
+  flex:none;font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--ink);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.sub-menu .amt b{color:var(--red-deep);font-weight:600}
+.sub-menu button[aria-pressed="true"] .nm{font-weight:700}
+.sub-menu button[aria-pressed="true"]::before{
+  content:'';position:absolute;left:-12px;top:50%;transform:translateY(-50%);
+  width:4px;height:4px;border-radius:50%;background:var(--red);
+}
+.sub-menu .sub-all{width:auto;border-bottom:0;padding:0}
+.sub-menu .sub-all .nm{letter-spacing:.2em;font-weight:600;color:var(--ink)}
+.sub-menu .sub-all[aria-pressed="true"] .nm{color:var(--ink)}
+.sub-menu .sub-all .amt{margin-left:14px}
+.sub-empty{font-size:11.5px;color:var(--ink);letter-spacing:.06em}
+@media (max-width:760px){
+  .sub-menu-in{padding:22px 20px 28px}
+  .sub-note{display:none}
 }
 
 .g-bar-c-label{
@@ -554,8 +685,8 @@ h1 em{font-style:normal;font-weight:600}
   pointer-events:none;
   opacity:0.72;
 }
-.flow-mark.up{color:var(--red-deep)}
-.flow-mark.dn{color:var(--blue-deep)}
+.flow-mark.up{color:var(--valley)}
+.flow-mark.dn{color:var(--southbay)}
 
 /* ===== RIBBON READOUT =====
    No card and no ground: the figure for whatever you are pointing at simply
@@ -793,6 +924,448 @@ h1 em{font-style:normal;font-weight:600}
   text-align:right;max-width:76ch;line-height:1.55;
   text-wrap:balance;
 }
+
+/* ================= THE TWO VIEWS ================= */
+body.view-prod [data-view="mgmt"]{display:none !important}
+body.view-mgmt [data-view="prod"]{display:none !important}
+.topbar .view-seg{gap:26px}
+
+/* a board with nothing to say while the page is narrowed */
+.board.is-empty{display:none !important}
+
+/* ================= SHOWING ONLY ================= */
+.focus-bar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;
+  margin:0 0 56px;padding:14px 18px;border:1px solid var(--blue);
+}
+.focus-bar[hidden]{display:none}
+.fb-k{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-right:4px}
+.fb-chip{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:var(--paper);
+  padding:6px 6px 6px 12px;font-size:12px}
+.fb-chip .fb-l{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+.fb-chip b{font-weight:700}
+.fb-chip button{background:none;border:0;color:inherit;cursor:pointer;font-size:15px;line-height:1;padding:0 6px;opacity:.8}
+.fb-chip button:hover{opacity:1}
+.fb-n{font-size:12px;font-weight:700;color:var(--ink);margin-left:6px}
+.fb-all{margin-left:auto;background:none;border:0;cursor:pointer;font-family:var(--sans);
+  font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);
+  border-bottom:1px solid currentColor;padding:0}
+
+/* ================= TODAY ON THE FLOOR ================= */
+.fl-top{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 18px}
+.fl-note{font-size:12px;font-weight:600;color:var(--ink)}
+.fl-note b{color:var(--blue)}
+.fl-clear{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:var(--red);
+  border-bottom:1px solid currentColor}
+.fl-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));gap:18px}
+.fl-tile{
+  display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:4px;
+  background:transparent;border:0;border-top:2px solid var(--ink);padding:16px 2px 14px;
+  cursor:pointer;color:var(--ink);font-family:var(--sans);
+  transition:background .35s var(--ease-premium), color .35s var(--ease-premium), padding .35s var(--ease-premium);
+}
+.fl-tile:hover{padding-left:8px}
+.fl-tile.tone-go{border-top-color:var(--blue)}
+.fl-tile.tone-stop{border-top-color:var(--red)}
+.fl-tile .fl-n{font-size:40px;font-weight:300;line-height:1;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.fl-tile.tone-go .fl-n{color:var(--blue)}
+.fl-tile.tone-stop .fl-n{color:var(--red-deep)}
+.fl-tile .fl-t{font-size:14px;font-weight:700;margin-top:8px}
+.fl-tile .fl-d{font-size:12px;font-weight:400;line-height:1.4}
+.fl-tile .fl-m{font-size:12px;font-weight:600;margin-top:6px;font-variant-numeric:tabular-nums}
+.fl-tile .fl-m b{color:var(--red-deep)}
+.fl-tile[aria-pressed="true"]{background:var(--ink);color:var(--paper);padding-left:12px;padding-right:10px}
+.fl-tile[aria-pressed="true"] .fl-n,.fl-tile[aria-pressed="true"] .fl-m b{color:var(--paper)}
+
+/* ================= MACHINE QUEUES ================= */
+.mq-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:40px 30px}
+.mq-lane{border-top:1.5px solid var(--ink);padding-top:12px}
+.mq-lane.next{border-top-color:var(--blue)}
+.mq-h{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 10px;margin-bottom:6px}
+.mq-fam{grid-column:1 / -1;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.mq-name{font-size:18px;font-weight:700;color:var(--blue)}
+.mq-lane.clear .mq-name{color:var(--ink);font-weight:500}
+.mq-c{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap}
+.mq-c b{color:var(--red-deep);font-weight:700}
+.mq-meta b{color:var(--ink);font-weight:700}
+/* each job its own square card — a thin outline, white on the paper, a
+   claret edge down the left when it is overdue or due today */
+.mq-job{
+  position:relative;padding:12px 14px 12px 16px;margin-top:10px;
+  background:#FFFFFF;border:1px solid var(--ink);border-radius:0;cursor:pointer;
+}
+/* overdue: the whole card in claret, white type; due today: a red edge */
+.mq-job.urg-today{box-shadow:inset 3px 0 0 var(--red)}
+.mq-job.urg-late{background:var(--red-deep);border-color:var(--red-deep);color:#FFFFFF}
+.mq-job.urg-late .mq-j1,.mq-job.urg-late .mq-j1 a,.mq-job.urg-late .mq-due,
+.mq-job.urg-late .mq-cust,.mq-job.urg-late .mq-prod,.mq-job.urg-late .mq-meta,
+.mq-job.urg-late .mq-meta b{color:#FFFFFF}
+
+.mq-h{padding-bottom:4px}
+.out-g .mq-job:first-of-type{margin-top:12px}
+.mq-job.copied{animation:ltCopied 1.4s var(--ease-premium)}
+.mq-j1{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;font-weight:700}
+.mq-j1 a{color:var(--blue);text-decoration:none}
+.mq-j1 a:hover{text-decoration:underline}
+.mq-due{white-space:nowrap}
+.mq-due.late{color:var(--red-deep)}
+.mq-due.today{color:var(--red)}
+.mq-cust{font-size:13px;font-weight:700;margin-top:5px;line-height:1.3}
+.mq-prod{font-size:12px;font-weight:400;line-height:1.4;margin-top:2px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mq-meta{font-size:11.5px;font-weight:500;margin-top:5px}
+.mq-more{margin-top:10px;background:none;border:0;padding:0;cursor:pointer;font-family:var(--sans);
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+.mq-more:hover{color:var(--red)}
+
+/* ================= MACHINE QUEUES — COMPACT ================= */
+.mqc-grid{display:grid;grid-template-columns:repeat(6, minmax(0, 1fr));gap:30px 14px;align-items:start}
+@media (max-width:1180px){ .mqc-grid{grid-template-columns:repeat(3, minmax(0, 1fr))} }
+@media (max-width:700px){ .mqc-grid{grid-template-columns:repeat(2, minmax(0, 1fr))} }
+.mqc-lane{border-top:1.5px solid var(--ink);padding-top:9px;min-width:0}
+.mqc-lane.next{border-top-color:var(--blue)}
+.mqc-h{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:1px 8px;margin-bottom:4px}
+.mqc-fam{grid-column:1 / -1;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.mqc-name{font-size:14px;font-weight:700;color:var(--blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mqc-lane.clear .mqc-name{color:var(--ink);font-weight:500}
+.mqc-c{grid-column:1 / -1;font-size:11px;font-weight:600;color:var(--ink);white-space:nowrap;margin-top:1px}
+.mqc-c b{color:var(--red-deep);font-weight:700}
+.mc-job{
+  position:relative;margin-top:6px;padding:7px 9px 7px 10px;
+  background:#FFFFFF;border:1px solid var(--ink);cursor:pointer;
+}
+.mc-1{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:10.5px;font-weight:700;white-space:nowrap}
+.mc-1 a{color:var(--blue);text-decoration:none;overflow:hidden;text-overflow:ellipsis}
+.mc-1 a:hover{text-decoration:underline}
+.mc-due{flex:none}
+.mc-cust{font-size:11.5px;font-weight:700;margin-top:3px;line-height:1.25;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-job.open .mc-cust{white-space:normal}
+.mc-more{animation:mcOpen .45s var(--ease-premium) both}
+@keyframes mcOpen{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+.mc-prod{font-size:11px;font-weight:400;line-height:1.4;margin-top:3px}
+.mc-dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;margin:9px 0 2px}
+.mc-dl dt{font-size:10.5px;font-weight:400;letter-spacing:0;text-transform:none;line-height:16px;white-space:nowrap}
+.mc-dl dd{margin:0;font-size:11px;font-weight:600;line-height:16px;min-width:0;overflow-wrap:anywhere}
+.mc-dl dd i{display:inline-block;width:6px;height:6px;margin-right:6px;vertical-align:1px}
+
+/* overdue: claret card, white type; due today: red edge — as in the big queues */
+.mc-job.urg-today{box-shadow:inset 3px 0 0 var(--red)}
+.mc-job.urg-today .mc-due{color:var(--red)}
+.mc-job.urg-late{background:var(--red-deep);border-color:var(--red-deep);color:#FFFFFF}
+.mc-job.urg-late .mc-1 a,.mc-job.urg-late .mc-due{color:#FFFFFF}
+.mc-job.urg-late .mc-dl dd i{outline:1px solid rgba(255,255,255,.7)}
+.mqc-more{margin-top:8px;font-size:10px}
+
+/* ================= SINCE YESTERDAY ================= */
+.chg-meta{margin-bottom:18px}
+.chg-grid{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:30px}
+@media (max-width:1000px){ .chg-grid{grid-template-columns:repeat(2, minmax(0,1fr))} }
+.chg-col{border-top:1.5px solid var(--ink);padding-top:10px;min-width:0}
+.chg-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.chg-h .t{font-size:15px;font-weight:700;color:var(--blue)}
+.chg-h .n{font-size:22px;font-weight:300;font-variant-numeric:tabular-nums}
+.chg-i{padding:9px 0;border-bottom:1px solid var(--line)}
+.chg-1{font-size:11px;font-weight:700}
+.chg-1 a{color:var(--blue);text-decoration:none}
+.chg-1 a:hover{text-decoration:underline}
+.chg-c{font-size:12.5px;font-weight:700;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chg-d{font-size:11.5px;margin-top:2px;line-height:1.35;color:var(--ink)}
+.chg-d.late{color:var(--red-deep);font-weight:600}
+.chg-d .arr{margin:0 3px}
+.chg-none{font-size:12px;padding:10px 0}
+
+/* ================= MACHINE LOAD ================= */
+.ld-wrap{overflow-x:auto}
+.ld{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:3px;font-variant-numeric:tabular-nums;min-width:860px}
+.ld th{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-align:center;
+  padding:0 4px 8px;color:var(--ink);white-space:nowrap}
+.ld th span{display:block;font-size:10.5px;font-weight:500;letter-spacing:0;text-transform:none;margin-top:2px}
+.ld th.today{color:var(--blue)}
+.ld th.od{color:var(--red-deep)}
+.ld th.m,.ld td.m{text-align:left;width:160px}
+.ld td{height:46px}
+.ld td.m{padding-right:10px;border-top:1px solid var(--line)}
+.ld td.m .fam{display:block;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.ld td.m .nm{display:block;font-size:13.5px;font-weight:700;color:var(--blue);margin-top:1px}
+.ld tr.idle td.m .nm{color:var(--ink);font-weight:500}
+.ld td.c{text-align:center;border:1px solid rgba(14,15,19,0.12);transition:transform .25s var(--ease-premium)}
+.ld td.c b{display:block;font-size:15px;font-weight:700;line-height:1.1}
+.ld td.c span{display:block;font-size:10px;font-weight:500;margin-top:1px}
+.ld td.c i{font-style:normal;color:rgba(14,15,19,0.25)}
+.ld th.tot,.ld td.tot{text-align:right;font-size:13px;font-weight:700;padding-left:10px;width:58px}
+.ld tbody tr:not(.idle){cursor:pointer}
+.ld tbody tr:not(.idle):hover td.m .nm{color:var(--red)}
+.ld tfoot td{font-size:12px;font-weight:700;text-align:center;height:34px;border-top:1.5px solid var(--ink)}
+.ld tfoot td.m{text-align:left;border-top:1.5px solid var(--ink)}
+.ld tfoot td.tot{text-align:right}
+
+/* ================= BATCH BY MATERIAL ================= */
+.bt-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(420px, 1fr));gap:34px 48px}
+.bt-m{border-top:1.5px solid var(--ink);padding-top:10px}
+.bt-mh{font-size:16px;font-weight:700;color:var(--blue);margin-bottom:6px}
+.bt-g{border:1px solid var(--ink);margin-top:8px;cursor:pointer;background:#FFFFFF}
+.bt-row{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:baseline;gap:4px 10px;padding:10px 12px}
+.bt-code{font-size:10.5px;font-weight:700;letter-spacing:.06em;border:1px solid var(--ink);padding:1px 6px}
+.bt-mat{font-size:12.5px;font-weight:700;line-height:1.35}
+.bt-n{grid-column:2;font-size:11.5px;font-weight:600}
+.bt-n b{color:var(--red-deep)}
+.bt-jobs{padding:0 12px 8px;animation:mcOpen .4s var(--ease-premium) both}
+.bt-j{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 12px;padding:8px 0;
+  border-top:1px solid var(--line);font-size:11.5px;align-items:baseline}
+.bt-j .o{grid-row:1;grid-column:1}
+.bt-j .cu{grid-row:1;grid-column:2}
+.bt-j .du{grid-row:1;grid-column:3;text-align:right}
+.bt-j .pr{grid-row:2;grid-column:1 / -1;color:var(--ink);line-height:1.35}
+.bt-j .o{font-weight:700}
+.bt-j .o a{color:var(--blue);text-decoration:none}
+.bt-j .cu{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt-j .du{font-weight:700;white-space:nowrap}
+.bt-j .du.late{color:var(--red-deep)} .bt-j .du.today{color:var(--red)}
+
+/* ================= ONE LINE AWAY ================= */
+.nr-l .d,.nr-m,.bt-j .pr,.chg-d,.chg-none,.mq-prod,.mc-prod,.fl-d,.out-empty,.lt-meta.chg-meta{font-weight:400}
+.nr,.nr *,.bt-g,.bt-g *:not(a):not(b):not(.late):not(.today),.chg-col,.chg-c,.chg-d:not(.late),.ld td.m{color:var(--ink)}
+.nr-l .du.late{color:var(--red-deep)} .nr-l .du.today{color:var(--red)} .nr-o a{color:var(--blue)}
+.nr-list{border-top:1.5px solid var(--ink)}
+.nr{display:grid;grid-template-columns:minmax(220px, 300px) minmax(0,1fr);gap:28px;padding:16px 0;border-bottom:1px solid var(--line)}
+.nr-o{font-size:12px;font-weight:700}
+.nr-o a{color:var(--blue);text-decoration:none}
+.nr-o a:hover{text-decoration:underline}
+.nr-c{font-size:14px;font-weight:700;margin-top:3px}
+.nr-p{display:flex;align-items:center;gap:10px;margin-top:8px}
+.nr-p .segs{display:inline-flex;gap:3px}
+.nr-p .segs i{width:9px;height:9px;border:1px solid var(--blue);display:inline-block}
+.nr-p .segs i.on{background:var(--blue)}
+.nr-p .segs i.bar{width:120px;height:7px;background:linear-gradient(90deg,var(--blue) var(--p),transparent var(--p))}
+.nr-p .t{font-size:11.5px;font-weight:700}
+.nr-m{font-size:11.5px;margin-top:6px}
+.nr-l{display:grid;grid-template-columns:34px minmax(0,1fr) 170px 64px 88px;gap:12px;align-items:baseline;padding:6px 0}
+.nr-l + .nr-l{border-top:1px solid var(--line)}
+.nr-l .p{font-size:12px;font-weight:700}
+.nr-l .d{font-size:12.5px;line-height:1.35}
+.nr-l .s{font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.nr-l .v{font-size:12px;font-weight:600;text-align:right}
+.nr-l .du{font-size:12px;font-weight:700;text-align:right;white-space:nowrap}
+.nr-l .du.late{color:var(--red-deep)} .nr-l .du.today{color:var(--red)}
+@media (max-width:900px){ .nr{grid-template-columns:1fr} .nr-l{grid-template-columns:30px minmax(0,1fr) 80px} .nr-l .s,.nr-l .v{display:none} }
+
+/* ===== HOVER — the card's own outline redraws itself. At rest the 1px outline
+   sits where it always has (drawn by ::before = top + right, ::after = bottom +
+   left, over a transparent border). On hover it vanishes and draws itself back
+   round from the top-left corner — top, right side, bottom, up the left — in half
+   a second, ending as the same thin outline. No second line, no shadow, no lift. */
+.mq-job,.mc-job,.bt-g{position:relative;--ol:var(--ink)}
+.mq-job,.mc-job,.bt-g,
+.mq-job.urg-late,.mc-job.urg-late{border-color:transparent}
+.mq-job.urg-late,.mc-job.urg-late{--ol:#5A0A0F}
+.mq-job::before,.mq-job::after,.mc-job::before,.mc-job::after,.bt-g::before,.bt-g::after{
+  content:'';position:absolute;box-sizing:border-box;pointer-events:none;z-index:2;
+  width:calc(100% + 2px);height:calc(100% + 2px);border:1px solid transparent;
+}
+.mq-job::before,.mc-job::before,.bt-g::before{top:-1px;left:-1px;border-top-color:var(--ol);border-right-color:var(--ol)}
+.mq-job::after,.mc-job::after,.bt-g::after{bottom:-1px;right:-1px;border-bottom-color:var(--ol);border-left-color:var(--ol)}
+.mq-job:hover::before,.mc-job:hover::before,.bt-g:hover::before{animation:olTR .5s linear both}
+.mq-job:hover::after,.mc-job:hover::after,.bt-g:hover::after{animation:olBL .5s linear both}
+@keyframes olTR{
+  0%  {width:0;height:0}
+  25% {width:calc(100% + 2px);height:0}
+  50%,100%{width:calc(100% + 2px);height:calc(100% + 2px)}
+}
+@keyframes olBL{
+  0%,49.9%{width:0;height:0;border-bottom-color:transparent;border-left-color:transparent}
+  50% {width:0;height:0;border-bottom-color:var(--ol);border-left-color:var(--ol)}
+  75% {width:calc(100% + 2px);height:0}
+  100%{width:calc(100% + 2px);height:calc(100% + 2px)}
+}
+/* Machine Load squares have no black outline at rest, so on hover the same
+   motion draws one round the square */
+.ld tbody tr:not(.idle) td.c{position:relative;--ol:var(--ink)}
+.ld tbody tr:not(.idle) td.c::before,.ld tbody tr:not(.idle) td.c::after{
+  content:'';position:absolute;box-sizing:border-box;pointer-events:none;z-index:2;
+  width:0;height:0;border:1px solid transparent;
+}
+.ld tbody tr:not(.idle) td.c::before{top:-1px;left:-1px}
+.ld tbody tr:not(.idle) td.c::after{bottom:-1px;right:-1px}
+.ld tbody tr:not(.idle) td.c:hover::before{border-top-color:var(--ol);border-right-color:var(--ol);animation:olTR .5s linear both}
+.ld tbody tr:not(.idle) td.c:hover::after{animation:olBL .5s linear both}
+
+/* ===== LATE THAT JUMPS OUT — a red box, white type, as on the sales dashboard ===== */
+.lt-flag{display:inline-block;background:var(--red-deep);color:#FFFFFF;font-weight:700;
+  padding:3px 8px;line-height:1.3;white-space:nowrap}
+.lt td.st{white-space:nowrap}
+
+/* ===== MACHINE LOAD — the opened square ===== */
+.ld td.c.picked{box-shadow:inset 0 0 0 2px var(--ink)}
+.ld td.c.picked[style*="color:#FFFFFF"]{box-shadow:inset 0 0 0 2px #FFFFFF}
+.ld tbody tr:not(.idle) td.c{cursor:pointer}
+.ld tbody tr:not(.idle) td.m{cursor:pointer}
+.ld-pick:empty{display:none}
+.ld-pick{margin-top:18px;border:1px solid var(--ink);background:#FFFFFF;padding:4px 18px 10px;
+  animation:mcOpen .35s var(--ease-premium) both}
+.ld-ph{display:flex;align-items:baseline;gap:16px;padding:12px 0 10px;border-bottom:1.5px solid var(--ink)}
+.ld-ph .t{font-size:15px;font-weight:700;color:var(--blue)}
+.ld-ph .n{font-size:12px;font-weight:600}
+.ld-x{margin-left:auto;background:none;border:0;cursor:pointer;font-size:20px;line-height:1;color:var(--ink)}
+.ld-pr{display:grid;grid-template-columns:130px minmax(120px,1fr) minmax(180px,1.6fr) minmax(140px,1fr) 64px 132px;
+  gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line);font-size:12px;color:var(--ink)}
+.ld-pr:last-child{border-bottom:0}
+.ld-pr .o{font-weight:700}
+.ld-pr .o a{color:var(--blue);text-decoration:none}
+.ld-pr .o a:hover{text-decoration:underline}
+.ld-pr .cu{font-weight:700}
+.ld-pr .pr,.ld-pr .ce{font-weight:400}
+.ld-pr .va{text-align:right;font-weight:600}
+.ld-pr .du{text-align:right;font-weight:700;white-space:nowrap}
+@media (max-width:900px){ .ld-pr{grid-template-columns:1fr auto} .ld-pr .pr,.ld-pr .ce,.ld-pr .va{display:none} }
+
+/* ===== HASN'T MOVED — overdue-only switch sits beside the day buttons ===== */
+#stallLateSeg{margin-left:18px}
+
+/* ================= AT RISK ================= */
+.risk-wrap{overflow-x:auto;border-top:1.5px solid var(--ink)}
+.lt.rk th{cursor:default;position:static}
+.lt.rk th:hover{color:var(--ink)}
+.lt.rk td.st{font-weight:700}
+.lt.rk tr.cp{cursor:pointer}
+.lt.rk tr.copied td{animation:ltCopied 1.4s var(--ease-premium)}
+
+/* ================= OUTSIDE DEPENDENCIES ================= */
+.out-grid,.disc-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(380px, 1fr));gap:40px 56px}
+.out-h{margin:0 0 12px;font-size:17px;font-weight:700;letter-spacing:0;color:var(--blue)}
+.out-g{border-top:1.5px solid var(--ink);padding-top:10px;margin-bottom:26px}
+.out-gh{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.out-gh .nm{font-size:14px;font-weight:700}
+.out-gh .c{font-size:12px;font-weight:600;white-space:nowrap}
+.out-gh .c b{color:var(--red-deep)}
+.out-empty{font-size:13px;color:var(--ink);padding:14px 0;border-top:1.5px solid var(--ink)}
+
+/* ================= KEEPING SUBSTATUS CURRENT ================= */
+.disc{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.disc th{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);
+  text-align:left;padding:0 8px 10px;border-bottom:1.5px solid var(--ink);white-space:nowrap}
+.disc td{font-size:12.5px;font-weight:500;color:var(--ink);padding:10px 8px;border-bottom:1px solid var(--line)}
+.disc th.r,.disc td.r{text-align:right}
+.disc td.nm{font-weight:700;white-space:nowrap}
+.disc td.nm i{display:inline-block;width:7px;height:7px;margin-right:8px;vertical-align:1px}
+.disc .db{display:inline-block;width:90px;height:6px;background:rgba(14,15,19,0.08);vertical-align:middle;margin-right:10px}
+.disc .db span{display:block;height:100%;background:var(--blue)}
+.disc .dp{font-weight:700}
+.disc td.gap{color:var(--red-deep);font-weight:700}
+
+/* ===== THE LIST — every line item, in full ===== */
+.board.list-sec{margin-top:0}
+/* ===== WHERE WORK IS STUCK ===== */
+.st-meta{font-size:12px;font-weight:600;color:var(--ink);margin:0 0 28px}
+.st-meta b{color:var(--red-deep);font-weight:700}
+.st-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(360px, 1fr));gap:44px 56px}
+.st-fam{border-top:1.5px solid var(--ink);padding-top:14px}
+.st-fam-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:10px}
+.st-fam-h h3{margin:0;font-size:17px;font-weight:700;letter-spacing:0;color:var(--blue)}
+.st-fam-h .tot{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.st-fam-h .tot b{color:var(--red-deep);font-weight:700}
+.st-row{
+  display:grid;grid-template-columns:minmax(0,1fr) 110px 64px;align-items:center;gap:6px 14px;
+  width:100%;padding:11px 0;background:transparent;border:0;border-bottom:1px solid var(--line);
+  text-align:left;cursor:pointer;color:var(--ink);font-family:var(--sans);
+  transition:padding-left .4s var(--ease-premium), background .3s var(--ease-premium);
+}
+.st-row:hover{padding-left:6px}
+.st-row:hover .nm{color:var(--red)}
+.st-row .nm{font-size:13px;font-weight:600;line-height:1.3;transition:color .3s var(--ease-premium)}
+.st-row .val{font-size:13px;font-weight:600;color:var(--blue);text-align:right;font-variant-numeric:tabular-nums}
+.st-row .bar{position:relative;height:6px;background:rgba(14,15,19,0.06)}
+.st-row .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--blue)}
+.st-row .bar i.l{background:var(--red)}
+.st-row .sub{grid-column:1 / -1;font-size:11.5px;font-weight:500;color:var(--ink);margin-top:-2px;font-variant-numeric:tabular-nums}
+.st-row .sub b{color:var(--red-deep);font-weight:700}
+.st-row[aria-pressed="true"]{background:rgba(26,76,126,.06);padding-left:10px}
+.st-row[aria-pressed="true"] .nm{color:var(--blue)}
+.st-fam.quiet h3{color:var(--ink)}
+.st-row.zero .nm{font-weight:500}
+.st-row.zero .val{color:var(--ink)}
+.st-empty{font-size:12px;color:var(--ink)}
+
+/* Stage Analytics now follows The Month rather than opening the panel */
+.details-panel .panel-header.stage-title{margin-top:96px}
+.lt-top{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 14px}
+.lt-meta{
+  font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+}
+/* copy the whole table — only offered once the list is narrowed to someone
+   or something worth writing about */
+.lt-copyall{
+  display:inline-flex;align-items:center;gap:9px;flex:none;
+  background:transparent;border:1px solid color-mix(in srgb, var(--blue) 40%, transparent);
+  border-radius:2px;color:var(--blue);cursor:pointer;
+  padding:7px 13px 7px 10px;
+  font-family:var(--sans);font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  transition:border-color .35s var(--ease-premium), background .35s var(--ease-premium), color .35s var(--ease-premium);
+}
+.lt-copyall[hidden]{display:none}
+.lt-copyall svg{width:16px;height:16px;flex:none}
+.lt-copyall:hover{background:var(--blue);border-color:var(--blue);color:var(--paper)}
+.lt-meta b{color:var(--red-deep);font-weight:700}
+.lt-wrap{
+  max-height:min(78vh, 900px);overflow:auto;
+  border-top:1.5px solid var(--ink);border-bottom:1px solid var(--line);
+}
+.lt-wrap::-webkit-scrollbar{width:4px;height:4px}
+.lt-wrap::-webkit-scrollbar-thumb{background:rgba(14,15,19,0.25)}
+.lt{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.lt th{
+  position:sticky;top:0;z-index:2;background:var(--paper);
+  font-family:var(--sans);font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink);text-align:left;white-space:nowrap;
+  padding:13px 9px 11px;border-bottom:1px solid var(--line);
+  cursor:pointer;user-select:none;
+}
+.lt th:hover{color:var(--red)}
+.lt th .ar{display:inline-block;width:10px;margin-left:4px;font-size:9px}
+.lt th.r,.lt td.r{text-align:right}
+.lt td{
+  font-size:12px;font-weight:500;color:var(--ink);white-space:nowrap;
+  padding:10px 9px;border-bottom:1px solid var(--line);vertical-align:baseline;
+}
+.lt tr:hover td{background:rgba(14,15,19,0.03)}
+.lt td.num a,.lt td.num span{font-weight:700;color:var(--ink);text-decoration:none;
+  border-bottom:1px solid transparent;transition:border-color .3s var(--ease-premium)}
+.lt td.num a:hover{border-bottom-color:var(--ink)}
+/* Long text wraps inside set widths, so the table keeps the same proportions
+   whether one substatus is picked or all of them are showing — no single long
+   name can stretch a column and push the rest off the screen. */
+.lt td{vertical-align:top}
+.lt td.wrap{white-space:normal;line-height:1.35}
+.lt td.cust{font-weight:600}
+.lt td.caps{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
+.lt td.subc{min-width:80px;max-width:136px}
+.lt td.stgc{min-width:76px;max-width:116px}
+.lt td.custc{min-width:96px;max-width:156px}
+.lt td.prodc{min-width:130px;max-width:216px}
+.lt td.repc{min-width:70px;max-width:106px}
+.lt td.catc{min-width:60px;max-width:96px}
+.lt td.ctr{white-space:nowrap}
+.lt td.ctr i{display:inline-block;width:7px;height:7px;margin-right:8px;vertical-align:1px}
+.lt td.late{color:var(--red-deep);font-weight:700}
+.lt td.today{font-weight:700}
+.lt tbody tr{cursor:pointer}
+.lt tbody tr.copied td{animation:ltCopied 1.4s var(--ease-premium)}
+@keyframes ltCopied{0%{background:rgba(26,76,126,.14)}100%{background:transparent}}
+.copy-toast{
+  position:fixed;left:50%;bottom:28px;z-index:9999;
+  transform:translate(-50%, 14px);opacity:0;pointer-events:none;
+  display:flex;align-items:center;gap:14px;
+  background:var(--blue);color:var(--paper);padding:14px 22px;border-radius:2px;
+  box-shadow:0 16px 36px -14px rgba(26,76,126,.55);
+  font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  transition:opacity .35s var(--ease-premium), transform .45s var(--ease-premium);
+}
+.copy-toast.show{opacity:1;transform:translate(-50%, 0)}
+.copy-toast b{font-weight:700}
+.copy-toast svg{width:17px;height:17px;flex:none;margin-right:-2px}
+.copy-toast span{opacity:.8}
+.lt-empty{padding:40px 0;text-align:center;font-size:12px;color:var(--ink);letter-spacing:.06em}
+@media (max-width:900px){ .lt-wrap{max-height:none} }
 
 /* ===== WHERE THE MONEY SITS =====
    The final panel fills the whole viewport and reveals as it scrolls into
@@ -1687,8 +2260,8 @@ h1 em{font-style:normal;font-weight:600}
 .ring-wrap .arc{
   transition:stroke-dasharray 1.1s var(--ease-premium);
 }
-.ring-wrap .arc.valley{stroke:var(--red)}
-.ring-wrap .arc.southbay{stroke:var(--blue)}
+.ring-wrap .arc.valley{stroke:var(--valley)}
+.ring-wrap .arc.southbay{stroke:var(--southbay)}
 
 .ring-mid{
   position:absolute;inset:0;
@@ -1764,7 +2337,7 @@ h1 em{font-style:normal;font-weight:600}
   z-index:5;
   margin-top:0;
   padding:14vh 54px 56px;
-  background:#33164F;
+  background:#0E0F13;   /* company ink — the old violet was a centre's colour */
   color:var(--paper);
 }
 .foot-in{max-width:1680px;margin:0 auto}
@@ -2263,6 +2836,7 @@ a.num:hover{color:var(--red)}
 /* sits on the line, its last letter landing on the line's end */
 .g-endlabel{
   position:absolute;
+  max-width:260px;overflow:hidden;text-overflow:ellipsis;
   bottom:50%;
   margin-bottom:2px;
   transform:translateX(-100%);
@@ -2680,7 +3254,13 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
       </span>
     </div>
 
-    <div class="tb-right"></div>
+    <div class="tb-right">
+      <!-- two faces: the floor's day, and the office's numbers -->
+      <div class="seg view-seg" id="viewSeg" role="group" aria-label="View">
+        <button data-v="prod" aria-pressed="true">Production</button>
+        <button data-v="mgmt" aria-pressed="false">Management</button>
+      </div>
+    </div>
   </div>
 
   <!-- LAYER 2 — scope chevron + districts (left, chevron under the menu icon) · centres (right). Always on. -->
@@ -2708,7 +3288,24 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <button data-d="late">Overdue</button>
     <button data-d="today">Due Today</button>
     <button data-d="all">Everything</button>
+    <span class="scope-sep" aria-hidden="true"></span>
+    <button class="sub-trigger" id="subTrigger" aria-haspopup="true" aria-expanded="false">
+      <span class="k">Substatus</span><span class="v" id="subTriggerV">All</span>
+      <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg>
+      <span class="x" role="button" aria-label="Clear substatus filter">&times;</span>
+    </button>
   </nav>
+
+  <!-- SUBSTATUS MENU — opens under the third bar, full width, in columns -->
+  <div class="sub-menu" id="subMenu" role="menu" aria-label="Substatus" data-lenis-prevent>
+    <div class="sub-menu-in">
+      <div class="sub-menu-top">
+        <button class="sub-all" data-sub="__all__"><span class="nm">All Substatuses</span><span class="amt" id="subAllAmt"></span></button>
+        <span class="sub-note">Counted within the current centre, salesperson and due scope</span>
+      </div>
+      <div class="sub-cols" id="subCols"></div>
+    </div>
+  </div>
 </header>
 
 <!-- SALESPERSON SIDEBAR — reps to navigate by, a date range at the foot -->
@@ -2814,15 +3411,101 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
 
   <!-- DETAILS PANEL -->
   <div class="details-panel" id="detailsPanel">
-    <div class="panel-header">
-      <div class="sec-title">
-        <h2>Stage Analytics</h2>
+    <!-- FOCUS BAR — what the page is narrowed to, each pick removable -->
+    <div class="focus-bar" id="focusBar" hidden></div>
+
+    <!-- THE LIST — every open line item in the current filters, in full -->
+    <section class="board list-sec" id="listSec">
+      <div class="panel-header"><div class="sec-title"><h2>Every Line Item</h2></div>
+        <span class="board-sub">Everything the filters above let through — district, centre, salesperson, due scope, dates and substatus — one row per line item. Click a column to sort; click an order number to open it in CoreBridge.</span></div>
+      <div class="lt-top">
+        <div class="lt-meta" id="ltMeta"></div>
+        <button class="lt-copyall" id="ltCopyAll" hidden title="Copy this table for an email">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.9983 10C20.9862 7.82497 20.8897 6.64706 20.1213 5.87868C19.2426 5 17.8284 5 15 5H12C9.17157 5 7.75736 5 6.87868 5.87868C6 6.75736 6 8.17157 6 11V16C6 18.8284 6 20.2426 6.87868 21.1213C7.75736 22 9.17157 22 12 22H15C17.8284 22 19.2426 22 20.1213 21.1213C21 20.2426 21 18.8284 21 16V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3 10V16C3 17.6569 4.34315 19 6 19M18 5C18 3.34315 16.6569 2 15 2H11C7.22876 2 5.34315 2 4.17157 3.17157C3.51839 3.82475 3.22937 4.69989 3.10149 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Copy table</span></button>
       </div>
-    </div>
-    <div class="details-grid" id="detailsGrid"></div>
+      <div class="lt-wrap" id="ltWrap" data-lenis-prevent>
+        <table class="lt" id="ltTable"></table>
+      </div>
+    </section>
+
+    <!-- ================= PRODUCTION VIEW ================= -->
+    <!-- TODAY ON THE FLOOR — every open line, sorted into can-run and can't-run -->
+    <section class="board floor-sec" id="floorSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>Today on the Floor</h2></div>
+        <span class="board-sub">Every open line sorted by what can happen to it today — ready to run, on a machine, blocked, out with a vendor, moving. Click a group to narrow the whole page to it.</span></div>
+      <div class="fl-top">
+        <div class="fl-note" id="flNote"></div>
+        <button class="lt-copyall" id="runSheetBtn" title="Copy today's run sheet for an email"></button>
+      </div>
+      <div class="fl-grid" id="flGrid"></div>
+    </section>
+
+    <!-- SINCE YESTERDAY — what changed overnight -->
+    <section class="board chg-sec" id="chgSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>Since Yesterday</h2></div>
+        <span class="board-sub">What changed since the last day this browser saw — new work, work that just went late, substatus moves, and lines that left the board (built, voided or closed).</span></div>
+      <div class="lt-meta chg-meta" id="chgMeta"></div>
+      <div class="chg-grid" id="chgGrid"></div>
+    </section>
+
+    <!-- MACHINE QUEUES — COMPACT: the same queues, six to a row, small cards -->
+    <section class="board mqc-sec" id="mqcSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>Machine Queues</h2></div>
+        <span class="board-sub">One lane per machine and bench, six to a row, in running order — most overdue first. Red cards are late; a red card on a cutter due the next working day means cut it today. Click a card to open it.</span></div>
+      <div class="mqc-grid" id="mqcGrid"></div>
+    </section>
+
+    <!-- MACHINE LOAD — the week ahead, machine by machine -->
+    <section class="board load-sec" id="loadSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>Machine Load</h2></div>
+        <span class="board-sub">Jobs due off each machine over the next seven days — the darker the square, the heavier the day; red on a cutter means work to cut today. Click a square to list its jobs; click a machine's name to narrow the page to it.</span></div>
+      <div class="ld-wrap" id="ldWrap"></div>
+      <div class="ld-pick" id="ldPick"></div>
+    </section>
+
+    <!-- BATCH BY MATERIAL — the same material on the same machine, run together -->
+    <section class="board batch-sec" id="batchSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>Batch by Material</h2></div>
+        <span class="board-sub">Each machine's queue grouped by the product code and material at the start of the product name — two or more jobs that could run on one setup. Click a batch to see its jobs.</span></div>
+      <div class="lt-meta" id="btMeta"></div>
+      <div class="bt-grid" id="btGrid"></div>
+    </section>
+
+    <!-- AT RISK — due in the next two days and not yet on a machine -->
+    <section class="board risk-sec" id="riskSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>At Risk</h2></div>
+        <span class="board-sub">Due today or in the next two days and not yet on a machine, plus anything still on a cutter that is due by the next working day. Red is today's problem; the rest is a heads-up. Click a row to copy it.</span></div>
+      <div class="lt-top">
+        <div class="lt-meta" id="riskMeta"></div>
+        <button class="lt-copyall" id="riskCopy" title="Copy this list for an email"></button>
+      </div>
+      <div class="risk-wrap" id="riskWrap"></div>
+    </section>
+
+    <!-- ONE LINE AWAY — orders held up by one or two open lines -->
+    <section class="board near-sec" id="nearSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>One Line Away</h2></div>
+        <span class="board-sub">Orders that are mostly built, held up by one or two open lines. Finish these and the whole order can go out the door.</span></div>
+      <div class="lt-top">
+        <div class="lt-meta" id="nearMeta"></div>
+        <button class="lt-copyall" id="nearCopy" title="Copy the holding lines for an email"></button>
+      </div>
+      <div class="nr-list" id="nrList"></div>
+    </section>
+
+    <!-- OUTSIDE DEPENDENCIES — vendors and transfers -->
+    <section class="board out-sec" id="outSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>Outside Dependencies</h2></div>
+        <span class="board-sub">Work that depends on someone else — what each vendor is holding, and what is moving between centres. The calls to make today.</span></div>
+      <div class="out-grid">
+        <div><h3 class="out-h">With vendors</h3><div id="outVendors"></div></div>
+        <div><h3 class="out-h">Transfers between centres</h3><div id="outTransfers"></div></div>
+      </div>
+    </section>
+
 
     <!-- THE MONTH — what falls due, day by day -->
-    <section class="board" id="leaderSec">
+    <section class="board" id="leaderSec" data-view="mgmt">
       <div class="panel-header"><div class="sec-title"><h2>The Month</h2></div>
         <span class="board-sub" id="leaderSub">Every open order on the day it is due. Colour is the centre; a day that has already passed carries its overdue count in claret. Pick a day to read it out on the right.</span></div>
       <div class="cal-bar">
@@ -2843,6 +3526,31 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
       <div class="leader-key" id="leaderKey"></div>
     </section>
 
+    <!-- WHERE WORK IS STUCK — open work by substatus family -->
+    <section class="board stuck-sec" id="stuckSec">
+      <div class="panel-header"><div class="sec-title"><h2>Where Work Is Stuck</h2></div>
+        <span class="board-sub">What is physically holding each job — machine, vendor, permit, transfer — grouped by substatus. The bar is open lines, claret for the overdue share. Click any line to filter the whole page to it.</span></div>
+      <div class="st-meta" id="stMeta"></div>
+      <div class="st-grid" id="stGrid"></div>
+    </section>
+
+    <!-- KEEPING SUBSTATUS CURRENT — both views -->
+    <section class="board disc-sec" id="discSec">
+      <div class="panel-header"><div class="sec-title"><h2>Keeping Substatus Current</h2></div>
+        <span class="board-sub">Every board above is only as good as the substatus behind it. Tracked means a real substatus — not Pending, not blank. The last column is the one to chase: work already in production that nobody has placed.</span></div>
+      <div class="disc-grid">
+        <div><h3 class="out-h">By centre</h3><div id="discCentre"></div></div>
+        <div data-view="mgmt"><h3 class="out-h">By salesperson</h3><div id="discRep"></div></div>
+      </div>
+    </section>
+
+    <div class="panel-header stage-title" data-view="mgmt">
+      <div class="sec-title">
+        <h2>Stage Analytics</h2>
+      </div>
+    </div>
+    <div class="details-grid" id="detailsGrid" data-view="mgmt"></div>
+
     <!-- SCHEDULE -->
     <div class="panel-header sched-title">
       <div class="sec-title">
@@ -2862,6 +3570,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
           <div class="seg" id="gGroup" role="group" aria-label="Grouping">
             <button data-g="stage" aria-pressed="true">By Stage</button>
             <button data-g="center" aria-pressed="false">By Centre</button>
+            <button data-g="substatus" aria-pressed="false">By Substatus</button>
             <button data-g="none" aria-pressed="false">Ranked</button>
           </div>
           <div class="g-bar-c-right">
@@ -2900,9 +3609,9 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     </section>
 
     <div class="legend">
-      <div class="k"><span class="sw" style="background:linear-gradient(90deg,#9E1219,#DA2128)"></span> Valley</div>
-      <div class="k"><span class="sw" style="background:linear-gradient(90deg,#0A2340,#1A4C7E)"></span> South Bay</div>
-      <div class="k"><span class="sw" style="background:linear-gradient(90deg,#33164F,#52247F)"></span> All centres</div>
+      <div class="k"><span class="sw" style="background:linear-gradient(90deg,#58003A,#97005E)"></span> Valley</div>
+      <div class="k"><span class="sw" style="background:linear-gradient(90deg,#00264D,#004990)"></span> South Bay</div>
+      <div class="k"><span class="sw" style="background:linear-gradient(90deg,#0E0F13,#34363E)"></span> All centres</div>
       <div class="k">Pale — open dollars · Solid — overdue or due today</div>
     </div>
     <div class="legend">
@@ -2928,7 +3637,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     </section>
 
     <!-- TOP CUSTOMERS -->
-    <section class="board full" id="custSec">
+    <section class="board full" id="custSec" data-view="mgmt">
       <div class="full-stage">
       <div class="panel-header"><div class="sec-title"><h2>The Ten Biggest Open Jobs</h2></div>
         <span class="board-sub">Your largest exposure right now. Click an order number to open it in CoreBridge, and read the claret feet below to see how much is already late.</span></div>
@@ -2942,7 +3651,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     </section>
 
     <!-- TOP CLIENTS -->
-    <section class="board full" id="clientSec">
+    <section class="board full" id="clientSec" data-view="mgmt">
       <div class="full-stage">
       <div class="panel-header"><div class="sec-title"><h2>Top Ten Clients</h2></div>
         <span class="board-sub">One client with a single large job is a different problem from one with seventeen small ones. Click any client to see every job behind the number.</span></div>
@@ -2956,7 +3665,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     </section>
 
     <!-- ORDER SIZE -->
-    <section class="board full" id="sizeSec">
+    <section class="board full" id="sizeSec" data-view="mgmt">
       <div class="full-stage">
       <div class="panel-header"><div class="sec-title"><h2>Order Size Against Late Rate</h2></div>
         <span class="board-sub">If small jobs run late and large ones do not, lateness is a scheduling choice. If the rate is flat across all four bands, the cause lies elsewhere.</span></div>
@@ -2970,7 +3679,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     </section>
 
     <!-- PRODUCT MIX -->
-    <section class="board full" id="mixSec">
+    <section class="board full" id="mixSec" data-view="mgmt">
       <div class="full-stage">
       <div class="panel-header"><div class="sec-title"><h2>What Kind Of Work</h2></div>
         <span class="board-sub">Which kind of work clogs the shop, rather than which stage. Installation late means crews; permits late means the city, and the floor cannot fix it.</span></div>
@@ -2984,21 +3693,21 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     </section>
 
     <!-- REP × STAGE -->
-    <section class="board" id="repStageSec">
+    <section class="board" id="repStageSec" data-view="mgmt">
       <div class="panel-header"><div class="sec-title"><h2>Whose Work Sits Where</h2></div>
         <span class="board-sub">An even spread is healthy. Everything banked in one stage points at a specific problem, and the stage itself tells you whose problem it is.</span></div>
       <div class="matrix" id="repStage"></div>
     </section>
 
     <!-- TREND -->
-    <section class="board" id="trendSec">
+    <section class="board" id="trendSec" data-view="mgmt">
       <div class="panel-header"><div class="sec-title"><h2>Is It Getting Better</h2></div>
         <span class="board-sub" id="trendSub">The only view here that is not a snapshot. Two lines over time, so you can tell whether what you changed last week actually worked.</span></div>
       <div class="trend" id="trend"></div>
     </section>
 
     <!-- REP SCORECARD -->
-    <section class="board full" id="repSec">
+    <section class="board full" id="repSec" data-view="mgmt">
       <div class="full-stage">
       <div class="panel-header"><div class="sec-title"><h2>By Salesperson</h2></div>
         <span class="board-sub">Sorted by overdue value, so the heaviest load sits at the top. Average late and oldest separate a busy salesperson from a neglectful one.</span></div>
@@ -3012,7 +3721,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     </section>
 
     <!-- CENTRE SCORECARD -->
-    <section class="board full" id="ctrSec">
+    <section class="board full" id="ctrSec" data-view="mgmt">
       <div class="full-stage">
       <div class="panel-header"><div class="sec-title"><h2>By Centre</h2></div>
         <span class="board-sub">The same measures across all five, so they read against each other. Percent late tells you more here than the dollar figure does.</span></div>
@@ -3036,13 +3745,16 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
           <button data-n="14">14 Days</button>
           <button data-n="30">30 Days</button>
         </div>
+        <div class="seg" id="stallLateSeg" role="group" aria-label="Overdue only">
+          <button id="stallLate" aria-pressed="false">Overdue only</button>
+        </div>
         <span class="stall-note" id="stallNote"></span>
       </div>
       <div class="score" id="stallBoard"></div>
     </section>
 
     <!-- WHERE THE MONEY SITS -->
-    <section class="board metrics-panel" id="metricsSec">
+    <section class="board metrics-panel" id="metricsSec" data-view="mgmt">
       <div class="panel-header"><div class="sec-title"><h2>Where The Money Sits</h2></div>
         <span class="board-sub">Where open value concentrates by stage, for whichever centre or district is currently selected above.</span></div>
       <div class="km-stage" id="keyMetricsStage"></div>
@@ -3176,11 +3888,12 @@ const TENANTS = {
            facility:'valley', centers:['Thousand Oaks','Tarzana'] }
 };
 const CENTERS = [
-  {name:'Tarzana',       facility:'valley',   color:'#00853F'},
-  {name:'Thousand Oaks', facility:'valley',   color:'#DA2128'},
-  {name:'Long Beach',    facility:'southbay', color:'#0066B3'},
-  {name:'Santa Ana',     facility:'southbay', color:'#F47D30'},
-  {name:'Torrance',      facility:'southbay', color:'#52247F'}
+  /* centre colours matched to the sales dashboard (Pantone in the notes) */
+  {name:'Tarzana',       facility:'valley',   color:'#97005E'},   /* Red 1 · 235            */
+  {name:'Thousand Oaks', facility:'valley',   color:'#52247F'},   /* Blue 1 · 2617          */
+  {name:'Long Beach',    facility:'southbay', color:'#004990'},   /* Blue 2 · 2685          */
+  {name:'Santa Ana',     facility:'southbay', color:'#0096D6'},   /* Blue 6 · 2925          */
+  {name:'Torrance',      facility:'southbay', color:'#0066B3'}    /* FASTSIGNS Blue · 286   */
 ];
 const COLOR_OF = Object.fromEntries(CENTERS.map(c => [c.name, c.color]));
 
@@ -3212,7 +3925,7 @@ const CACHE_TTL = 8*60*1000;
 /* The API sweep is the slow part of opening this file — reused across page
    loads (not just within one tab) so reopening within CACHE_TTL paints real
    data immediately instead of re-running it from scratch. */
-const DATA_CACHE_KEY = 'fs_helm_data_v1';
+const DATA_CACHE_KEY = 'fs_helm_data_v2';   /* v2: rows carry subStatus */
 function loadCachedData(){
   try{
     const parsed = JSON.parse(localStorage.getItem(DATA_CACHE_KEY));
@@ -3226,7 +3939,9 @@ function saveCachedData(rows){
 
 let locCache = {}, DIAG = [], ROWS = [], memCache = loadCachedData(), demoMode = false;
 /* One scope for the page: act (needs action) | late | today | all */
-let state = { lens:'districts', due:'all', rep:null, dateFrom:null, dateTo:null, dateBasis:'due' };
+let state = { lens:'districts', due:'all', rep:null, dateFrom:null, dateTo:null, dateBasis:'due',
+              subStatus:null,     /* null = every substatus; '' = lines with none */
+              flow:null };        /* null = every flow group; else a FLOW key */
 
 /* ============================================================
    URL PARAMS — kiosk / center / due
@@ -3355,6 +4070,23 @@ function daysFromToday(d){
 }
 const cleanCenter = s => String(s||'').replace(/FASTSIGNS of /i,'').trim();
 const cleanQueue  = s => String(s||'').replace(/^WIP\s*:\s*/i,'').trim();
+/* Substatus: the documented field first, then any other field whose name reads
+   "sub status" in case CoreBridge names it differently on some records. */
+function readSubStatus(p){
+  if (p.ProductSubStatus) return cleanQueue(p.ProductSubStatus);
+  for (const k of Object.keys(p)){
+    const v = p[k];
+    if (/sub_?status/i.test(k) && typeof v === 'string' && v.trim()) return cleanQueue(v);
+  }
+  return '';
+}
+/* Substatus sections sort alphabetically so families sit together (every
+   Cutting, then every Printing, every Vended…); Pending — CoreBridge's
+   default — and the blank ones go last. */
+const SUB_NONE = 'No substatus';
+const subTail = k => k === '' ? 2 : /^pending$/i.test(k) ? 1 : 0;
+const subStatusOrder = (a, b) =>
+  subTail(a) - subTail(b) || a.localeCompare(b, undefined, {sensitivity:'base'});
 
 function resolveCenter(raw, tk){
   const name = cleanCenter(raw);
@@ -3431,6 +4163,7 @@ function normalize(orders, tk, quiet){
                      pick(o, ['orderDescription','description']) || '').trim(),
         value: Number(p.ProductTotal ?? p.ProductSubTotal ?? 0) || 0,
         category: String(p.ProductCategoryName || '').trim(),
+        subStatus: readSubStatus(p),                 /* often '' — expected */
         daysLate: dl,
         age: start ? Math.max(0, daysFromToday(start)) : null
       });
@@ -3446,6 +4179,11 @@ function normalize(orders, tk, quiet){
 const DEMO_DESC = ['Channel Letters','ADA Room IDs','Vehicle Wrap','Window Graphics',
   'Monument Face','Banner 4x8','Yard Signs','Wayfinding Set','Acrylic Panel','Post & Panel',
   'Lobby Logo','Menu Boards','Fleet Decals','Dimensional Letters','Door Vinyl'];
+const DEMO_SUB = ['Pending','Pending','Pending','Fabrication','Cutting | Kern','Printing | Epson S60',
+  'Printing | Arizona 2360','Vended - Grimco','Transfer > Torrance','Permitting','TSP System',
+  'Lamination | Seal Base','On Hold | Waiting on Customer','Cutting | Kongsberg','Vended: JDS',
+  'Transfer > Tarzana','Printing | Mutoh','TSP Production File Needed','Ready for Output - External',
+  'Ready For Output - Internal','Plotting','Atten: Stan Gray'];
 const DEMO_REP = ['Brittney Herrera','Marcus Ruiz','Dana Whitfield','Sam Okafor',
   'Priya Raghavan','Tom Beaudry','Elena Castillo','Grant Yoshida'];
 const DEMO_CO = ['Harbor Medical','Kessler & Co','Vista Dental','Pacific Freight',
@@ -3482,6 +4220,7 @@ function demoRows(){
         order: String(head.oid), customer: head.co, rep: head.rep,
         desc: DEMO_DESC[Math.floor(rnd()*DEMO_DESC.length)],
         value: Math.round(rnd()>0.93 ? 4000+rnd()*22000 : 180+rnd()*3200), category:'',
+        subStatus: rnd() < 0.35 ? '' : DEMO_SUB[Math.floor(rnd()*DEMO_SUB.length)],
         daysLate: dl, age: Math.max(head.ag, dl > 0 ? dl : 0)});
     }
   return rows;
@@ -3504,6 +4243,15 @@ const money = v => {
 const esc = s => String(s).replace(/[&<>"']/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function visible(){
+  /* Substatus stacks on everything else — centre, district, salesperson, due
+     scope and dates all still apply. It filters line items, so an order shows
+     only the lines that carry the chosen substatus. */
+  let base = visibleLens();
+  if (state.subStatus !== null) base = base.filter(r => (r.subStatus || '') === state.subStatus);
+  if (state.flow) base = base.filter(r => flowOf(r) === state.flow);
+  return base;
+}
+function visibleLens(){
   /* A chosen salesperson replaces the centre/district lens entirely — outside
      sales work across centres, so "Brittany" means Brittany everywhere. */
   if (state.rep){
@@ -3579,9 +4327,9 @@ function renderHeads(S){
 }
 
 const RIBBON = {
-  valley:   {from:'#9E1219', to:'#DA2128'},
-  southbay: {from:'#0A2340', to:'#1A4C7E'},
-  centers:  {from:'#33164F', to:'#52247F'}
+  valley:   {from:'#58003A', to:'#97005E'},   /* Valley — Tarzana's maroon      */
+  southbay: {from:'#00264D', to:'#004990'},   /* South Bay — Long Beach's blue  */
+  centers:  {from:'#0E0F13', to:'#34363E'}    /* company total — the dark ink   */
 };
 
 const darken = (hex, k) => '#' + [1,3,5]
@@ -4063,6 +4811,25 @@ function urgencyOf(r){
 }
 const STAGE_RANK = Object.fromEntries(STAGES.map((s,i) => [s.name, i]));
 
+/* PRE-DUE ON THE CUTTERS. Cutting is never the last step, so a line still on a
+   cutter on its due date will be late. Anything on a cutter that is due by the
+   next working day is flagged as late today — on a Friday that reaches through
+   to Monday. Only cutting; nothing else is red before it is due. */
+const isCutting = r => /^cutting\b/i.test(String(r.subStatus || '').trim());
+function nextWorkingDay(){
+  const d = new Date(); d.setHours(0,0,0,0);
+  do { d.setDate(d.getDate() + 1); } while (d.getDay() === 0 || d.getDay() === 6);
+  return d;
+}
+function preDue(r){
+  if (!isCutting(r) || r.daysLate == null || r.daysLate >= 0) return false;
+  const due = new Date(); due.setHours(0,0,0,0); due.setDate(due.getDate() - r.daysLate);
+  return due <= nextWorkingDay();
+}
+/* urgency for colour: a pre-due cutting line wears late's red */
+const urgOf = r => preDue(r) ? 'pre' : urgencyOf(r);
+const preLabel = r => r.daysLate === -1 ? 'Cut today · due tomorrow' : 'Cut today · due ' + DUE_DATE(r);
+
 /* Two tenants, ragged rows: any field can arrive missing, and a concatenation
    like count + ' open' turns a missing value into the WORD "undefined" before
    any guard downstream can catch it. So nothing goes into the hover card
@@ -4148,7 +4915,7 @@ function toOrders(rows){
     }
     o.value += r.value;
     o.count += 1;
-    o.items.push({line:r.line, desc:r.desc, queue:r.queue,
+    o.items.push({line:r.line, desc:r.desc, queue:r.queue, subStatus:r.subStatus || '',
                   daysLate:r.daysLate, age:r.age, value:r.value});
     if (r.orderTotal) o.total = r.orderTotal;
     if (r.orderDone !== undefined) o.done = r.orderDone;
@@ -4198,15 +4965,17 @@ function progressHTML(r){
 function subHTML(r, half, win){
   return `<div class="g-sub"><div class="g-subin">` + r.items.map((it, k) => {
     const late = it.daysLate !== null && it.daysLate > 0;
+    /* stage, then substatus when there is one — "In Production · Cutting | Kern" */
+    const label = it.subStatus ? it.queue + ' · ' + it.subStatus : it.queue;
     /* Product sits under the order, stage under the centre, and the value and
        due date land in the same columns as the order's own. */
-    return `<div class="g-line">
+    return `<div class="g-line" title="${esc(label)}">
       <span class="pd"><span class="p">P${it.line || (k+1)}</span>
         <span class="d">${esc(it.desc || '—')}</span></span>
       <span class="v">${esc(money(it.value))}</span>
       <div class="g-track sub" data-dl="${it.daysLate === null ? '' : it.daysLate}"
            data-age="${it.age === null || it.age === undefined ? '' : it.age}"
-           data-stage="${esc(it.queue)}"><div class="g-shift">${trackHTML(it, half, win, it.queue)}</div></div>
+           data-stage="${esc(label)}"><div class="g-shift">${trackHTML(it, half, win, label)}</div></div>
       <span class="u${late ? ' late' : ''}">${esc(dueLabel(it))}</span>
     </div>`;
   }).join('') + `</div></div>`;
@@ -4359,7 +5128,15 @@ function bandSummary(list){
          (late ? ` · <b>${late} overdue</b>` : '');
 }
 
-function sectionsOf(set){
+function sectionsOf(set, rows){
+  /* Grouped by line item, not by order: an order with P1 on the Kern and P2 at
+     a vendor appears in both sections, each time with only its own lines. */
+  if (GANTT.group === 'substatus'){
+    const keys = [...new Set(rows.map(r => r.subStatus || ''))].sort(subStatusOrder);
+    return keys.map(k => ({name: k || SUB_NONE, color:null,
+                           list: ganttSet(rows.filter(r => (r.subStatus || '') === k))}))
+               .filter(x => x.list.length);
+  }
   if (GANTT.group === 'center'){
     const out = CENTERS.map(c => ({name:c.name, color:c.color,
                                    list:set.filter(r => r.center === c.name)}));
@@ -4390,7 +5167,7 @@ function renderGantt(rows){
     return;
   }
 
-  const secs = sectionsOf(set);
+  const secs = sectionsOf(set, rows);
   /* keep the reader's place across a rebuild — only clamp if the stage list
      itself got shorter */
   GANTT.open = Math.max(0, Math.min(GANTT.open, secs.length - 1));
@@ -5475,6 +6252,7 @@ function renderRepStage(rows){
 const STALL_KEY = 'fs_stage_v1';
 const STALL_PRUNE = 45;                 /* forget orders unseen this long */
 let STALL_MIN = 7;                      /* days without moving, from the buttons */
+let STALL_LATE = false;                 /* only orders already past due */
 
 const dayKey = d => { const x = new Date(d); x.setHours(0,0,0,0);
                       return x.toISOString().slice(0,10); };
@@ -5538,7 +6316,7 @@ function renderStalled(rows){
 
   const rank = toOrders(rows)
     .map(o => ({o, st: stallOf(o, map, today)}))
-    .filter(x => x.st && x.st.days >= STALL_MIN)
+    .filter(x => x.st && x.st.days >= STALL_MIN && (!STALL_LATE || (x.o.daysLate != null && x.o.daysLate > 0)))
     .sort((a,b) => b.st.days - a.st.days || b.o.value - a.o.value);
 
   if (!rank.length){
@@ -5671,6 +6449,12 @@ function wireFullBoards(){
 function wireStalled(){
   const seg = document.getElementById('stallWin');
   if (!seg) return;
+  const lt = document.getElementById('stallLate');
+  if (lt) lt.addEventListener('click', () => {
+    STALL_LATE = !STALL_LATE;
+    lt.setAttribute('aria-pressed', String(STALL_LATE));
+    if (window.__lastRows) renderStalled(window.__lastRows);
+  });
   seg.addEventListener('click', e => {
     const b = e.target.closest('button');
     if (!b) return;
@@ -6376,8 +7160,8 @@ function ringParts(s){
   const L = state.lens;
 
   if (L === 'districts')
-    return [{name:'Valley',    color:'var(--red)',  value:s.valley},
-            {name:'South Bay', color:'var(--blue)', value:s.southbay}];
+    return [{name:'Valley',    color:'var(--valley)',   value:s.valley},
+            {name:'South Bay', color:'var(--southbay)', value:s.southbay}];
 
   if (L === 'valley' || L === 'southbay')
     return CENTERS.filter(c => c.facility === L)
@@ -6559,11 +7343,1322 @@ function render(){
   renderCentreBoard(cr);
   renderLeaderboard(cr);
   renderStalled(cr);
+  renderList(cr);
+  renderStuck();
+  renderProduction();
   window.__lastRows = cr;
   window.__lastS = S; renderKeyMetrics(S);
   renderGantt(rows);
   renderUnmapped(rows);
 }
+
+/* ============================================================
+   THE LIST — every line item that survives the page's filters
+   ============================================================ */
+const LIST = {key:'status', dir:-1};
+let LIST_ROWS = [];
+/* lateness up front, so the column you act on is never off the right edge */
+const LIST_COLS = [
+  {k:'order',    t:'Order'},
+  {k:'line',     t:'Line'},
+  {k:'status',   t:'Status'},
+  {k:'due',      t:'Due'},
+  {k:'sub',      t:'Substatus'},
+  {k:'customer', t:'Customer'},
+  {k:'desc',     t:'Product'},
+  {k:'center',   t:'Centre'},
+  {k:'rep',      t:'Salesperson'},
+  {k:'queue',    t:'Stage'},
+  {k:'value',    t:'Value', r:true},
+  {k:'taken',    t:'Taken'},
+  {k:'age',      t:'Open', r:true},
+  {k:'built',    t:'Built', r:true},
+  {k:'category', t:'Category'}
+];
+const dayFromToday = n => {
+  if (n == null || !isFinite(Number(n))) return null;
+  const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() + Number(n)); return d;
+};
+const fmtDay = d => !d ? '—' : d.getFullYear() === new Date().getFullYear()
+  ? d.toLocaleDateString([], {month:'short', day:'numeric'})
+  : d.toLocaleDateString([], {month:'short', day:'numeric', year:'2-digit'});
+
+/* the value each column sorts on — text sorts A→Z, numbers high→low first */
+function listKey(r, k){
+  switch (k){
+    case 'order':    return String(r.order || r.orderId);
+    case 'line':     return NUM(r.line);
+    case 'customer': return (r.customer || '').toLowerCase();
+    case 'desc':     return (r.desc || '').toLowerCase();
+    case 'center':   return r.center || '';
+    case 'rep':      return (r.rep || '').toLowerCase();
+    case 'queue':    return STAGE_RANK[r.queue] ?? 99;
+    case 'sub':      return (r.subStatus || '\uffff').toLowerCase();   /* blanks last */
+    case 'category': return (r.category || '\uffff').toLowerCase();
+    case 'value':    return NUM(r.value);
+    case 'built':    return r.orderTotal ? NUM(r.orderDone) / NUM(r.orderTotal) : 0;
+    case 'taken':
+    case 'age':      return r.age == null ? -1 : NUM(r.age);
+    case 'due':      return r.daysLate == null ? 1e9 : -NUM(r.daysLate);
+    case 'status':   return r.daysLate == null ? -1e9 : NUM(r.daysLate);
+  }
+  return 0;
+}
+
+/* ============================================================
+   PRODUCTION VIEW
+   Every open line falls into one "flow" group by its substatus — what can
+   happen to it today. The floor, the machine queues, the at-risk list and the
+   run sheet are all built on this one rule.
+   ============================================================ */
+const FLOWS = [
+  {k:'ready',     t:'Ready to run',    d:'Files ready, waiting for a machine',          tone:'go'},
+  {k:'shop',      t:'In the shop',     d:'On a printer, cutter, laminator or bench',    tone:'run'},
+  {k:'inside',    t:'Blocked inside',  d:'Files, revisions, artwork, sign-off',         tone:'stop'},
+  {k:'outside',   t:'Blocked outside', d:'Waiting on a customer or a permit',           tone:'stop'},
+  {k:'vendor',    t:'At vendors',      d:'Out with an outside supplier',                tone:'out'},
+  {k:'moving',    t:'Moving',          d:'Transfers between centres, shipping',         tone:'out'},
+  {k:'untracked', t:'Untracked',       d:'Pending or no substatus — nobody has placed it', tone:'quiet'},
+  {k:'other',     t:'Other',           d:'Substatuses without a group yet',             tone:'quiet'}
+];
+const FLOW_BY = Object.fromEntries(FLOWS.map(f => [f.k, f]));
+function flowOf(r){
+  const s = String(r.subStatus || '').toLowerCase().trim();
+  if (!s || s === 'pending') return 'untracked';
+  if (/^ready for output|file ready/.test(s)) return 'ready';
+  if (/^(printing|cutting|lamination|plotting|fabrication)/.test(s)) return 'shop';
+  if (/^vended/.test(s)) return 'vendor';
+  if (/^transfer|prepare shipping|shipping/.test(s)) return 'moving';
+  if (/waiting on customer|external revision|permit|on hold/.test(s)) return 'outside';
+  if (/file needed|internal revision|revision|dims|qc rejected|missing information|^aw\b|^aw-|artwork|atten/.test(s)) return 'inside';
+  return 'other';
+}
+/* running order everywhere on the floor: most overdue, then nearest due, then money */
+const prio = (a, b) => {
+  const la = a.daysLate == null ? -1e9 : a.daysLate, lb = b.daysLate == null ? -1e9 : b.daysLate;
+  return (lb - la) || (NUM(b.value) - NUM(a.value));
+};
+/* The production boards read exactly what the rest of the page reads — a
+   substatus, salesperson or group choice runs through everything. The floor
+   tiles alone skip the group pick, so you can move from one group to the next. */
+const floorRows = () => chartRows();
+const floorTileRows = () => {
+  let b = visibleLens();
+  if (state.subStatus !== null) b = b.filter(r => (r.subStatus || '') === state.subStatus);
+  return b.filter(inScope);
+};
+/* narrowed = someone picked something specific; then empty things are noise */
+const isNarrowed = () => state.subStatus !== null || !!state.flow || !!state.rep;
+const showSec = (id, on) => { const el = document.getElementById(id); if (el) el.classList.toggle('is-empty', !on); };
+const ROW_BY_UID = new Map();
+const isLate = r => r.daysLate != null && r.daysLate > 0;
+const lateTxt = n => n ? ` · <b>${n} late</b>` : '';
+
+/* ---- 1. TODAY ON THE FLOOR ---- */
+function renderFloor(rows){
+  const grid = document.getElementById('flGrid');
+  if (!grid) return;
+  const T = Object.fromEntries(FLOWS.map(f => [f.k, {n:0, late:0, val:0}]));
+  for (const r of rows){ const t = T[flowOf(r)]; t.n++; t.val += NUM(r.value); if (isLate(r)) t.late++; }
+  const narrowed = isNarrowed();
+  grid.innerHTML = FLOWS.filter(f => narrowed ? (T[f.k].n || state.flow === f.k) : (f.k !== 'other' || T.other.n)).map(f => {
+    const t = T[f.k];
+    return `<button class="fl-tile tone-${f.tone}" data-flow="${f.k}" aria-pressed="${state.flow === f.k}">
+      <span class="fl-n">${t.n}</span>
+      <span class="fl-t">${f.t}</span>
+      <span class="fl-d">${f.d}</span>
+      <span class="fl-m">${esc(money(t.val))}${lateTxt(t.late)}</span>
+    </button>`;
+  }).join('');
+  const note = document.getElementById('flNote');
+  if (note) note.innerHTML = state.flow
+    ? `Showing only <b>${esc(FLOW_BY[state.flow].t)}</b> across the page · <button class="fl-clear" id="flClear">Show everything</button>`
+    : `${rows.length} open line items in scope`;
+  const btn = document.getElementById('runSheetBtn');
+  if (btn) btn.innerHTML = COPY_ICON + '<span>Copy run sheet</span>';
+}
+
+/* ---- 2. MACHINE QUEUES ---- */
+const MQ_OPEN = new Set();
+const MQ_SHOW = 6;
+function renderQueues(rows){
+  const grid = document.getElementById('mqGrid');   /* the large board — retired, kept harmless */
+  const shop = SUB_KNOWN.filter(k => flowOf({subStatus:k}) === 'shop');
+  const live = [...new Set(rows.map(r => r.subStatus).filter(k => k && flowOf({subStatus:k}) === 'shop'))];
+  const have = new Set(shop.map(subNorm));
+  const machines = shop.concat(live.filter(k => !have.has(subNorm(k))));
+  const by = new Map(machines.map(k => [subNorm(k), []]));
+  const ready = [];
+  for (const r of rows){
+    const f = flowOf(r);
+    if (f === 'shop'){ const q = by.get(subNorm(r.subStatus)); if (q) q.push(r); }
+    else if (f === 'ready') ready.push(r);
+  }
+  const famOf = k => { const m = k.match(/^([^|:>-]+?)\s*[|:>-]\s*(.+)$/); return m ? [m[1].trim(), m[2].trim()] : ['Bench', k]; };
+  const lanes = [{key:'__ready', fam:'Waiting for a machine', name:'Up next', list: ready.sort(prio)}]
+    .concat(machines.map(k => { const [fam, name] = famOf(k); return {key:k, fam, name, list: by.get(subNorm(k)).sort(prio)}; }));
+
+  const narrowed = isNarrowed();
+  const shownLanes = narrowed ? lanes.filter(L => L.list.length) : lanes;
+  showSec('mqSec', shownLanes.length > 0);
+  renderQueuesCompact(shownLanes);
+  if (!grid) return;
+  grid.innerHTML = shownLanes.map(L => {
+    const late = L.list.filter(isLate).length;
+    const open = MQ_OPEN.has(L.key);
+    const shown = open ? L.list : L.list.slice(0, MQ_SHOW);
+    return `<div class="mq-lane${L.list.length ? '' : ' clear'}${L.key === '__ready' ? ' next' : ''}">
+      <div class="mq-h"><span class="mq-fam">${esc(L.fam)}</span>
+        <span class="mq-name">${esc(L.name)}</span>
+        <span class="mq-c">${L.list.length ? `${L.list.length} ${L.list.length === 1 ? 'job' : 'jobs'}${lateTxt(late)}` : 'Clear'}</span></div>
+      ${shown.map(r => jobHTML(r)).join('')}
+      ${L.list.length > MQ_SHOW ? `<button class="mq-more" data-lane="${esc(L.key)}">${open ? 'Show fewer' : `+ ${L.list.length - MQ_SHOW} more`}</button>` : ''}
+    </div>`;
+  }).join('');
+}
+/* ---- 2b. MACHINE QUEUES, COMPACT ---- */
+const MQC_OPEN = new Set();       /* cards opened, by line uid */
+const MQC_LANE_OPEN = new Set();  /* lanes showing everything */
+const MQC_SHOW = 8;
+function renderQueuesCompact(lanes){
+  const grid = document.getElementById('mqcGrid');
+  if (!grid) return;
+  showSec('mqcSec', lanes.length > 0);
+  grid.innerHTML = lanes.map(L => {
+    const late = L.list.filter(isLate).length;
+    const all = MQC_LANE_OPEN.has(L.key);
+    const shown = all ? L.list : L.list.slice(0, MQC_SHOW);
+    return `<div class="mqc-lane${L.list.length ? '' : ' clear'}${L.key === '__ready' ? ' next' : ''}">
+      <div class="mqc-h"><span class="mqc-fam">${esc(L.fam)}</span>
+        <span class="mqc-name">${esc(L.name)}</span>
+        <span class="mqc-c">${L.list.length ? `${L.list.length}${lateTxt(late)}${(() => { const p = L.list.filter(preDue).length; return p ? ` · <b>${p} cut today</b>` : ''; })()}` : 'Clear'}</span></div>
+      ${shown.map(jobCompactHTML).join('')}
+      ${L.list.length > MQC_SHOW ? `<button class="mq-more mqc-more" data-mclane="${esc(L.key)}">${all ? 'Show fewer' : `+ ${L.list.length - MQC_SHOW} more`}</button>` : ''}
+    </div>`;
+  }).join('');
+}
+/* the opened card: the product, then quiet label / value pairs */
+function mcDetail(r){
+  const due = r.daysLate == null ? 'No due date' : DUE_DATE(r) + (preDue(r) ? ' — on the cutter, cut it today' : '');
+  const taken = r.age == null ? '' : fmtDay(dayFromToday(-NUM(r.age)));
+  const open = r.age == null ? '—' : `${NUM(r.age)} ${NUM(r.age) === 1 ? 'day' : 'days'}${taken ? ' · since ' + taken : ''}`;
+  const total = Math.max(NUM(r.orderTotal), 1);
+  const pair = (k, v) => `<dt>${k}</dt><dd>${v}</dd>`;
+  return `<div class="mc-more">
+    <div class="mc-prod">${esc(r.desc || '—')}</div>
+    <dl class="mc-dl">
+      ${pair('Stage', esc(r.queue || '—'))}
+      ${r.subStatus ? pair('Substatus', esc(r.subStatus)) : ''}
+      ${pair('Centre', `<i style="background:${COLOR_OF[r.center] || '#0E0F13'}"></i>${esc(r.center || '—')}`)}
+      ${pair('Salesperson', esc(r.rep || '—'))}
+      ${pair('Value', esc(fullMoney(r.value)))}
+      ${pair('Due', esc(due))}
+      ${pair('Open', esc(open))}
+      ${pair('Built', `${NUM(r.orderDone)} of ${total} lines`)}
+      ${r.category ? pair('Category', esc(r.category)) : ''}
+    </dl>
+  </div>`;
+}
+function jobCompactHTML(r){
+  ROW_BY_UID.set(r.uid, r);
+  const u = ORDER_URL(r), n = esc(r.order || r.orderId) + (r.line ? ' · P' + NUM(r.line) : '');
+  const urg = urgOf(r);
+  const open = MQC_OPEN.has(r.uid);
+  return `<div class="mc-job${urg === 'late' || urg === 'pre' ? ' urg-late' : urg === 'today' ? ' urg-today' : ''}${urg === 'pre' ? ' urg-pre' : ''}${open ? ' open' : ''}" data-mc="${esc(r.uid)}">
+    <div class="mc-1">${u ? `<a href="${u}" target="_blank" rel="noopener">${n}</a>` : n}
+      <span class="mc-due">${esc(urg === 'pre' ? 'Cut today' : dueLabel(r))}</span></div>
+    <div class="mc-cust">${esc(r.customer || '—')}</div>
+    ${open ? mcDetail(r) : ''}
+  </div>`;
+}
+
+function jobHTML(r, why){
+  ROW_BY_UID.set(r.uid, r);
+  const u = ORDER_URL(r), n = esc(r.order || r.orderId) + (r.line ? ' · P' + NUM(r.line) : '');
+  const urg = urgOf(r);
+  return `<div class="mq-job cp${urg === 'late' || urg === 'pre' ? ' urg-late' : urg === 'today' ? ' urg-today' : ''}" data-uid="${esc(r.uid)}">
+    <div class="mq-j1">${u ? `<a href="${u}" target="_blank" rel="noopener">${n}</a>` : n}
+      <span class="mq-due${urg === 'late' || urg === 'pre' ? ' late' : urg === 'today' ? ' today' : ''}">${esc(urg === 'pre' ? 'Cut today' : dueLabel(r))}</span></div>
+    <div class="mq-cust">${esc(r.customer || '—')}</div>
+    <div class="mq-prod">${esc(r.desc || '—')}</div>
+    <div class="mq-meta">${esc(r.center || '')}${r.rep ? ' · ' + esc(r.rep) : ''} · ${esc(money(NUM(r.value)))}${why ? ' · <b>' + esc(why) + '</b>' : ''}</div>
+  </div>`;
+}
+
+/* ---- 3. AT RISK ---- */
+let RISK_ROWS = [];
+function riskWhy(r){
+  const f = flowOf(r);
+  if (preDue(r)) return 'Still on ' + r.subStatus + ' — cut it today';
+  if (f === 'untracked') return 'No substatus · ' + (r.queue || 'unplaced');
+  if (f === 'vendor') return 'At vendor · ' + r.subStatus.replace(/^vended\s*[-:]?\s*/i, '');
+  return r.subStatus;
+}
+function renderRisk(rows){
+  const wrap = document.getElementById('riskWrap');
+  if (!wrap) return;
+  RISK_ROWS = rows.filter(r => preDue(r) || (r.daysLate != null && r.daysLate <= 0 && r.daysLate >= -2 &&
+                               !['shop','moving','ready'].includes(flowOf(r))))
+                  .sort((a, b) => {
+                    const t = r => r.daysLate === 0 ? 0 : preDue(r) ? 1 : 2;   /* today, cut today, then the rest */
+                    return (t(a) - t(b)) || (b.daysLate - a.daysLate) || (NUM(b.value) - NUM(a.value));
+                  });
+  const meta = document.getElementById('riskMeta');
+  const val = RISK_ROWS.reduce((a, r) => a + NUM(r.value), 0);
+  if (meta) meta.innerHTML = RISK_ROWS.length
+    ? `${RISK_ROWS.length} line ${RISK_ROWS.length === 1 ? 'item' : 'items'} · ${new Set(RISK_ROWS.map(r => r.orderId)).size} orders · ${money(val)}`
+    : 'Nothing at risk in the next two days';
+  const cb = document.getElementById('riskCopy');
+  if (cb){ cb.innerHTML = COPY_ICON + '<span>Copy list</span>'; cb.hidden = !RISK_ROWS.length; }
+  showSec('riskSec', RISK_ROWS.length > 0 || !isNarrowed());
+  if (!RISK_ROWS.length){ wrap.innerHTML = ''; return; }
+  const when = r => r.daysLate === 0 ? 'Today' : preDue(r) ? 'Cut today' : r.daysLate === -1 ? 'Tomorrow' : 'In 2 days';
+  wrap.innerHTML = `<table class="lt rk"><thead><tr>
+      <th>Due</th><th>Order</th><th>Why it is at risk</th><th>Customer</th><th>Product</th>
+      <th>Centre</th><th>Salesperson</th><th class="r">Value</th></tr></thead><tbody>` +
+    RISK_ROWS.map(r => {
+      ROW_BY_UID.set(r.uid, r);
+      const u = ORDER_URL(r), n = esc(r.order || r.orderId) + (r.line ? ' · P' + NUM(r.line) : '');
+      return `<tr class="cp" data-uid="${esc(r.uid)}">
+        <td class="st">${r.daysLate === 0 || preDue(r) ? `<span class="lt-flag">${when(r)}</span>` : when(r)}</td>
+        <td class="num">${u ? `<a href="${u}" target="_blank" rel="noopener">${n}</a>` : `<span>${n}</span>`}</td>
+        <td class="wrap caps subc">${esc(riskWhy(r))}</td>
+        <td class="cust wrap custc">${esc(r.customer || '—')}</td>
+        <td class="wrap prodc">${esc(r.desc || '—')}</td>
+        <td class="ctr caps"><i style="background:${COLOR_OF[r.center] || '#0E0F13'}"></i>${esc(r.center || '—')}</td>
+        <td class="wrap repc">${esc(r.rep || '—')}</td>
+        <td class="r">${esc(money(NUM(r.value)))}</td></tr>`;
+    }).join('') + '</tbody></table>';
+}
+
+/* ---- 4. OUTSIDE DEPENDENCIES ---- */
+const OUT_OPEN = new Set();
+function renderOutside(rows){
+  const draw = (hostId, flow, nameOf, emptyTxt) => {
+    const host = document.getElementById(hostId);
+    if (!host) return;
+    const groups = new Map();
+    for (const r of rows) if (flowOf(r) === flow){
+      const k = nameOf(r);
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k).push(r);
+    }
+    if (!groups.size){ host.innerHTML = `<div class="out-empty">${emptyTxt}</div>`; return; }
+    host.innerHTML = [...groups.entries()]
+      .sort((a, b) => b[1].filter(isLate).length - a[1].filter(isLate).length || b[1].length - a[1].length)
+      .map(([k, list]) => {
+        list.sort(prio);
+        const oldest = Math.max(0, ...list.map(r => NUM(r.age)));
+        const key = hostId + ':' + k, open = OUT_OPEN.has(key);
+        return `<div class="out-g">
+          <div class="out-gh"><span class="nm">${esc(k)}</span>
+            <span class="c">${list.length} ${list.length === 1 ? 'job' : 'jobs'}${lateTxt(list.filter(isLate).length)}${oldest ? ` · oldest ${oldest}d open` : ''}</span></div>
+          ${(open ? list : list.slice(0, 4)).map(r => jobHTML(r, flow === 'moving' ? 'from ' + (r.center || '—') : '')).join('')}
+          ${list.length > 4 ? `<button class="mq-more" data-out="${esc(key)}">${open ? 'Show fewer' : `+ ${list.length - 4} more`}</button>` : ''}
+        </div>`;
+      }).join('');
+  };
+  const anyOut = rows.some(r => ['vendor','moving'].includes(flowOf(r)));
+  showSec('outSec', anyOut || !isNarrowed());
+  draw('outVendors', 'vendor', r => r.subStatus.replace(/^vended(\s+design)?\s*[-:]?\s*/i, (m, d) => d ? 'Design · ' : ''),
+       'Nothing out with vendors');
+  draw('outTransfers', 'moving', r => /^transfer/i.test(r.subStatus)
+         ? 'To ' + r.subStatus.replace(/^transfer\s*>?\s*/i, '') : r.subStatus,
+       'Nothing moving between centres');
+}
+
+/* ---- 5. THE RUN SHEET — today, as an email ---- */
+function runSheetSections(rows){
+  const byFlow = k => rows.filter(r => flowOf(r) === k).sort(prio);
+  const shop = rows.filter(r => flowOf(r) === 'shop');
+  const machines = [...new Set(shop.map(r => r.subStatus))].sort(subStatusOrder);
+  const risk = rows.filter(r => preDue(r) || (r.daysLate != null && r.daysLate <= 0 && r.daysLate >= -2 &&
+                                !['shop','moving','ready'].includes(flowOf(r)))).sort(prio);
+  return [
+    {title:'At risk — cut today, or due within two days and not yet on a machine', rows: risk},
+    {title:'Up next — ready to run', rows: byFlow('ready')},
+    ...machines.map(m => ({title:'On ' + m, rows: shop.filter(r => r.subStatus === m).sort(prio)})),
+    {title:'Blocked inside', rows: byFlow('inside')},
+    {title:'Blocked outside', rows: byFlow('outside')},
+    {title:'At vendors', rows: byFlow('vendor')},
+    {title:'Moving', rows: byFlow('moving')}
+  ];
+}
+
+/* ---- DISCIPLINE — is substatus being kept? ---- */
+function renderDiscipline(rows){
+  const table = (hostId, keyOf, label) => {
+    const host = document.getElementById(hostId);
+    if (!host) return;
+    const G = new Map();
+    for (const r of rows){
+      const k = keyOf(r) || '—';
+      const g = G.get(k) || {n:0, tracked:0, pending:0, blank:0, prodGap:0};
+      g.n++;
+      const sub = String(r.subStatus || '').trim();
+      if (!sub) g.blank++; else if (/^pending$/i.test(sub)) g.pending++; else g.tracked++;
+      if ((!sub || /^pending$/i.test(sub)) && /production/i.test(r.queue || '')) g.prodGap++;
+      G.set(k, g);
+    }
+    const list = [...G.entries()].sort((a, b) => b[1].prodGap - a[1].prodGap || a[1].tracked / a[1].n - b[1].tracked / b[1].n);
+    host.innerHTML = `<table class="disc"><thead><tr><th>${label}</th><th class="r">Open</th><th>Tracked</th>
+        <th class="r">Pending</th><th class="r">Blank</th><th class="r">In production, unplaced</th></tr></thead><tbody>` +
+      list.map(([k, g]) => {
+        const pct = Math.round(100 * g.tracked / g.n);
+        const ctr = COLOR_OF[k];
+        return `<tr><td class="nm">${ctr ? `<i style="background:${ctr}"></i>` : ''}${esc(k)}</td>
+          <td class="r">${g.n}</td>
+          <td><span class="db"><span style="width:${pct}%"></span></span><span class="dp">${pct}%</span></td>
+          <td class="r">${g.pending}</td><td class="r">${g.blank}</td>
+          <td class="r${g.prodGap ? ' gap' : ''}">${g.prodGap}</td></tr>`;
+      }).join('') + '</tbody></table>';
+  };
+  showSec('discSec', state.subStatus === null && !state.flow);
+  table('discCentre', r => r.center, 'Centre');
+  table('discRep', r => r.rep, 'Salesperson');
+}
+
+/* ---- the "Showing only" bar ---- */
+function renderFocus(){
+  const bar = document.getElementById('focusBar');
+  if (!bar) return;
+  const chips = [];
+  const L = state.lens;
+  if (state.rep) chips.push(['rep', 'Salesperson', state.rep]);
+  else if (L === 'valley') chips.push(['lens', 'District', 'Valley']);
+  else if (L === 'southbay') chips.push(['lens', 'District', 'South Bay']);
+  else if (L !== 'districts' && L !== 'centers') chips.push(['lens', 'Centre', L]);
+  if (state.subStatus !== null) chips.push(['sub', 'Substatus', state.subStatus || SUB_NONE]);
+  if (state.flow) chips.push(['flow', 'Group', FLOW_BY[state.flow].t]);
+  if (state.due !== 'all') chips.push(['due', 'Due', {act:'Needs action', late:'Overdue', today:'Due today'}[state.due] || state.due]);
+  if (state.dateFrom || state.dateTo) chips.push(['dates', 'Dates', 'Custom range']);
+  bar.hidden = !chips.length;
+  if (!chips.length){ bar.innerHTML = ''; return; }
+  const n = chartRows().length;
+  bar.innerHTML = `<span class="fb-k">Showing only</span>` +
+    chips.map(([k, lab, v]) => `<span class="fb-chip"><span class="fb-l">${esc(lab)}</span>` +
+      `<b>${esc(v)}</b><button data-clear="${k}" aria-label="Remove ${esc(lab)}">&times;</button></span>`).join('') +
+    `<span class="fb-n">${n} line ${n === 1 ? 'item' : 'items'}</span>` +
+    (chips.length > 1 ? `<button class="fb-all" data-clear="all">Clear all</button>` : '');
+}
+(function wireFocus(){
+  const bar = document.getElementById('focusBar');
+  if (!bar) return;
+  bar.addEventListener('click', e => {
+    const b = e.target.closest('[data-clear]');
+    if (!b) return;
+    const k = b.dataset.clear;
+    if (k === 'rep' || k === 'all') state.rep = null;
+    if (k === 'lens' || k === 'all') state.lens = 'districts';
+    if (k === 'sub' || k === 'all') state.subStatus = null;
+    if (k === 'flow' || k === 'all') state.flow = null;
+    if (k === 'due' || k === 'all') state.due = 'all';
+    if (k === 'dates' || k === 'all'){ state.dateFrom = null; state.dateTo = null; }
+    paintFilters();
+    renderKeepingPlace();
+  });
+})();
+
+/* ============================================================
+   SINCE YESTERDAY — a daily snapshot kept in this browser
+   ============================================================ */
+const SNAP_KEY = 'fs_helm_snap_v1';
+let CHG_FOR = null, CHG_PREV = null, CHG_FIRST = false;
+const CHG_OPEN = new Set();
+const snapDay = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+function snapOf(r){
+  return {o:String(r.order || r.orderId), l:r.line || null, c:r.customer || '', d:String(r.desc || '').slice(0, 80),
+          ce:r.center || '', f:r.facility || '', rp:r.rep || '', q:r.queue || '', s:r.subStatus || '',
+          dl:r.daysLate, v:NUM(r.value), u:ORDER_URL(r) || ''};
+}
+function updateSnapshot(){
+  if (demoMode) return {prev:null, first:false};
+  const today = snapDay(new Date());
+  let obj = null;
+  try{ obj = JSON.parse(localStorage.getItem(SNAP_KEY) || 'null'); }catch(e){ obj = null; }
+  const rows = {};
+  for (const r of ROWS) rows[r.uid] = snapOf(r);
+  let first = false;
+  if (!obj || !obj.today){ obj = {today:{date:today, rows}}; first = true; }
+  else if (obj.today.date !== today){ obj.prev = obj.today; obj.today = {date:today, rows}; }
+  else obj.today.rows = rows;
+  try{ localStorage.setItem(SNAP_KEY, JSON.stringify(obj)); }catch(e){}
+  return {prev: obj.prev || null, first: first || !obj.prev};
+}
+/* the same centre / district / salesperson lens, for a remembered line */
+function lensMatchSnap(x){
+  if (state.rep) return (x.rp || '').trim().toLowerCase() === state.rep.toLowerCase();
+  const L = state.lens;
+  if (L === 'districts' || L === 'centers') return true;
+  if (L === 'valley' || L === 'southbay') return x.f === L;
+  return x.ce === L;
+}
+function subMatch(sub){
+  if (state.subStatus !== null && (sub || '') !== state.subStatus) return false;
+  if (state.flow && flowOf({subStatus:sub}) !== state.flow) return false;
+  return true;
+}
+function renderChanges(){
+  const grid = document.getElementById('chgGrid'), meta = document.getElementById('chgMeta');
+  if (!grid) return;
+  if (CHG_FOR !== ROWS){ const u = updateSnapshot(); CHG_PREV = u.prev; CHG_FIRST = u.first; CHG_FOR = ROWS; }
+  if (demoMode){ meta.innerHTML = 'Comparisons start once Helm is reading live CoreBridge data.'; grid.innerHTML = ''; showSec('chgSec', !isNarrowed()); return; }
+  if (!CHG_PREV){
+    meta.innerHTML = 'Helm started keeping a daily record in this browser today — changes appear from tomorrow.';
+    grid.innerHTML = ''; showSec('chgSec', !isNarrowed()); return;
+  }
+  const prev = CHG_PREV.rows || {};
+  const inScopeNow = new Set(visible().map(r => r.uid));
+  const cur = ROWS.filter(r => inScopeNow.has(r.uid));
+  const NEW = [], LATE = [], MOVED = [], GONE = [];
+  for (const r of cur){
+    const p = prev[r.uid];
+    if (!p){ NEW.push(r); continue; }
+    if (isLate(r) && !(p.dl != null && p.dl > 0)) LATE.push(r);
+    if ((p.s || '') !== (r.subStatus || '')) MOVED.push([r, p.s || '']);
+  }
+  const curIds = new Set(ROWS.map(r => r.uid));
+  for (const [uid, p] of Object.entries(prev))
+    if (!curIds.has(uid) && lensMatchSnap(p) && subMatch(p.s)) GONE.push(p);
+
+  const since = new Date(CHG_PREV.date + 'T00:00:00').toLocaleDateString([], {weekday:'long', month:'short', day:'numeric'});
+  meta.innerHTML = `Compared with ${esc(since)}, as seen in this browser`;
+  const any = NEW.length + LATE.length + MOVED.length + GONE.length;
+  showSec('chgSec', any > 0 || !isNarrowed());
+
+  const item = (num, url, cust, detail, late) =>
+    `<div class="chg-i"><div class="chg-1">${url ? `<a href="${url}" target="_blank" rel="noopener">${esc(num)}</a>` : esc(num)}</div>
+       <div class="chg-c">${esc(cust || '—')}</div><div class="chg-d${late ? ' late' : ''}">${detail}</div></div>`;
+  const numOf = r => (r.order || r.orderId) + (r.line ? ' · P' + NUM(r.line) : '');
+  const col = (key, title, list, render) => {
+    const open = CHG_OPEN.has(key);
+    const shown = open ? list : list.slice(0, 6);
+    return `<div class="chg-col"><div class="chg-h"><span class="t">${title}</span><span class="n">${list.length}</span></div>
+      ${list.length ? shown.map(render).join('') : '<div class="chg-none">Nothing</div>'}
+      ${list.length > 6 ? `<button class="mq-more chg-more" data-chg="${key}">${open ? 'Show fewer' : `+ ${list.length - 6} more`}</button>` : ''}</div>`;
+  };
+  grid.innerHTML =
+    col('new', 'New since yesterday', NEW.sort(prio), r => item(numOf(r), ORDER_URL(r), r.customer,
+        esc((r.subStatus || r.queue || '') + ' · ' + dueLabel(r)), false)) +
+    col('late', 'Went late', LATE.sort(prio), r => item(numOf(r), ORDER_URL(r), r.customer,
+        esc('Was due ' + DUE_DATE(r) + (r.subStatus ? ' · ' + r.subStatus : '')), true)) +
+    col('moved', 'Moved substatus', MOVED.sort((a, b) => prio(a[0], b[0])), ([r, from]) => item(numOf(r), ORDER_URL(r), r.customer,
+        `${esc(from || 'None')} <span class="arr">&rarr;</span> <b>${esc(r.subStatus || 'None')}</b>`, false)) +
+    col('gone', 'Left the board', GONE.sort((a, b) => NUM(b.v) - NUM(a.v)), p => item(p.o + (p.l ? ' · P' + p.l : ''), p.u, p.c,
+        esc('Last seen ' + (p.s || p.q || 'open') + ' · built, voided or closed'), false));
+}
+
+/* ============================================================
+   MACHINE LOAD — the week ahead, machine by machine
+   ============================================================ */
+function machineList(rows){
+  const shop = SUB_KNOWN.filter(k => flowOf({subStatus:k}) === 'shop');
+  const live = [...new Set(rows.map(r => r.subStatus).filter(k => k && flowOf({subStatus:k}) === 'shop'))];
+  const have = new Set(shop.map(subNorm));
+  return shop.concat(live.filter(k => !have.has(subNorm(k))));
+}
+let LD_PICK = null;   /* {key, col} of the square opened below the grid */
+function renderMachineLoad(rows){
+  const wrap = document.getElementById('ldWrap');
+  if (!wrap) return;
+  const machines = machineList(rows);
+  const days = [...Array(7)].map((_, i) => dayFromToday(i));
+  const cols = [{k:'late', t:'Overdue', s:''}]
+    .concat(days.map((d, i) => ({k:'d' + i, t: i === 0 ? 'Today' : d.toLocaleDateString([], {weekday:'short'}),
+                                 s: d.toLocaleDateString([], {month:'short', day:'numeric'})})))
+    .concat([{k:'later', t:'Later', s:''}]);
+  const colOf = r => r.daysLate == null ? 'later' : r.daysLate > 0 ? 'late' : -r.daysLate <= 6 ? 'd' + (-r.daysLate) : 'later';
+
+  const lanes = [{key:'__ready', name:'Up next', fam:'Ready to run', match: r => flowOf(r) === 'ready'}]
+    .concat(machines.map(k => { const m = k.match(/^([^|:>-]+?)\s*[|:>-]\s*(.+)$/);
+      return {key:k, name: m ? m[2].trim() : k, fam: m ? m[1].trim() : 'Bench', match: r => subNorm(r.subStatus || '') === subNorm(k)}; }));
+  const grid = lanes.map(L => {
+    const cells = Object.fromEntries(cols.map(c => [c.k, {n:0, v:0}]));
+    for (const r of rows) if (L.match(r)){ const k = colOf(r), c = cells[k]; c.n++; c.v += NUM(r.value); (c.rows = c.rows || []).push(r); if (preDue(r)) c.pre = (c.pre || 0) + 1; }
+    const tot = Object.values(cells).reduce((a, c) => a + c.n, 0);
+    return {...L, cells, tot};
+  }).filter(L => L.tot || !isNarrowed());
+  showSec('loadSec', grid.some(L => L.tot) || !isNarrowed());
+
+  const maxDay = Math.max(1, ...grid.flatMap(L => cols.filter(c => c.k !== 'late' && c.k !== 'later').map(c => L.cells[c.k].n)));
+  const maxLate = Math.max(1, ...grid.map(L => L.cells.late.n));
+  const maxLater = Math.max(1, ...grid.map(L => L.cells.later.n));
+  /* the week in solid sapphire steps — ice blue for a light day, deep sapphire
+     for the heaviest; overdue keeps its red */
+  const SAPPHIRE = ['#EAF2FB','#CFE1F6','#9EC3EC','#5592D8','#1F62B5','#0B3F85'];
+  const shade = (k, n) => {
+    if (!n) return '';
+    const max = k === 'late' ? maxLate : k === 'later' ? maxLater : maxDay;
+    if (k === 'late'){
+      const a = 0.1 + 0.75 * (n / max);
+      return `background:rgba(158,18,25,${a.toFixed(2)});${a > 0.45 ? 'color:#FFFFFF;' : ''}`;
+    }
+    const step = max > 1 ? Math.round(5 * (n - 1) / (max - 1)) : 2;
+    return `background:${SAPPHIRE[step]};border-color:${SAPPHIRE[step]};${step >= 3 ? 'color:#FFFFFF;' : ''}`;
+  };
+  const colTot = Object.fromEntries(cols.map(c => [c.k, grid.reduce((a, L) => a + L.cells[c.k].n, 0)]));
+
+  wrap.innerHTML = `<table class="ld"><thead><tr><th class="m">Machine</th>` +
+    cols.map(c => `<th class="${c.k === 'd0' ? 'today' : ''}${c.k === 'late' ? ' od' : ''}">${esc(c.t)}${c.s ? `<span>${esc(c.s)}</span>` : ''}</th>`).join('') +
+    `<th class="tot">Total</th></tr></thead><tbody>` +
+    grid.map(L => `<tr class="${L.tot ? '' : 'idle'}" data-ld="${esc(L.key)}">
+      <td class="m"><span class="fam">${esc(L.fam)}</span><span class="nm">${esc(L.name)}</span></td>` +
+      cols.map(c => { const x = L.cells[c.k];
+        const picked = LD_PICK && LD_PICK.key === L.key && LD_PICK.col === c.k;
+        const st = x.pre ? 'background:var(--red-deep);border-color:var(--red-deep);color:#FFFFFF;' : shade(c.k, x.n);
+        return `<td class="c${picked ? ' picked' : ''}" data-col="${c.k}" style="${st}" title="${x.n ? `${x.n} ${x.n === 1 ? 'job' : 'jobs'} · ${fullMoney(x.v)}${x.pre ? ' · ' + x.pre + ' to cut today' : ''}` : ''}">` +
+               (x.n ? `<b>${x.n}</b><span>${esc(money(x.v))}</span>` : '<i>·</i>') + `</td>`; }).join('') +
+      `<td class="tot">${L.tot || '—'}</td></tr>`).join('') +
+    `</tbody><tfoot><tr><td class="m">All machines</td>` +
+    cols.map(c => `<td class="c">${colTot[c.k] || ''}</td>`).join('') +
+    `<td class="tot">${Object.values(colTot).reduce((a, b) => a + b, 0)}</td></tr></tfoot></table>`;
+
+  /* the opened square, listed under the grid */
+  const pickHost = document.getElementById('ldPick');
+  if (pickHost){
+    const L = LD_PICK && grid.find(g => g.key === LD_PICK.key);
+    const cell = L && L.cells[LD_PICK.col];
+    if (!cell || !cell.n){ LD_PICK = null; pickHost.innerHTML = ''; }
+    else {
+      const colName = cols.find(c => c.k === LD_PICK.col);
+      const list = cell.rows.slice().sort(prio);
+      pickHost.innerHTML = `<div class="ld-ph"><span class="t">${esc(L.name)} · ${esc(colName.t)}${colName.s ? ' ' + esc(colName.s) : ''}</span>
+          <span class="n">${list.length} ${list.length === 1 ? 'job' : 'jobs'} · ${esc(fullMoney(cell.v))}</span>
+          <button class="ld-x" aria-label="Close">&times;</button></div>` +
+        list.map(r => {
+          const u = ORDER_URL(r), n = esc(r.order || r.orderId) + (r.line ? ' · P' + NUM(r.line) : '');
+          const urg = urgOf(r);
+          return `<div class="ld-pr">
+            <span class="o">${u ? `<a href="${u}" target="_blank" rel="noopener">${n}</a>` : n}</span>
+            <span class="cu">${esc(r.customer || '—')}</span>
+            <span class="pr">${esc(r.desc || '—')}</span>
+            <span class="ce">${esc(r.center || '')}${r.rep ? ' · ' + esc(r.rep) : ''}</span>
+            <span class="va">${esc(money(NUM(r.value)))}</span>
+            <span class="du">${urg === 'late' || urg === 'pre' ? `<span class="lt-flag">${esc(urg === 'pre' ? 'Cut today' : dueLabel(r))}</span>` : esc(dueLabel(r))}</span>
+          </div>`;
+        }).join('');
+    }
+  }
+}
+
+/* ============================================================
+   BATCH BY MATERIAL — same code and material on the same machine
+   ============================================================ */
+const BT_OPEN = new Set();
+function materialOf(desc){
+  const m = String(desc || '').match(/^\s*([0-9]{2}[A-Z]{2,4})\s*[-–]\s*([^|]+)/i);
+  if (!m) return null;
+  return {code: m[1].toUpperCase(), mat: m[2].replace(/\s+/g, ' ').trim().toUpperCase()};
+}
+function renderBatches(rows){
+  const grid = document.getElementById('btGrid'), meta = document.getElementById('btMeta');
+  if (!grid) return;
+  const machines = [{key:'__ready', name:'Up next — ready to run', match: r => flowOf(r) === 'ready'}]
+    .concat(machineList(rows).map(k => ({key:k, name:k, match: r => subNorm(r.subStatus || '') === subNorm(k)})));
+  let coded = 0, uncoded = 0, batches = 0, inBatch = 0;
+  const blocks = machines.map(M => {
+    const G = new Map();
+    for (const r of rows) if (M.match(r)){
+      const mt = materialOf(r.desc);
+      if (!mt){ uncoded++; continue; }
+      coded++;
+      const k = mt.code + '|' + mt.mat;
+      if (!G.has(k)) G.set(k, {...mt, list: []});
+      G.get(k).list.push(r);
+    }
+    const list = [...G.values()].filter(g => g.list.length > 1)
+      .sort((a, b) => b.list.length - a.list.length || b.list.filter(isLate).length - a.list.filter(isLate).length);
+    batches += list.length; inBatch += list.reduce((a, g) => a + g.list.length, 0);
+    return {...M, list};
+  }).filter(M => M.list.length);
+  showSec('batchSec', blocks.length > 0 || !isNarrowed());
+  meta.innerHTML = blocks.length
+    ? `${batches} ${batches === 1 ? 'batch' : 'batches'} · ${inBatch} line items could share a setup`
+    : (coded ? 'No two jobs on the same machine share a material right now'
+             : 'No product codes found in the current queues — this board reads codes like 05WS at the start of the product name');
+  grid.innerHTML = blocks.map(M => `<div class="bt-m"><div class="bt-mh">${esc(M.name)}</div>` +
+    M.list.map(g => {
+      g.list.sort(prio);
+      const key = M.key + '::' + g.code + '|' + g.mat, open = BT_OPEN.has(key);
+      const late = g.list.filter(isLate).length;
+      const soonest = g.list.reduce((a, r) => r.daysLate != null && (a == null || r.daysLate > a.daysLate) ? r : a, null);
+      return `<div class="bt-g${open ? ' open' : ''}" data-bt="${esc(key)}">
+        <div class="bt-row"><span class="bt-code">${esc(g.code)}</span><span class="bt-mat">${esc(g.mat)}</span>
+          <span class="bt-n">${g.list.length} jobs${lateTxt(late)}${soonest ? ` · most urgent ${esc(dueLabel(soonest))}` : ''}</span></div>
+        ${open ? `<div class="bt-jobs">${g.list.map(r => {
+            const u = ORDER_URL(r), n = esc(r.order || r.orderId) + (r.line ? ' · P' + NUM(r.line) : '');
+            const urg = urgencyOf(r);
+            return `<div class="bt-j"><span class="o">${u ? `<a href="${u}" target="_blank" rel="noopener">${n}</a>` : n}</span>
+              <span class="cu">${esc(r.customer || '—')}</span>
+              <span class="pr">${esc(String(r.desc || '').split('|').slice(1).join('|').trim() || '—')}</span>
+              <span class="du${urg === 'late' ? ' late' : urg === 'today' ? ' today' : ''}">${esc(dueLabel(r))}</span></div>`;
+          }).join('')}</div>` : ''}
+      </div>`;
+    }).join('') + `</div>`).join('');
+}
+
+/* ============================================================
+   ONE LINE AWAY — orders held up by one or two open lines
+   ============================================================ */
+let NEAR_ROWS = [];
+function renderNear(){
+  const host = document.getElementById('nrList'), meta = document.getElementById('nearMeta');
+  if (!host) return;
+  const byOrder = new Map();
+  for (const r of visibleLens()){
+    if (!byOrder.has(r.orderId)) byOrder.set(r.orderId, []);
+    byOrder.get(r.orderId).push(r);
+  }
+  const orders = [];
+  for (const lines of byOrder.values()){
+    const t = Math.max(NUM(lines[0].orderTotal), lines.length), d = NUM(lines[0].orderDone);
+    if (lines.length > 2 || d < 1 || d / t < 0.5) continue;
+    if (!lines.some(inScope)) continue;
+    if ((state.subStatus !== null || state.flow) && !lines.some(r => subMatch(r.subStatus))) continue;
+    lines.sort((a, b) => NUM(a.line) - NUM(b.line));
+    const worst = lines.reduce((a, r) => r.daysLate != null && (a == null || r.daysLate > a) ? r.daysLate : a, null);
+    orders.push({lines, t, d, worst, val: lines.reduce((a, r) => a + NUM(r.value), 0)});
+  }
+  orders.sort((a, b) => ((b.worst ?? -1e9) - (a.worst ?? -1e9)) || (b.val - a.val));
+  NEAR_ROWS = orders.flatMap(o => o.lines);
+  showSec('nearSec', orders.length > 0 || !isNarrowed());
+  const late = orders.filter(o => o.worst != null && o.worst > 0).length;
+  meta.innerHTML = orders.length
+    ? `${orders.length} ${orders.length === 1 ? 'order' : 'orders'} · ${NEAR_ROWS.length} holding ${NEAR_ROWS.length === 1 ? 'line' : 'lines'}${late ? ` · <b>${late} already late</b>` : ''}`
+    : 'No orders are one line away right now';
+  const cb = document.getElementById('nearCopy');
+  if (cb){ cb.innerHTML = COPY_ICON + '<span>Copy list</span>'; cb.hidden = !orders.length; }
+  host.innerHTML = orders.map(o => {
+    const r0 = o.lines[0], u = ORDER_URL(r0);
+    const segs = o.t <= 24
+      ? [...Array(o.t)].map((_, i) => `<i class="${i < o.d ? 'on' : ''}"></i>`).join('')
+      : `<i class="bar" style="--p:${(100 * o.d / o.t).toFixed(0)}%"></i>`;
+    return `<div class="nr">
+      <div class="nr-a">
+        <div class="nr-o">${u ? `<a href="${u}" target="_blank" rel="noopener">${esc(r0.order || r0.orderId)}</a>` : esc(r0.order || r0.orderId)}</div>
+        <div class="nr-c">${esc(r0.customer || '—')}</div>
+        <div class="nr-p"><span class="segs">${segs}</span><span class="t">${o.d} of ${o.t} built</span></div>
+        <div class="nr-m">${esc(r0.center || '')}${r0.rep ? ' · ' + esc(r0.rep) : ''}</div>
+      </div>
+      <div class="nr-b">${o.lines.map(r => {
+        const urg = urgencyOf(r);
+        return `<div class="nr-l"><span class="p">P${NUM(r.line) || '—'}</span>
+          <span class="d">${esc(r.desc || '—')}</span>
+          <span class="s">${esc(r.subStatus || 'No substatus')}</span>
+          <span class="v">${esc(money(NUM(r.value)))}</span>
+          <span class="du${urg === 'late' ? ' late' : urg === 'today' ? ' today' : ''}">${esc(dueLabel(r))}</span></div>`;
+      }).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderProduction(){
+  renderFocus();
+  ROW_BY_UID.clear();
+  const rows = floorRows();
+  renderFloor(floorTileRows());
+  renderQueues(rows);
+  renderRisk(rows);
+  renderOutside(rows);
+  renderDiscipline(rows);
+  renderChanges();
+  renderMachineLoad(rows);
+  renderBatches(rows);
+  renderNear();
+}
+
+(function wireProduction(){
+  const panel = document.getElementById('detailsPanel');
+  if (!panel) return;
+  panel.addEventListener('click', async e => {
+    const tile = e.target.closest('.fl-tile');
+    if (tile){
+      state.flow = state.flow === tile.dataset.flow ? null : tile.dataset.flow;
+      paintFilters(); renderKeepingPlace(); return;
+    }
+    if (e.target.closest('#flClear')){ state.flow = null; paintFilters(); renderKeepingPlace(); return; }
+    const more = e.target.closest('.mq-more:not(.mqc-more):not(.chg-more)');
+    if (more){
+      const set = more.dataset.lane ? MQ_OPEN : OUT_OPEN, key = more.dataset.lane || more.dataset.out;
+      set.has(key) ? set.delete(key) : set.add(key);
+      renderProduction(); return;
+    }
+    if (e.target.closest('#runSheetBtn')){
+      const rows = floorRows();
+      const secs = runSheetSections(rows);
+      const all = [...new Map(secs.flatMap(x => x.rows).map(r => [r.uid, r])).values()];
+      if (!all.length) return;
+      const ok = await copyCard(tableFor(all, secs, 'Run sheet'));
+      copyToast(ok ? `<b>Copied the run sheet</b><span>Paste it into your email</span>`
+                   : `<b>Could not copy</b><span>Your browser blocked the clipboard</span>`);
+      return;
+    }
+    if (e.target.closest('#riskCopy')){
+      if (!RISK_ROWS.length) return;
+      const ok = await copyCard(tableFor(RISK_ROWS, null, 'At risk'));
+      copyToast(ok ? `<b>Copied ${RISK_ROWS.length} at-risk lines</b><span>Paste them into your email</span>`
+                   : `<b>Could not copy</b><span>Your browser blocked the clipboard</span>`);
+      return;
+    }
+    const chgMore = e.target.closest('.chg-more');
+    if (chgMore){ const k = chgMore.dataset.chg; CHG_OPEN.has(k) ? CHG_OPEN.delete(k) : CHG_OPEN.add(k); renderProduction(); return; }
+    const ldx = e.target.closest('.ld-x');
+    if (ldx){ LD_PICK = null; renderProduction(); return; }
+    const ldc = e.target.closest('tr[data-ld] td.c');
+    if (ldc){
+      const key = ldc.parentElement.dataset.ld, col = ldc.dataset.col;
+      LD_PICK = LD_PICK && LD_PICK.key === key && LD_PICK.col === col ? null : {key, col};
+      renderProduction();
+      if (LD_PICK){ const ph = document.getElementById('ldPick'); if (ph) ph.scrollIntoView({block:'nearest', behavior:'smooth'}); }
+      return;
+    }
+    const ld = e.target.closest('tr[data-ld]');
+    if (ld && !ld.classList.contains('idle') && e.target.closest('td.m')){
+      const k = ld.dataset.ld;
+      if (k === '__ready'){ state.subStatus = null; state.flow = state.flow === 'ready' ? null : 'ready'; }
+      else { state.flow = null; state.subStatus = state.subStatus === k ? null : k; }
+      paintFilters(); renderKeepingPlace(); return;
+    }
+    const bt = e.target.closest('.bt-g');
+    if (bt && !e.target.closest('a')){ const k = bt.dataset.bt; BT_OPEN.has(k) ? BT_OPEN.delete(k) : BT_OPEN.add(k); renderProduction(); return; }
+    if (e.target.closest('#nearCopy')){
+      if (!NEAR_ROWS.length) return;
+      const ok = await copyCard(tableFor(NEAR_ROWS, null, 'One line away'));
+      copyToast(ok ? `<b>Copied ${NEAR_ROWS.length} holding lines</b><span>Paste them into your email</span>`
+                   : `<b>Could not copy</b><span>Your browser blocked the clipboard</span>`);
+      return;
+    }
+    const mcMore = e.target.closest('.mqc-more');
+    if (mcMore){
+      const k = mcMore.dataset.mclane;
+      MQC_LANE_OPEN.has(k) ? MQC_LANE_OPEN.delete(k) : MQC_LANE_OPEN.add(k);
+      renderProduction(); return;
+    }
+    /* compact queue: a click opens or closes the card; the order link still opens */
+    const mc = e.target.closest('.mc-job');
+    if (mc && !e.target.closest('a')){
+      if (String(getSelection() || '').trim()) return;
+      const k = mc.dataset.mc;
+      MQC_OPEN.has(k) ? MQC_OPEN.delete(k) : MQC_OPEN.add(k);
+      renderProduction(); return;
+    }
+    /* a job or at-risk row: copy it as a card; links still open */
+    const job = e.target.closest('.cp[data-uid]');
+    if (job && !e.target.closest('a') && !String(getSelection() || '').trim()){
+      const r = ROW_BY_UID.get(job.dataset.uid);
+      if (!r) return;
+      const card = cardFor(r);
+      const ok = await copyCard(card);
+      job.classList.remove('copied'); void job.offsetWidth; job.classList.add('copied');
+      copyToast(ok ? `<b>Copied ${esc(card.label)}</b><span>Paste it into your email</span>`
+                   : `<b>Could not copy</b><span>Your browser blocked the clipboard</span>`);
+    }
+  });
+})();
+
+/* ---- the two views ---- */
+const VIEW_KEY = 'fs_helm_view';
+function setView(v, keep){
+  v = v === 'mgmt' ? 'mgmt' : 'prod';
+  document.body.classList.toggle('view-prod', v === 'prod');
+  document.body.classList.toggle('view-mgmt', v === 'mgmt');
+  document.querySelectorAll('#viewSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
+  if (keep) try{ localStorage.setItem(VIEW_KEY, v); }catch(e){}
+}
+(function wireView(){
+  let v = null;
+  try{ v = new URL(location.href).searchParams.get('view'); }catch(e){}
+  if (v === 'management') v = 'mgmt';
+  if (v === 'production') v = 'prod';
+  if (!v) try{ v = localStorage.getItem(VIEW_KEY); }catch(e){}
+  setView(v || 'prod', false);
+  document.querySelectorAll('#viewSeg button').forEach(b => b.addEventListener('click', () => {
+    setView(b.dataset.v, true);
+    renderKeepingPlace();
+  }));
+})();
+
+/* ============================================================
+   WHERE WORK IS STUCK — open work grouped by substatus family
+   Counts come from the page's scope (district, centre, salesperson, due,
+   dates) but ignore the substatus filter itself, so the board never
+   collapses to the one line you picked — it highlights it instead.
+   ============================================================ */
+/* The shop's machine, vendor and routing families always get their own
+   heading, even when only one of them is open right now; anything else forms a
+   family once two or more share a first word. */
+const SUB_CORE = ['cutting','printing','vended','transfer','tsp'];
+
+/* CoreBridge's own substatus list, from its Substatus filter. Every one is
+   always shown — a machine at 0 is clear, and that is worth seeing. Anything
+   new CoreBridge adds still appears on its own the moment it is used. */
+const SUB_KNOWN = [
+  'Cutting | Kern','Cutting | Kongsberg','Cutting | Vision 2550',
+  'Printing | Arizona 2360','Printing | Colorado','Printing | Epson S60','Printing | Epson S80','Printing | Mutoh',
+  'Fabrication','Lamination | Seal Base','Plotting','Prepare Shipping','Pending',
+  'File Needed for Output','Ready for Output - External','Ready For Output - Internal',
+  'Internal Revision','External Revision','Waiting on DIMS Verification','Permitting',
+  'Vended - 4 Over','Vended - Grimco','Vended - Letters Etc','Vended - SignMart','Vended - Zoo Printing',
+  'Vended Design - Vector Dr.','Vended: B2 Signs','Vended: JDS','Vended: N. Glantz',
+  'Transfer > Long Beach','Transfer > Santa Ana','Transfer > Tarzana','Transfer > Thousand Oaks','Transfer > Torrance',
+  'TSP System','TSP Production File Needed','TSP Production File Ready'
+];
+/* same name written a little differently ("For"/"for", spacing) counts once */
+const subNorm = k => String(k).toLowerCase().replace(/\s+/g, ' ').replace(/\s*([|:>-])\s*/g, '$1').trim();
+function withKnownSubs(map, blank){
+  const have = new Set([...map.keys()].map(subNorm));
+  for (const k of SUB_KNOWN) if (!have.has(subNorm(k))) map.set(k, blank());
+  return map;
+}
+function subFamilies(keys){
+  const famOf = k => k.split(/[\s:|>-]/)[0].toLowerCase();
+  const byFam = new Map();
+  for (const k of keys.filter(k => subTail(k) === 0)){
+    const f = famOf(k);
+    if (!byFam.has(f)) byFam.set(f, []);
+    byFam.get(f).push(k);
+  }
+  const fams = [], other = [];
+  for (const [f, list] of byFam){
+    if (list.length > 1 || SUB_CORE.includes(f)) fams.push({head: list[0].slice(0, f.length), list});
+    else other.push(list[0]);
+  }
+  if (other.length) fams.push({head:'Other steps', list: other, other:true});
+  const tail = keys.filter(k => subTail(k) > 0);
+  if (tail.length) fams.push({head:'Unspecified', list: tail, quiet:true});
+  return fams;
+}
+const subShort = (k, head) => {
+  if (!k) return SUB_NONE;
+  const rest = k.slice(head.length);
+  return head !== 'Other steps' && head !== 'Unspecified' && /^\s*[|:>-]/.test(rest)
+    ? rest.replace(/^\s*[|:>-]\s*/, '') : k;
+};
+
+function renderStuck(){
+  const grid = document.getElementById('stGrid');
+  const meta = document.getElementById('stMeta');
+  if (!grid) return;
+  const rows = chartRows();
+  const narrowed = isNarrowed();
+
+  const T = new Map();
+  for (const r of rows){
+    const k = r.subStatus || '';
+    const t = T.get(k) || {n:0, late:0, val:0, oldest:0};
+    t.n++; t.val += NUM(r.value);
+    if (r.daysLate != null && r.daysLate > 0) t.late++;
+    if (r.age != null) t.oldest = Math.max(t.oldest, NUM(r.age));
+    T.set(k, t);
+  }
+  showSec('stuckSec', rows.length > 0 || !isNarrowed());
+  if (!rows.length){ grid.innerHTML = '<div class="st-empty">Nothing in the current scope</div>'; if (meta) meta.innerHTML = ''; return; }
+  if (!narrowed) withKnownSubs(T, () => ({n:0, late:0, val:0, oldest:0}));
+
+  const tracked = [...T.entries()].filter(([k]) => subTail(k) === 0).reduce((a, [, t]) => a + t.n, 0);
+  if (meta) meta.innerHTML = `${tracked} of ${rows.length} open lines carry a real substatus` +
+    ` (${Math.round(100 * tracked / rows.length)}%) — the rest are Pending or blank`;
+
+  /* scale the bars to the busiest real substatus — Pending and blank are
+     far bigger and would flatten every other bar; theirs simply fill */
+  const real = [...T.entries()].filter(([k]) => subTail(k) === 0).map(([, t]) => t.n);
+  const maxN = Math.max(1, ...(real.length ? real : [...T.values()].map(t => t.n)));
+  const fams = subFamilies([...T.keys()]).map(f => {
+    const list = f.list.slice().sort((a, b) => T.get(b).late - T.get(a).late || T.get(b).n - T.get(a).n ||
+                                         a.localeCompare(b));
+    const tot = list.reduce((a, k) => { const t = T.get(k); a.n += t.n; a.late += t.late; a.val += t.val; return a; },
+                            {n:0, late:0, val:0});
+    return {...f, list, tot};
+  });
+  /* the families holding the most late work lead; Unspecified always last */
+  const rank = f => f.quiet ? 2 : f.other ? 1 : 0;
+  fams.sort((a, b) => rank(a) - rank(b) ||
+                      b.tot.late - a.tot.late || b.tot.val - a.tot.val);
+
+  grid.innerHTML = fams.map(f => `
+    <div class="st-fam${f.quiet ? ' quiet' : ''}">
+      <div class="st-fam-h"><h3>${esc(f.head)}</h3>
+        <span class="tot">${f.tot.n} ${f.tot.n === 1 ? 'line' : 'lines'} · ${esc(money(f.tot.val))}` +
+        `${f.tot.late ? ` · <b>${f.tot.late} late</b>` : ''}</span></div>
+      ${f.list.map(k => {
+        const t = T.get(k);
+        const w = Math.min(100, 100 * t.n / maxN), wl = Math.min(w, 100 * t.late / maxN);
+        return `<button class="st-row${t.n ? '' : ' zero'}" data-sub="${esc(k === '' ? '__none__' : k)}" title="${esc(k || SUB_NONE)}"
+                   aria-pressed="${state.subStatus === k}">
+          <span class="nm">${esc(subShort(k, f.head))}</span>
+          <span class="bar"><i style="width:${w.toFixed(1)}%"></i><i class="l" style="width:${wl.toFixed(1)}%"></i></span>
+          <span class="val">${esc(money(t.val))}</span>
+          <span class="sub">${t.n ? `${t.n} ${t.n === 1 ? 'line' : 'lines'}` +
+          `${t.late ? ` · <b>${t.late} late</b>` : ''}${t.oldest ? ` · oldest ${t.oldest}d open` : ''}`
+          : 'Clear — nothing open'}</span>
+        </button>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+(function wireStuck(){
+  const grid = document.getElementById('stGrid');
+  if (!grid) return;
+  grid.addEventListener('click', e => {
+    const b = e.target.closest('.st-row');
+    if (!b) return;
+    const v = b.dataset.sub === '__none__' ? '' : b.dataset.sub;
+    /* clicking the one already picked lets it go; the page follows either way */
+    state.subStatus = state.subStatus === v ? null : v;
+    paintFilters();
+    renderKeepingPlace();
+  });
+})();
+
+function renderList(rows){
+  const tbl  = document.getElementById('ltTable');
+  const meta = document.getElementById('ltMeta');
+  if (!tbl) return;
+
+  const k = LIST.key, dir = LIST.dir;
+  const list = rows.slice().sort((a, b) => {
+    const x = listKey(a, k), y = listKey(b, k);
+    const c = typeof x === 'string' ? x.localeCompare(y) : (x - y);
+    return c * dir ||
+      /* ties: worst lateness, then money */
+      (NUM(b.daysLate) - NUM(a.daysLate)) || (NUM(b.value) - NUM(a.value));
+  });
+
+  const late = list.filter(r => r.daysLate != null && r.daysLate > 0).length;
+  const orders = new Set(list.map(r => r.orderId)).size;
+  const val = list.reduce((a, r) => a + NUM(r.value), 0);
+  if (meta) meta.innerHTML = `${list.length} line ${list.length === 1 ? 'item' : 'items'} · ` +
+    `${orders} ${orders === 1 ? 'order' : 'orders'} · ${money(val)}` +
+    (late ? ` · <b>${late} overdue</b>` : '');
+
+  const head = '<thead><tr>' + LIST_COLS.map(c =>
+    `<th data-k="${c.k}" class="${c.r ? 'r' : ''}">${c.t}` +
+    `<span class="ar">${c.k === k ? (dir > 0 ? '&#8593;' : '&#8595;') : ''}</span></th>`).join('') +
+    '</tr></thead>';
+
+  if (!list.length){
+    LIST_ROWS = [];
+    paintCopyAll();
+    tbl.innerHTML = head + `<tbody><tr><td colspan="${LIST_COLS.length}" class="lt-empty">` +
+                    `Nothing matches the current filters</td></tr></tbody>`;
+    return;
+  }
+
+  const body = list.map((r, i) => {
+    const url = ORDER_URL(r);
+    const n = esc(r.order || r.orderId);
+    const u = urgencyOf(r);
+    const color = COLOR_OF[r.center] || '#9A9BA3';
+    const total = Math.max(NUM(r.orderTotal), 1);
+    const cell = {
+      order:    `<td class="num">${url ? `<a href="${url}" target="_blank" rel="noopener">${n}</a>` : `<span>${n}</span>`}</td>`,
+      line:     `<td>${r.line ? 'P' + NUM(r.line) : '—'}</td>`,
+      status:   preDue(r) ? `<td class="st"><span class="lt-flag">${esc(preLabel(r))}</span></td>`
+              : u === 'late' ? `<td class="st"><span class="lt-flag">${esc(dueLabel(r))}</span></td>`
+              : `<td class="${u === 'today' ? 'today' : ''}">${esc(dueLabel(r))}</td>`,
+      due:      `<td>${fmtDay(r.daysLate == null ? null : dayFromToday(-NUM(r.daysLate)))}</td>`,
+      sub:      `<td class="wrap caps subc">${esc(r.subStatus || '—')}</td>`,
+      customer: `<td class="cust wrap custc">${esc(r.customer || '—')}</td>`,
+      desc:     `<td class="wrap prodc">${esc(r.desc || '—')}</td>`,
+      center:   `<td class="ctr caps"><i style="background:${color}"></i>${esc(r.center || '—')}</td>`,
+      rep:      `<td class="wrap repc">${esc(r.rep || '—')}</td>`,
+      queue:    `<td class="wrap caps stgc">${esc(r.queue || '—')}</td>`,
+      value:    `<td class="r">${esc(money(NUM(r.value)))}</td>`,
+      taken:    `<td>${fmtDay(r.age == null ? null : dayFromToday(-NUM(r.age)))}</td>`,
+      age:      `<td class="r">${r.age == null ? '—' : NUM(r.age) + 'd'}</td>`,
+      built:    `<td class="r">${NUM(r.orderDone)}/${total}</td>`,
+      category: `<td class="wrap catc">${esc(r.category || '—')}</td>`
+    };
+    return `<tr data-i="${i}">` + LIST_COLS.map(c => cell[c.k]).join('') + '</tr>';
+  }).join('');
+  LIST_ROWS = list;
+  tbl.innerHTML = head + '<tbody>' + body + '</tbody>';
+  paintCopyAll();
+}
+
+/* ---- click a row, get an email card ------------------------------------
+   The row goes to the clipboard twice over: as a small outlined card (HTML,
+   inline styles and tables only, since that is all Gmail keeps) and as plain
+   text for anywhere that cannot take the card. */
+const fullMoney = v => '$' + Math.round(NUM(v)).toLocaleString('en-US');
+
+function cardFor(r){
+  const url  = ORDER_URL(r);
+  const num  = String(r.order || r.orderId);
+  const line = r.line ? 'P' + NUM(r.line) : '';
+  const u = urgencyOf(r);
+  const status = r.daysLate == null ? 'No due date'
+               : r.daysLate > 0 ? r.daysLate + 'd late'
+               : r.daysLate === 0 ? 'Due today' : 'Due in ' + (-r.daysLate) + 'd';
+  const stage = (r.queue || '—') + (r.subStatus ? ' · ' + r.subStatus : '');
+  const due = r.daysLate == null ? 'No date' : DUE_DATE(r);
+  const color = COLOR_OF[r.center] || '#9A9BA3';
+
+  /* After the DealBoard card: rounded, outlined, generous air; quiet labels,
+     navy values, one line of urgency across the middle. Tables and inline
+     styles only — that is all Gmail keeps. */
+  const INK = '#0E0F13', NAVY = '#1A4C7E', RED = '#B0141C', LABEL = '#0E0F13', LINE = '#1A4C7E';
+  const F = "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;";
+  const lab = t => `<div style="${F}font-size:11px;font-weight:500;letter-spacing:1.4px;` +
+    `text-transform:uppercase;color:${LABEL};margin:0 0 6px;">${t}</div>`;
+  const val = (h, extra = '') => `<div style="${F}font-size:13px;font-weight:500;letter-spacing:1px;` +
+    `text-transform:uppercase;color:${NAVY};line-height:1.35;${extra}">${h}</div>`;
+  const cell = (k, v, extra) => `<td width="50%" style="vertical-align:top;padding:0 12px 22px 0;">${lab(k)}${val(v, extra)}</td>`;
+
+  const days = r.daysLate;
+  const alert = preDue(r) ? {t:`Still on the cutter, due ${days === -1 ? 'tomorrow' : due} — cut it today`, c:RED}
+              : days == null ? {t:'No due date set', c:LABEL}
+              : days > 0   ? {t:`${days} ${days === 1 ? 'day' : 'days'} overdue — was due ${due}`, c:RED}
+              : days === 0 ? {t:'Due today', c:RED}
+              : {t:`Due in ${-days} ${-days === 1 ? 'day' : 'days'} — ${due}`, c:NAVY};
+  const openDays = r.age == null ? '—' : NUM(r.age);
+
+  const orderHtml = url
+    ? `<a href="${url}" style="color:${INK};text-decoration:none;">${esc(num)}</a>`
+    : esc(num);
+
+  const html =
+`<table cellpadding="0" cellspacing="0" border="0" style="width:380px;max-width:100%;border:1px solid ${LINE};border-radius:18px;border-collapse:separate;background:#FFFFFF;">
+<tr><td style="padding:26px 28px 8px;">
+  <div style="${F}font-size:13px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:${INK};">${esc(r.customer || '—')}</div>
+  <div style="${F}font-size:22px;font-weight:400;letter-spacing:.3px;color:${INK};margin-top:10px;">${orderHtml}${line ? `<span style="color:${LABEL};font-size:15px;">&nbsp;&nbsp;·&nbsp;&nbsp;${line}</span>` : ''}</div>
+</td></tr>
+<tr><td align="center" style="padding:22px 28px 26px;">
+  <div style="${F}font-size:11px;font-weight:600;letter-spacing:2.2px;text-transform:uppercase;color:${alert.c};">${esc(alert.t)}</div>
+</td></tr>
+<tr><td style="padding:0 28px 26px;">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+    <td style="vertical-align:bottom;">${lab('Line value')}<div style="${F}font-size:28px;font-weight:400;color:${NAVY};line-height:1.1;">${fullMoney(r.value)}</div></td>
+    <td align="right" style="vertical-align:bottom;"><div style="${F}font-size:24px;font-weight:400;color:${NAVY};line-height:1.1;">${openDays}</div><div style="${F}font-size:11px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;color:${LABEL};margin-top:6px;">Days open</div></td>
+  </tr></table>
+</td></tr>
+<tr><td style="padding:0 28px 4px;">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>${cell('Salesperson', esc(r.rep || '—'))}${cell('Centre', esc(r.center || '—'))}</tr>
+    <tr>${cell('Stage', esc(r.queue || '—'))}${cell('Substatus', esc(r.subStatus || '—'))}</tr>
+    <tr><td colspan="2" style="vertical-align:top;padding:0 0 22px;">${lab('Product')}${val(esc(r.desc || '—'))}</td></tr>
+  </table>
+</td></tr>
+${url ? `<tr><td align="center" style="padding:6px 28px 28px;">
+  <a href="${url}" style="${F}font-size:12px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:${NAVY};text-decoration:none;">Open in CoreBridge&nbsp;&nbsp;&rarr;</a>
+</td></tr>` : ''}
+</table><br>`;
+
+  const text = [
+    `${num}${line ? ' · ' + line : ''} — ${status}`,
+    `${r.customer || '—'} — ${r.desc || '—'}`,
+    `Salesperson: ${r.rep || '—'}`,
+    `Centre: ${r.center || '—'}`,
+    `Value: ${fullMoney(r.value)}`,
+    `Stage: ${stage}`,
+    `Due: ${due}`,
+    url ? url : ''
+  ].filter(Boolean).join('\n');
+
+  return {html, text, label: num + (line ? ' · ' + line : '')};
+}
+
+async function copyCard(card){
+  try{
+    if (navigator.clipboard && window.ClipboardItem){
+      await navigator.clipboard.write([new ClipboardItem({
+        'text/html':  new Blob([card.html], {type:'text/html'}),
+        'text/plain': new Blob([card.text], {type:'text/plain'})
+      })]);
+      return true;
+    }
+  }catch(e){ /* fall through to the older route */ }
+  /* the old way: select a rendered copy of the card and copy the selection */
+  const box = document.createElement('div');
+  box.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;';
+  box.innerHTML = card.html;
+  document.body.appendChild(box);
+  const sel = getSelection(), range = document.createRange();
+  range.selectNodeContents(box);
+  sel.removeAllRanges(); sel.addRange(range);
+  let ok = false;
+  try{ ok = document.execCommand('copy'); }catch(e){}
+  sel.removeAllRanges(); box.remove();
+  return ok;
+}
+
+const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.9983 10C20.9862 7.82497 20.8897 6.64706 20.1213 5.87868C19.2426 5 17.8284 5 15 5H12C9.17157 5 7.75736 5 6.87868 5.87868C6 6.75736 6 8.17157 6 11V16C6 18.8284 6 20.2426 6.87868 21.1213C7.75736 22 9.17157 22 12 22H15C17.8284 22 19.2426 22 20.1213 21.1213C21 20.2426 21 18.8284 21 16V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3 10V16C3 17.6569 4.34315 19 6 19M18 5C18 3.34315 16.6569 2 15 2H11C7.22876 2 5.34315 2 4.17157 3.17157C3.51839 3.82475 3.22937 4.69989 3.10149 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+
+function copyToast(msg){
+  let t = document.getElementById('copyToast');
+  if (!t){
+    t = document.createElement('div');
+    t.id = 'copyToast'; t.className = 'copy-toast';
+    document.body.appendChild(t);
+  }
+  t.innerHTML = COPY_ICON + msg;
+  t.classList.add('show');
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ---- the whole table, for an email -----------------------------------
+   Offered once a substatus or a salesperson is picked. It copies the rows as
+   they are sorted on screen, with the basics only, under a title that says
+   what the list is. */
+function paintCopyAll(){
+  const b = document.getElementById('ltCopyAll');
+  if (!b) return;
+  b.hidden = !((state.subStatus !== null || state.rep || state.flow) && LIST_ROWS.length);
+}
+
+function listTitle(){
+  const due = {act:'Needs action', late:'Overdue', today:'Due today', all:'Open work'}[state.due] || 'Open work';
+  const parts = [due];
+  if (state.subStatus !== null) parts.push(state.subStatus || SUB_NONE);
+  if (state.flow) parts.push(FLOW_BY[state.flow].t);
+  if (state.rep) parts.push(state.rep);
+  else {
+    const L = state.lens;
+    if (L === 'valley') parts.push('Valley');
+    else if (L === 'southbay') parts.push('South Bay');
+    else if (L !== 'districts' && L !== 'centers') parts.push(L);
+  }
+  return parts.join('  ·  ');
+}
+
+function tableFor(list, sections, heading){
+  /* A list, not a spreadsheet: Gmail's compose window is narrow, so each line
+     item is one entry at the standard 600px email width. Sharp navy frame,
+     black type, a thin claret mark down the edge of anything overdue. */
+  const INK = '#0E0F13', NAVY = '#1A4C7E', RED = '#B0141C', RULE = '#E3E0D8';
+  const F = "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;";
+  const showRep = !state.rep;
+  const plain = t => String(t || '').replace(/\s+/g, ' ').trim();
+
+  const late = list.filter(r => r.daysLate != null && r.daysLate > 0).length;
+  const orders = new Set(list.map(r => r.orderId)).size;
+  const total = list.reduce((a, r) => a + NUM(r.value), 0);
+  const today = new Date().toLocaleDateString([], {weekday:'long', month:'long', day:'numeric'});
+  const countTxt = `${list.length} line ${list.length === 1 ? 'item' : 'items'} · ${orders} ` +
+    `${orders === 1 ? 'order' : 'orders'}`;
+  const summaryTxt = countTxt + ` · ${fullMoney(total)}` + (late ? ` · ${late} overdue` : '');
+
+  const metaOf = r => [showRep ? r.rep : null, r.center, r.queue].filter(Boolean).join('  ·  ');
+  const statusOf = r => preDue(r) ? 'Cut today — due ' + (r.daysLate === -1 ? 'tomorrow' : DUE_DATE(r))
+    : r.daysLate == null ? 'No due date'
+    : r.daysLate > 0 ? `${r.daysLate} ${r.daysLate === 1 ? 'day' : 'days'} late`
+    : r.daysLate === 0 ? 'Due today'
+    : `Due in ${-r.daysLate} ${-r.daysLate === 1 ? 'day' : 'days'}`;
+
+  const item = (r, last) => {
+    const u = ORDER_URL(r);
+    const n = esc(r.order || r.orderId) + (r.line ? ' &nbsp;·&nbsp; P' + NUM(r.line) : '');
+    const num = u ? `<a href="${u}" style="color:${NAVY};text-decoration:none;">${n}</a>` : n;
+    const urgent = preDue(r) || (r.daysLate != null && r.daysLate >= 0);
+    const tag = r.subStatus
+      ? `&nbsp;&nbsp;<span style="${F}display:inline-block;border:1px solid ${INK};padding:2px 7px;` +
+        `font-size:10.5px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:${INK};` +
+        `line-height:14px;vertical-align:1px;">${esc(r.subStatus)}</span>`
+      : '';
+    const rule = last ? '' : `border-bottom:1px solid ${RULE};`;
+    return `<tr>
+  <td style="width:3px;padding:0;background:${urgent ? RED : '#FFFFFF'};${rule}">&nbsp;</td>
+  <td style="padding:18px 0 18px 22px;${rule}vertical-align:top;">
+    <div style="${F}font-size:12px;font-weight:700;letter-spacing:.3px;color:${NAVY};line-height:20px;">${num}${tag}</div>
+    <div style="${F}font-size:15px;font-weight:700;color:${INK};margin-top:8px;line-height:1.3;">${esc(plain(r.customer) || '—')}</div>
+    <div style="${F}font-size:13px;font-weight:400;color:${INK};margin-top:4px;line-height:1.5;">${esc(plain(r.desc) || '—')}</div>
+    <div style="${F}font-size:12px;font-weight:400;color:${INK};margin-top:8px;">${esc(metaOf(r))}</div>
+  </td>
+  <td align="right" style="padding:18px 22px 18px 24px;${rule}vertical-align:top;white-space:nowrap;">
+    <div style="${F}font-size:17px;font-weight:500;color:${NAVY};line-height:20px;">${fullMoney(r.value)}</div>
+    <div style="${F}font-size:12px;font-weight:700;color:${urgent ? RED : INK};margin-top:10px;">${esc(statusOf(r))}</div>
+    <div style="${F}font-size:12px;font-weight:400;color:${INK};margin-top:3px;">${r.daysLate == null ? '' : esc(DUE_DATE(r))}</div>
+  </td>
+</tr>`;
+  };
+
+  const html =
+`<table cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:100%;border:1px solid ${NAVY};border-collapse:collapse;background:#FFFFFF;">
+<tr><td style="padding:22px 22px 20px 25px;border-bottom:1px solid ${NAVY};">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+    <td style="vertical-align:bottom;">
+      <div style="${F}font-size:12px;font-weight:400;color:${INK};">${heading ? `<b style="color:${NAVY};">${esc(heading)}</b> &nbsp;·&nbsp; ` : ''}As of ${esc(today)}</div>
+      <div style="${F}font-size:14px;font-weight:700;color:${INK};margin-top:6px;">${esc(countTxt)}${late ? ` &nbsp;·&nbsp; <span style="color:${RED};">${late} overdue</span>` : ''}</div>
+    </td>
+    <td align="right" style="vertical-align:bottom;white-space:nowrap;">
+      <div style="${F}font-size:12px;font-weight:400;color:${INK};">Total</div>
+      <div style="${F}font-size:22px;font-weight:500;color:${NAVY};margin-top:2px;line-height:1.1;">${fullMoney(total)}</div>
+    </td>
+  </tr></table>
+</td></tr>
+<tr><td style="padding:0;">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+${sections
+  ? sections.filter(sec => sec.rows.length).map(sec => {
+      const sl = sec.rows.filter(r => r.daysLate != null && r.daysLate > 0).length;
+      return `<tr><td colspan="3" style="padding:24px 22px 10px 25px;border-bottom:1px solid ${NAVY};">
+    <div style="${F}font-size:14px;font-weight:700;color:${NAVY};">${esc(sec.title)}</div>
+    <div style="${F}font-size:12px;font-weight:400;color:${INK};margin-top:3px;">${sec.rows.length} line ${sec.rows.length === 1 ? 'item' : 'items'}${sl ? ` · <span style="color:${RED};font-weight:700;">${sl} late</span>` : ''}${sec.note ? ' · ' + esc(sec.note) : ''}</div>
+  </td></tr>\n` + sec.rows.map((r, i) => item(r, i === sec.rows.length - 1)).join('\n');
+    }).join('\n')
+  : list.map((r, i) => item(r, i === list.length - 1)).join('\n')}
+  </table>
+</td></tr>
+</table><br>`;
+
+  const text = [summaryTxt, '',
+    ...list.map(r => [
+      `${r.order || r.orderId}${r.line ? ' · P' + NUM(r.line) : ''}${r.subStatus ? ' · ' + r.subStatus : ''}` +
+        ` — ${statusOf(r)}${r.daysLate == null ? '' : ' (' + DUE_DATE(r) + ')'} — ${fullMoney(r.value)}`,
+      `${plain(r.customer) || '—'} — ${plain(r.desc) || '—'}`,
+      metaOf(r),
+      ORDER_URL(r) || ''
+    ].filter(Boolean).join('\n'))].join('\n\n');
+
+  return {html, text};
+}
+
+(function wireCopyAll(){
+  const b = document.getElementById('ltCopyAll');
+  if (!b) return;
+  b.addEventListener('click', async () => {
+    if (!LIST_ROWS.length) return;
+    const ok = await copyCard(tableFor(LIST_ROWS));
+    const n = LIST_ROWS.length;
+    copyToast(ok ? `<b>Copied ${n} ${n === 1 ? 'line' : 'lines'}</b><span>Paste the table into your email</span>`
+                 : `<b>Could not copy</b><span>Your browser blocked the clipboard</span>`);
+  });
+})();
+
+(function wireRowCopy(){
+  const tbl = document.getElementById('ltTable');
+  if (!tbl) return;
+  tbl.addEventListener('click', async e => {
+    if (e.target.closest('a, th')) return;             /* the link still opens */
+    if (String(getSelection() || '').trim()) return;   /* selecting text is not a copy */
+    const tr = e.target.closest('tbody tr[data-i]');
+    if (!tr) return;
+    const r = LIST_ROWS[Number(tr.dataset.i)];
+    if (!r) return;
+    const card = cardFor(r);
+    const ok = await copyCard(card);
+    tr.classList.remove('copied'); void tr.offsetWidth; tr.classList.add('copied');
+    copyToast(ok ? `<b>Copied ${esc(card.label)}</b><span>Paste it into your email</span>`
+                 : `<b>Could not copy</b><span>Your browser blocked the clipboard</span>`);
+  });
+})();
+
+/* one listener for the headers, however often the table is rebuilt */
+(function wireList(){
+  const tbl = document.getElementById('ltTable');
+  if (!tbl) return;
+  tbl.addEventListener('click', e => {
+    const th = e.target.closest('th[data-k]');
+    if (!th) return;
+    const k = th.dataset.k;
+    /* first click: numbers and lateness high→low, text A→Z; again flips it */
+    const textual = ['order','customer','desc','center','rep','queue','sub','category'].includes(k);
+    if (LIST.key === k) LIST.dir = -LIST.dir;
+    else { LIST.key = k; LIST.dir = textual || k === 'due' || k === 'queue' ? 1 : -1; }
+    renderList(window.__lastRows || chartRows());
+  });
+})();
 
 /* ============================================================
    8. SCROLL INTERACTION
@@ -6951,14 +9046,15 @@ function renderKeepingPlace(){
 }
 
 /* The header wears the identifier colour of whatever is selected — a centre's
-   own, red for Valley, navy for South Bay, ink for everything. */
+   own, Valley's maroon (Tarzana's), South Bay's blue (Long Beach's), ink for
+   everything. Never the FASTSIGNS red: red means late. */
 function paintTopbar(){
   const bar = document.getElementById('topbar');
   if (!bar) return;
   const L = state.lens;
   let c = null;
-  if (L === 'valley')        c = getComputedStyle(document.documentElement).getPropertyValue('--red').trim();
-  else if (L === 'southbay') c = getComputedStyle(document.documentElement).getPropertyValue('--blue').trim();
+  if (L === 'valley')        c = getComputedStyle(document.documentElement).getPropertyValue('--valley').trim();
+  else if (L === 'southbay') c = getComputedStyle(document.documentElement).getPropertyValue('--southbay').trim();
   else if (COLOR_OF[L])      c = COLOR_OF[L];
   /* deepened so paper text still reads on the lighter identifiers */
   bar.style.setProperty('--topbar-bg', c ? darken(c, 0.26) : '');
@@ -6967,6 +9063,14 @@ function paintTopbar(){
 function paintFilters(){
   paintTopbar();
   paintSubText();
+  const tv = document.getElementById('subTriggerV');
+  const tr = document.getElementById('subTrigger');
+  if (tv) tv.textContent = state.subStatus === null ? 'All' : (state.subStatus || SUB_NONE);
+  if (tr) tr.classList.toggle('on', state.subStatus !== null);
+  /* the chevron carries a dot while the board is narrowed, so a folded third
+     bar never hides that a substatus is on */
+  const sc = document.getElementById('scopeToggle');
+  if (sc) sc.classList.toggle('filtered', state.subStatus !== null || !!state.flow);
   document.querySelectorAll('.district-seg button').forEach(x =>
     x.setAttribute('aria-pressed', String(!state.rep && x.dataset.f === state.lens)));
   document.querySelectorAll('.centers button').forEach(x =>
@@ -7028,6 +9132,98 @@ document.querySelectorAll('.district-seg button').forEach(b =>
        vanish underneath you. */
   });
   addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+})();
+
+/* ---- SUBSTATUS MENU -------------------------------------------------------
+   The outlined trigger at the end of the third bar opens a full-width panel of
+   every substatus in the live data, grouped by family. The header label opens
+   the same panel; only its × clears the filter. */
+(function wireSubMenu(){
+  const trig  = document.getElementById('subTrigger');
+  const panel = document.getElementById('subMenu');
+  const bar   = document.getElementById('scopeMenu');
+  const tog   = document.getElementById('scopeToggle');
+  if (!trig || !panel) return;
+
+  /* family = the first word, when two or more share it; inside a family the
+     name drops that word if a separator follows ("Cutting | Kern" → "Kern") */
+  const famOf = k => k.split(/[\s:|>-]/)[0].toLowerCase();
+  const shortName = (k, head) => {
+    const rest = k.slice(head.length);
+    return /^\s*[|:>-]/.test(rest) ? rest.replace(/^\s*[|:>-]\s*/, '') : k;
+  };
+
+  function build(){
+    const rows = visibleLens().filter(inScope);
+    const tally = new Map();
+    for (const r of rows){
+      const k = r.subStatus || '';
+      const t = tally.get(k) || {n:0, late:0};
+      t.n++; if (r.daysLate !== null && r.daysLate > 0) t.late++;
+      tally.set(k, t);
+    }
+    withKnownSubs(tally, () => ({n:0, late:0}));
+    if (state.subStatus !== null && !tally.has(state.subStatus))
+      tally.set(state.subStatus, {n:0, late:0});
+
+    const amt = t => `${t.n}` + (t.late ? ` · <b>${t.late} late</b>` : '');
+    const item = (key, label, full) =>
+      `<button role="menuitemradio" data-sub="${esc(key === '' ? '__none__' : key)}" ` +
+      `title="${esc(full)}" aria-pressed="${state.subStatus === key}">` +
+      `<span class="nm">${esc(label)}</span><span class="amt">${amt(tally.get(key))}</span></button>`;
+
+    const keys = [...tally.keys()].sort(subStatusOrder);
+    let html = subFamilies(keys).map(g =>
+      `<div class="sub-fam"><h4>${esc(g.head)}</h4>` +
+      g.list.map(k => item(k, subShort(k, g.head), k || SUB_NONE)).join('') + `</div>`).join('');
+    if (!rows.length) html = `<div class="sub-empty">Nothing in the current scope</div>`;
+
+    document.getElementById('subCols').innerHTML = html;
+    document.getElementById('subAllAmt').textContent = rows.length + ' lines';
+    panel.querySelector('.sub-all').setAttribute('aria-pressed', String(state.subStatus === null));
+  }
+
+  const isOpen = () => panel.classList.contains('open');
+  function setOpen(on){
+    if (on){
+      build();
+      /* the menu hangs from the third bar, so the bar comes down with it */
+      if (bar && !bar.classList.contains('open')){
+        bar.classList.add('open');
+        if (tog) tog.setAttribute('aria-expanded', 'true');
+      }
+    }
+    panel.classList.toggle('open', on);
+    trig.setAttribute('aria-expanded', String(on));
+  }
+
+  trig.addEventListener('click', e => {
+    e.stopPropagation();
+    if (e.target.closest('.x')){
+      state.subStatus = null;
+      setOpen(false);
+      paintFilters();
+      renderKeepingPlace();
+      return;
+    }
+    setOpen(!isOpen());
+  });
+  panel.addEventListener('click', e => {
+    e.stopPropagation();
+    const b = e.target.closest('button[data-sub]');
+    if (!b) return;
+    const v = b.dataset.sub;
+    state.subStatus = v === '__all__' ? null : v === '__none__' ? '' : v;
+    setOpen(false);
+    paintFilters();
+    renderKeepingPlace();
+  });
+  /* closing the third bar takes the menu with it */
+  if (tog) tog.addEventListener('click', () => { if (isOpen()) setOpen(false); });
+  document.addEventListener('click', e => {
+    if (isOpen() && !panel.contains(e.target) && !trig.contains(e.target)) setOpen(false);
+  });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && isOpen()) setOpen(false); });
 })();
 
 buildCenterFilter();
