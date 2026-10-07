@@ -2,18 +2,20 @@
 <!--
   ============================================================
   HELM, FASTSIGNS production priority dashboard
-  Version : 2026-10-06 · "Due Tomorrow"
-  Date    : Tuesday, October 6, 2026
-  Based on: 2026-10-06 · "Plain Descriptions"
+  Version : 2026-10-07 · "dueDate Filter"
+  Date    : Wednesday, October 7, 2026
+  Based on: 2026-10-06 · "Due Tomorrow"
   Changed in this version:
-    - New "Due Tomorrow" button in the third bar, between Due Today
-      and Everything. It shows every open line due after today and
-      by the next working day, across all stages and substatuses.
-      On a Friday it reads "Due Monday" and includes weekend dates.
-    - Works like the other due buttons: combines with district,
-      centre, salesperson, substatus and group; narrows the whole
-      page; shows in the "Showing only" bar; Copy table follows it;
-      and it has its own link, ?due=tomorrow.
+    - The overdue sweep now sends DateFilterFor "dueDate". CoreBridge
+      only accepts "created", "modified" or "dueDate"; the "due" sent
+      before was silently ignored, so that sweep pulled the most
+      recently changed orders (up to 10 pages per centre) instead of
+      orders due in the past year. Fewer requests per load, and old
+      overdue jobs that nobody has touched now show up.
+  Carried over from "Due Tomorrow": the Due Tomorrow button in the
+  third bar (reads "Due Monday" on a Friday, weekend dates included),
+  combining with every other filter, in the "Showing only" bar, Copy
+  table, and its own link ?due=tomorrow.
   Carried over: plain section descriptions; Valley never red; one
   compact Machine Queues board; cutting pre-due ("Cut today");
   late as a red box; Machine Load job lists; Hasn't Moved
@@ -4036,7 +4038,7 @@ async function fetchTenant(tk, onPage){
   const chunks = await Promise.all(locs.flatMap(l => [
     sweep(tk,l.id,'modified',shift(-150),shift(60), onPage)
       .catch(e => { DIAG.push(tk+'/'+l.name+' modified sweep failed: '+e.message); return []; }),
-    sweep(tk,l.id,'due',shift(-365),shift(-1), onPage).catch(()=>[])
+    sweep(tk,l.id,'dueDate',shift(-365),shift(-1), onPage).catch(()=>[])
   ]));
   const flat = chunks.flat();
   DIAG.push(tk+': '+flat.length+' raw order records');
