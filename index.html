@@ -1,33 +1,23 @@
 <!DOCTYPE html>
 <!--
   ============================================================
-  HELM — FASTSIGNS production priority dashboard
-  Version : 2026-10-06 · "Stan's Review"
+  HELM, FASTSIGNS production priority dashboard
+  Version : 2026-10-06 · "Due Tomorrow"
   Date    : Tuesday, October 6, 2026
-  Based on: 2026-10-06 · "Outline Redraw"
-  Changed in this version (from Stan's walkthrough):
-    - Valley never turns red: picking Valley tints the header in
-      Valley's maroon (#97005E, Tarzana's), South Bay in #004990.
-    - One Machine Queues board — the compact one Stan preferred,
-      now titled "Machine Queues". The large board is retired.
-    - Cutting pre-due: a line on a cutter (Kern, Kongsberg, Vision
-      2550) due by the next working day is flagged red today
-      ("Cut today") — on compact cards, in Every Line Item, At Risk,
-      the run sheet, copied email cards, and red squares on the
-      cutters' rows in Machine Load. Friday reaches through Monday.
-      Nothing else turns red before it is due.
-    - At Risk: only Today (and cut-today) is red; tomorrow and two
-      days out read in black.
-    - Late jumps out: in Every Line Item, At Risk and the Machine
-      Load list, late status is a red box with white type, as on
-      the sales dashboard.
-    - Machine Load: click a square to list its jobs under the grid
-      (click again or × to close); click a machine's name to narrow
-      the page to that machine.
-    - Hasn't Moved: an "Overdue only" switch beside 3/7/14/30 days,
-      for orders that are behind and still haven't moved.
-  Not in this file: the nightly email to Stan and Fernando — it
-  needs Stan's pick of contents and a Sheets + Apps Script sender.
+  Based on: 2026-10-06 · "Plain Descriptions"
+  Changed in this version:
+    - New "Due Tomorrow" button in the third bar, between Due Today
+      and Everything. It shows every open line due after today and
+      by the next working day, across all stages and substatuses.
+      On a Friday it reads "Due Monday" and includes weekend dates.
+    - Works like the other due buttons: combines with district,
+      centre, salesperson, substatus and group; narrows the whole
+      page; shows in the "Showing only" bar; Copy table follows it;
+      and it has its own link, ?due=tomorrow.
+  Carried over: plain section descriptions; Valley never red; one
+  compact Machine Queues board; cutting pre-due ("Cut today");
+  late as a red box; Machine Load job lists; Hasn't Moved
+  "Overdue only".
   ============================================================
 -->
 <html lang="en">
@@ -3287,6 +3277,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <button data-d="act">Needs Action</button>
     <button data-d="late">Overdue</button>
     <button data-d="today">Due Today</button>
+    <button data-d="tomorrow" id="dueNextBtn">Due Tomorrow</button>
     <button data-d="all">Everything</button>
     <span class="scope-sep" aria-hidden="true"></span>
     <button class="sub-trigger" id="subTrigger" aria-haspopup="true" aria-expanded="false">
@@ -3417,7 +3408,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <!-- THE LIST — every open line item in the current filters, in full -->
     <section class="board list-sec" id="listSec">
       <div class="panel-header"><div class="sec-title"><h2>Every Line Item</h2></div>
-        <span class="board-sub">Everything the filters above let through — district, centre, salesperson, due scope, dates and substatus — one row per line item. Click a column to sort; click an order number to open it in CoreBridge.</span></div>
+        <span class="board-sub">One row per line item, following every filter above: district, centre, salesperson, due scope, dates and substatus. Click a column to sort. Click an order number to open it in CoreBridge.</span></div>
       <div class="lt-top">
         <div class="lt-meta" id="ltMeta"></div>
         <button class="lt-copyall" id="ltCopyAll" hidden title="Copy this table for an email">
@@ -3432,7 +3423,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <!-- TODAY ON THE FLOOR — every open line, sorted into can-run and can't-run -->
     <section class="board floor-sec" id="floorSec" data-view="prod">
       <div class="panel-header"><div class="sec-title"><h2>Today on the Floor</h2></div>
-        <span class="board-sub">Every open line sorted by what can happen to it today — ready to run, on a machine, blocked, out with a vendor, moving. Click a group to narrow the whole page to it.</span></div>
+        <span class="board-sub">Every open line sorted by what can happen to it today: ready to run, on a machine, blocked, with a vendor or moving. Click a group to narrow the whole page to it.</span></div>
       <div class="fl-top">
         <div class="fl-note" id="flNote"></div>
         <button class="lt-copyall" id="runSheetBtn" title="Copy today's run sheet for an email"></button>
@@ -3443,7 +3434,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <!-- SINCE YESTERDAY — what changed overnight -->
     <section class="board chg-sec" id="chgSec" data-view="prod">
       <div class="panel-header"><div class="sec-title"><h2>Since Yesterday</h2></div>
-        <span class="board-sub">What changed since the last day this browser saw — new work, work that just went late, substatus moves, and lines that left the board (built, voided or closed).</span></div>
+        <span class="board-sub">What changed since the last day this browser saw: new work, work that just went late, substatus moves, and lines that left the board because they were built, voided or closed.</span></div>
       <div class="lt-meta chg-meta" id="chgMeta"></div>
       <div class="chg-grid" id="chgGrid"></div>
     </section>
@@ -3451,14 +3442,14 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <!-- MACHINE QUEUES — COMPACT: the same queues, six to a row, small cards -->
     <section class="board mqc-sec" id="mqcSec" data-view="prod">
       <div class="panel-header"><div class="sec-title"><h2>Machine Queues</h2></div>
-        <span class="board-sub">One lane per machine and bench, six to a row, in running order — most overdue first. Red cards are late; a red card on a cutter due the next working day means cut it today. Click a card to open it.</span></div>
+        <span class="board-sub">One lane per machine and bench, six to a row, most overdue first. Red cards are late. A red card on a cutter due the next working day means cut it today. Click a card to open it.</span></div>
       <div class="mqc-grid" id="mqcGrid"></div>
     </section>
 
     <!-- MACHINE LOAD — the week ahead, machine by machine -->
     <section class="board load-sec" id="loadSec" data-view="prod">
       <div class="panel-header"><div class="sec-title"><h2>Machine Load</h2></div>
-        <span class="board-sub">Jobs due off each machine over the next seven days — the darker the square, the heavier the day; red on a cutter means work to cut today. Click a square to list its jobs; click a machine's name to narrow the page to it.</span></div>
+        <span class="board-sub">Jobs due off each machine over the next seven days. The darker the square, the heavier the day, and red on a cutter means work to cut today. Click a square to list its jobs, or a machine's name to narrow the page to it.</span></div>
       <div class="ld-wrap" id="ldWrap"></div>
       <div class="ld-pick" id="ldPick"></div>
     </section>
@@ -3466,7 +3457,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <!-- BATCH BY MATERIAL — the same material on the same machine, run together -->
     <section class="board batch-sec" id="batchSec" data-view="prod">
       <div class="panel-header"><div class="sec-title"><h2>Batch by Material</h2></div>
-        <span class="board-sub">Each machine's queue grouped by the product code and material at the start of the product name — two or more jobs that could run on one setup. Click a batch to see its jobs.</span></div>
+        <span class="board-sub">Each machine's queue grouped by the product code and material at the start of the product name, showing jobs that could run on one setup. Click a batch to see its jobs.</span></div>
       <div class="lt-meta" id="btMeta"></div>
       <div class="bt-grid" id="btGrid"></div>
     </section>
@@ -3496,7 +3487,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <!-- OUTSIDE DEPENDENCIES — vendors and transfers -->
     <section class="board out-sec" id="outSec" data-view="prod">
       <div class="panel-header"><div class="sec-title"><h2>Outside Dependencies</h2></div>
-        <span class="board-sub">Work that depends on someone else — what each vendor is holding, and what is moving between centres. The calls to make today.</span></div>
+        <span class="board-sub">Work that depends on someone else: what each vendor is holding and what is moving between centres. These are the calls to make today.</span></div>
       <div class="out-grid">
         <div><h3 class="out-h">With vendors</h3><div id="outVendors"></div></div>
         <div><h3 class="out-h">Transfers between centres</h3><div id="outTransfers"></div></div>
@@ -3529,7 +3520,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <!-- WHERE WORK IS STUCK — open work by substatus family -->
     <section class="board stuck-sec" id="stuckSec">
       <div class="panel-header"><div class="sec-title"><h2>Where Work Is Stuck</h2></div>
-        <span class="board-sub">What is physically holding each job — machine, vendor, permit, transfer — grouped by substatus. The bar is open lines, claret for the overdue share. Click any line to filter the whole page to it.</span></div>
+        <span class="board-sub">What is physically holding each job, grouped by substatus: a machine, a vendor, a permit or a transfer. The bar shows open lines, with the overdue share in claret. Click any line to filter the whole page to it.</span></div>
       <div class="st-meta" id="stMeta"></div>
       <div class="st-grid" id="stGrid"></div>
     </section>
@@ -3537,7 +3528,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <!-- KEEPING SUBSTATUS CURRENT — both views -->
     <section class="board disc-sec" id="discSec">
       <div class="panel-header"><div class="sec-title"><h2>Keeping Substatus Current</h2></div>
-        <span class="board-sub">Every board above is only as good as the substatus behind it. Tracked means a real substatus — not Pending, not blank. The last column is the one to chase: work already in production that nobody has placed.</span></div>
+        <span class="board-sub">Every board above is only as good as the substatus behind it. Tracked means a real substatus, not Pending and not blank. The last column is the one to chase: work already in production that nobody has placed.</span></div>
       <div class="disc-grid">
         <div><h3 class="out-h">By centre</h3><div id="discCentre"></div></div>
         <div data-view="mgmt"><h3 class="out-h">By salesperson</h3><div id="discRep"></div></div>
@@ -3612,13 +3603,13 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
       <div class="k"><span class="sw" style="background:linear-gradient(90deg,#58003A,#97005E)"></span> Valley</div>
       <div class="k"><span class="sw" style="background:linear-gradient(90deg,#00264D,#004990)"></span> South Bay</div>
       <div class="k"><span class="sw" style="background:linear-gradient(90deg,#0E0F13,#34363E)"></span> All centres</div>
-      <div class="k">Pale — open dollars · Solid — overdue or due today</div>
+      <div class="k">Pale: open dollars · Solid: overdue or due today</div>
     </div>
     <div class="legend">
-      <div class="k"><span class="sw" style="background:linear-gradient(90deg,#0A2340,#1A4C7E)"></span> Navy — the time the order had, from taken to due</div>
-      <div class="k"><span class="sw" style="background:linear-gradient(90deg,#9E1219,#DA2128)"></span> Claret — time it has run past due, up to today</div>
+      <div class="k"><span class="sw" style="background:linear-gradient(90deg,#0A2340,#1A4C7E)"></span> Navy: the time the order had, from taken to due</div>
+      <div class="k"><span class="sw" style="background:linear-gradient(90deg,#9E1219,#DA2128)"></span> Claret: time it has run past due, up to today</div>
       <div class="k">A squared-off end means the bar continues beyond the window</div>
-      <div class="k">Square in the row — the centre</div>
+      <div class="k">Square in the row: the centre</div>
     </div>
     <div class="legend" id="centerLegend"></div>
 
@@ -3737,7 +3728,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <!-- HASN'T MOVED — how long each order has sat in its current stage -->
     <section class="board" id="stallSec">
       <div class="panel-header"><div class="sec-title"><h2>Hasn't Moved</h2></div>
-        <span class="board-sub" id="stallSub">Orders sitting in the same stage day after day. Ageing counts from when the order was raised; this counts from the last time it actually moved — which is the thing you can do something about.</span></div>
+        <span class="board-sub" id="stallSub">Orders sitting in the same stage day after day. Ageing counts from when the order was raised. This counts from the last time it actually moved, which is the part you can do something about.</span></div>
       <div class="stall-bar">
         <div class="seg" id="stallWin" role="group" aria-label="Days without moving">
           <button data-n="3">3 Days</button>
@@ -3965,7 +3956,7 @@ const KIOSK = QP.get('kiosk') === '1';
     }
   }
   const d = QP.get('due');
-  if (d && ['act','late','today','all'].includes(d)) state.due = d;
+  if (d && ['act','late','today','tomorrow','all'].includes(d)) state.due = d;
 })();
 let metricsRevealed = false;
 
@@ -4825,6 +4816,18 @@ function preDue(r){
   if (!isCutting(r) || r.daysLate == null || r.daysLate >= 0) return false;
   const due = new Date(); due.setHours(0,0,0,0); due.setDate(due.getDate() - r.daysLate);
   return due <= nextWorkingDay();
+}
+/* DUE TOMORROW — due after today and by the next working day. On a Friday that
+   is Monday (weekend due dates included), so nothing slips past the weekend. */
+function dueByNextWorkDay(r){
+  if (r.daysLate == null || r.daysLate >= 0) return false;
+  const due = new Date(); due.setHours(0,0,0,0); due.setDate(due.getDate() - r.daysLate);
+  return due <= nextWorkingDay();
+}
+/* "Due Tomorrow", or "Due Monday" when tomorrow is not a working day */
+function nextDayLabel(){
+  const n = nextWorkingDay(), t = new Date(); t.setHours(0,0,0,0); t.setDate(t.getDate() + 1);
+  return n.getTime() === t.getTime() ? 'Due Tomorrow' : 'Due ' + n.toLocaleDateString([], {weekday:'long'});
 }
 /* urgency for colour: a pre-due cutting line wears late's red */
 const urgOf = r => preDue(r) ? 'pre' : urgencyOf(r);
@@ -7293,6 +7296,7 @@ function renderSkeleton(){
 function inScope(r){
   const d = state.due;
   if (d === 'today' && r.daysLate !== 0) return false;
+  if (d === 'tomorrow' && !dueByNextWorkDay(r)) return false;
   if (d === 'late'  && !(r.daysLate !== null && r.daysLate > 0)) return false;
   if (d === 'act'   && !(r.daysLate !== null && r.daysLate >= -7)) return false;
 
@@ -7730,7 +7734,8 @@ function renderFocus(){
   else if (L !== 'districts' && L !== 'centers') chips.push(['lens', 'Centre', L]);
   if (state.subStatus !== null) chips.push(['sub', 'Substatus', state.subStatus || SUB_NONE]);
   if (state.flow) chips.push(['flow', 'Group', FLOW_BY[state.flow].t]);
-  if (state.due !== 'all') chips.push(['due', 'Due', {act:'Needs action', late:'Overdue', today:'Due today'}[state.due] || state.due]);
+  if (state.due !== 'all') chips.push(['due', 'Due', {act:'Needs action', late:'Overdue', today:'Due today',
+    tomorrow: nextDayLabel().replace(/^Due /, '')}[state.due] || state.due]);
   if (state.dateFrom || state.dateTo) chips.push(['dates', 'Dates', 'Custom range']);
   bar.hidden = !chips.length;
   if (!chips.length){ bar.innerHTML = ''; return; }
@@ -8508,7 +8513,8 @@ function paintCopyAll(){
 }
 
 function listTitle(){
-  const due = {act:'Needs action', late:'Overdue', today:'Due today', all:'Open work'}[state.due] || 'Open work';
+  const due = {act:'Needs action', late:'Overdue', today:'Due today', tomorrow: nextDayLabel(),
+               all:'Open work'}[state.due] || 'Open work';
   const parts = [due];
   if (state.subStatus !== null) parts.push(state.subStatus || SUB_NONE);
   if (state.flow) parts.push(FLOW_BY[state.flow].t);
@@ -9077,6 +9083,8 @@ function paintFilters(){
     x.setAttribute('aria-pressed', String(!state.rep && x.dataset.c === state.lens)));
   document.querySelectorAll('#scopeMenu button').forEach(x =>
     x.setAttribute('aria-pressed', String(x.dataset.d === state.due)));
+  const nb = document.getElementById('dueNextBtn');
+  if (nb) nb.textContent = nextDayLabel();
 }
 
 /* All Centres carried Torrance's exact violet, so the two were indistinguishable
