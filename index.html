@@ -4,19 +4,21 @@
   HELM, FASTSIGNS production priority dashboard
   Version : 2026-10-07 · "dueDate Filter"
   Date    : Wednesday, October 7, 2026
-  Based on: 2026-10-06 · "Plain Descriptions"
+  Based on: 2026-10-06 · "Due Tomorrow"
   Changed in this version:
     - The overdue sweep now sends DateFilterFor "dueDate". CoreBridge
       only accepts "created", "modified" or "dueDate"; the "due" sent
       before was silently ignored, so that sweep pulled the whole order
       history (capped at 10 pages) instead of the past year's due dates.
       Faster loads, and old overdue jobs past the 10-page cap now return.
-  Carried over from "Plain Descriptions": plain-sentence section
-  descriptions; timeline legend with colons.
-  Carried over from "Stan's Review": Valley never red; one compact
-  Machine Queues board; cutting pre-due ("Cut today"); At Risk red
-  only for today and cut today; late as a red box with white type;
-  Machine Load squares open a job list; Hasn't Moved "Overdue only".
+  Carried over from "Due Tomorrow": the Due Tomorrow button in the
+  third bar (reads "Due Monday" on a Friday, weekend dates included),
+  combining with every other filter, in the "Showing only" bar, Copy
+  table, and its own link ?due=tomorrow.
+  Carried over: plain section descriptions; Valley never red; one
+  compact Machine Queues board; cutting pre-due ("Cut today");
+  late as a red box; Machine Load job lists; Hasn't Moved
+  "Overdue only".
   ============================================================
 -->
 <html lang="en">
@@ -3276,6 +3278,7 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
     <button data-d="act">Needs Action</button>
     <button data-d="late">Overdue</button>
     <button data-d="today">Due Today</button>
+    <button data-d="tomorrow" id="dueNextBtn">Due Tomorrow</button>
     <button data-d="all">Everything</button>
     <span class="scope-sep" aria-hidden="true"></span>
     <button class="sub-trigger" id="subTrigger" aria-haspopup="true" aria-expanded="false">
@@ -3954,7 +3957,7 @@ const KIOSK = QP.get('kiosk') === '1';
     }
   }
   const d = QP.get('due');
-  if (d && ['act','late','today','all'].includes(d)) state.due = d;
+  if (d && ['act','late','today','tomorrow','all'].includes(d)) state.due = d;
 })();
 let metricsRevealed = false;
 
@@ -4814,6 +4817,18 @@ function preDue(r){
   if (!isCutting(r) || r.daysLate == null || r.daysLate >= 0) return false;
   const due = new Date(); due.setHours(0,0,0,0); due.setDate(due.getDate() - r.daysLate);
   return due <= nextWorkingDay();
+}
+/* DUE TOMORROW — due after today and by the next working day. On a Friday that
+   is Monday (weekend due dates included), so nothing slips past the weekend. */
+function dueByNextWorkDay(r){
+  if (r.daysLate == null || r.daysLate >= 0) return false;
+  const due = new Date(); due.setHours(0,0,0,0); due.setDate(due.getDate() - r.daysLate);
+  return due <= nextWorkingDay();
+}
+/* "Due Tomorrow", or "Due Monday" when tomorrow is not a working day */
+function nextDayLabel(){
+  const n = nextWorkingDay(), t = new Date(); t.setHours(0,0,0,0); t.setDate(t.getDate() + 1);
+  return n.getTime() === t.getTime() ? 'Due Tomorrow' : 'Due ' + n.toLocaleDateString([], {weekday:'long'});
 }
 /* urgency for colour: a pre-due cutting line wears late's red */
 const urgOf = r => preDue(r) ? 'pre' : urgencyOf(r);
@@ -7282,6 +7297,7 @@ function renderSkeleton(){
 function inScope(r){
   const d = state.due;
   if (d === 'today' && r.daysLate !== 0) return false;
+  if (d === 'tomorrow' && !dueByNextWorkDay(r)) return false;
   if (d === 'late'  && !(r.daysLate !== null && r.daysLate > 0)) return false;
   if (d === 'act'   && !(r.daysLate !== null && r.daysLate >= -7)) return false;
 
@@ -7719,7 +7735,8 @@ function renderFocus(){
   else if (L !== 'districts' && L !== 'centers') chips.push(['lens', 'Centre', L]);
   if (state.subStatus !== null) chips.push(['sub', 'Substatus', state.subStatus || SUB_NONE]);
   if (state.flow) chips.push(['flow', 'Group', FLOW_BY[state.flow].t]);
-  if (state.due !== 'all') chips.push(['due', 'Due', {act:'Needs action', late:'Overdue', today:'Due today'}[state.due] || state.due]);
+  if (state.due !== 'all') chips.push(['due', 'Due', {act:'Needs action', late:'Overdue', today:'Due today',
+    tomorrow: nextDayLabel().replace(/^Due /, '')}[state.due] || state.due]);
   if (state.dateFrom || state.dateTo) chips.push(['dates', 'Dates', 'Custom range']);
   bar.hidden = !chips.length;
   if (!chips.length){ bar.innerHTML = ''; return; }
@@ -8497,7 +8514,8 @@ function paintCopyAll(){
 }
 
 function listTitle(){
-  const due = {act:'Needs action', late:'Overdue', today:'Due today', all:'Open work'}[state.due] || 'Open work';
+  const due = {act:'Needs action', late:'Overdue', today:'Due today', tomorrow: nextDayLabel(),
+               all:'Open work'}[state.due] || 'Open work';
   const parts = [due];
   if (state.subStatus !== null) parts.push(state.subStatus || SUB_NONE);
   if (state.flow) parts.push(FLOW_BY[state.flow].t);
@@ -9066,6 +9084,8 @@ function paintFilters(){
     x.setAttribute('aria-pressed', String(!state.rep && x.dataset.c === state.lens)));
   document.querySelectorAll('#scopeMenu button').forEach(x =>
     x.setAttribute('aria-pressed', String(x.dataset.d === state.due)));
+  const nb = document.getElementById('dueNextBtn');
+  if (nb) nb.textContent = nextDayLabel();
 }
 
 /* All Centres carried Torrance's exact violet, so the two were indistinguishable
