@@ -2,24 +2,18 @@
 <!--
   ============================================================
   HELM, FASTSIGNS production priority dashboard
-  Version : 2026-10-07 · "dueDate Filter"
-  Date    : Wednesday, October 7, 2026
-  Based on: 2026-10-06 · "Due Tomorrow"
-  Changed in this version:
-    - The overdue sweep now sends DateFilterFor "dueDate". CoreBridge
-      only accepts "created", "modified" or "dueDate"; the "due" sent
-      before was silently ignored, so that sweep pulled the most
-      recently changed orders (up to 10 pages per centre) instead of
-      orders due in the past year. Fewer requests per load, and old
-      overdue jobs that nobody has touched now show up.
-  Carried over from "Due Tomorrow": the Due Tomorrow button in the
-  third bar (reads "Due Monday" on a Friday, weekend dates included),
-  combining with every other filter, in the "Showing only" bar, Copy
-  table, and its own link ?due=tomorrow.
-  Carried over: plain section descriptions; Valley never red; one
-  compact Machine Queues board; cutting pre-due ("Cut today");
-  late as a red box; Machine Load job lists; Hasn't Moved
-  "Overdue only".
+  Version : 2026-10-21 · "Flow In Centre Colours"
+  Date    : Wednesday, October 21, 2026
+  Based on: 2026-10-16 · "Today Flow"
+  Changed in this version (TV mode):
+    - Today Flow: the ribbons from substatus group to substatus now
+      keep each centre's colour (Long Beach #004990, Torrance
+      #0066B3, Santa Ana #0096D6, Thousand Oaks #52247F, Tarzana
+      #97005E), so a centre can be followed from left to right all
+      the way to its substatus. Blocks keep their group colours.
+  Carried over: every earlier change, including Today Flow, Today
+  Lanes, Machines Today, hold-any-board tabs, Pause button, pages
+  and clickable More.
   ============================================================
 -->
 <html lang="en">
@@ -3004,6 +2998,182 @@ body.kiosk .scroll-spacer{display:none}
 /* a wall screen never retracts its own masthead */
 body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;padding:0 54px;pointer-events:auto}
 
+/* ===== SCREEN DOCK — two quiet buttons, bottom right ===== */
+.screen-dock{position:fixed;right:14px;bottom:14px;z-index:80;display:flex;gap:6px;
+  transition:opacity .45s var(--ease-premium), transform .45s var(--ease-premium)}
+/* out of the way until the mouse moves — a TV is driven by a remote */
+.screen-dock.idle{opacity:0;transform:translateY(8px);pointer-events:none}
+.screen-dock button{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 6px;
+  background:#FFFFFF;border:1px solid var(--ink);color:var(--ink);cursor:pointer;
+  font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.screen-dock button span,.screen-dock button kbd{display:none}
+.screen-dock button:hover{padding:0 9px}
+.screen-dock button:hover span,.screen-dock button:hover kbd{display:inline}
+.screen-dock button svg{width:16px;height:16px;flex:none}
+.screen-dock button svg path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:square}
+.screen-dock button kbd{font-family:var(--sans);font-size:9px;font-weight:700;border:1px solid currentColor;
+  padding:0 4px;line-height:14px;letter-spacing:0}
+.screen-dock button[aria-pressed="true"]{background:var(--ink);color:#FFFFFF}
+body.kiosk .screen-dock,body.tv-on .screen-dock{display:none}
+
+/* ===== TV MODE — sized in units of a 16:9 frame, so it fills any TV exactly ===== */
+.tv-view{position:fixed;inset:0;z-index:200;background:#FFFFFF;display:none;
+  align-items:center;justify-content:center;--u:min(1vw, 1.7778vh);cursor:default}
+body.tv-on .tv-view{display:flex}
+body.tv-on{overflow:hidden}
+.tv-frame{width:100%;height:100%;box-sizing:border-box;
+  padding:calc(var(--u) * 1.1) calc(var(--u) * 2.2) calc(var(--u) * .9);
+  display:flex;flex-direction:column;gap:calc(var(--u) * .8);color:var(--ink);font-family:var(--sans)}
+.tv-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline}
+.tv-brand{display:flex;align-items:center;gap:calc(var(--u) * .8);font-size:calc(var(--u) * 1.05);
+  font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.tv-brand img{height:calc(var(--u) * 1.5);width:auto;filter:brightness(0)}
+.tv-scope{font-size:calc(var(--u) * 1.35);font-weight:700;color:var(--blue)}
+.tv-clock{justify-self:end;font-size:calc(var(--u) * 1.0);font-weight:500;text-align:right}
+.tv-clock b{font-weight:700}
+.tv-kpis{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:calc(var(--u) * 1.6)}
+.tv-k{border-top:3px solid var(--ink);padding-top:calc(var(--u) * .35)}
+.tv-k .l{font-size:calc(var(--u) * 1.0);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.tv-k .n{display:flex;align-items:baseline;gap:calc(var(--u) * .8);margin-top:calc(var(--u) * .2)}
+.tv-k .n b{font-size:calc(var(--u) * 3.2);font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
+.tv-k .n span{font-size:calc(var(--u) * 1.1);font-weight:600}
+.tv-k .d{font-size:calc(var(--u) * .95);font-weight:500;margin-top:calc(var(--u) * .25);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+.tv-k.hot{border-top-color:var(--red-deep)}
+.tv-k.hot .n b,.tv-k.hot .l{color:var(--red-deep)}
+.tv-title{display:flex;align-items:baseline;gap:calc(var(--u) * 1.2)}
+.tv-title h2{margin:0;font-size:calc(var(--u) * 1.6);font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.tv-title span{font-size:calc(var(--u) * 1.05);font-weight:500}
+.tv-body{flex:1;min-height:0;overflow:hidden;animation:tvIn .6s var(--ease-premium) both}
+@keyframes tvIn{from{opacity:0;transform:translateY(calc(var(--u) * .6))}to{opacity:1;transform:none}}
+.tv-empty{font-size:calc(var(--u) * 1.6);font-weight:500;padding-top:calc(var(--u) * 4);text-align:center}
+
+/* queues */
+.tv-lanes{display:grid;grid-template-columns:repeat(6, minmax(0,1fr));gap:calc(var(--u) * 1.4);height:100%}
+.tv-lane{border-top:2px solid var(--ink);padding-top:calc(var(--u) * .4);min-width:0;overflow:hidden;
+  display:flex;flex-direction:column;height:100%;box-sizing:border-box}
+.tv-lane .cards{min-height:0;flex-shrink:0}
+.tv-lane .sm{font-size:calc(var(--u) * .9);font-weight:500;margin-top:calc(var(--u) * .1)}
+.tv-lane.next{border-top-color:var(--blue)}
+.tv-lane.stop{border-top-color:var(--red-deep)}
+.tv-lane .f{font-size:calc(var(--u) * .78);font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.tv-lane .nm{display:flex;justify-content:space-between;align-items:baseline;gap:calc(var(--u) * .5)}
+.tv-lane .nm b{font-size:calc(var(--u) * 1.35);font-weight:700;color:var(--blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-lane .nm span{font-size:calc(var(--u) * .95);font-weight:700;white-space:nowrap}
+.tv-lane .nm span em{font-style:normal;color:var(--red-deep)}
+.tv-c{border:1px solid var(--ink);padding:calc(var(--u) * .35) calc(var(--u) * .55);margin-top:calc(var(--u) * .45);
+  background:#FFFFFF;font-size:calc(var(--u) * .92);line-height:1.25}
+.tv-c .a{display:flex;justify-content:space-between;gap:calc(var(--u) * .4);font-weight:700;white-space:nowrap}
+.tv-c .a i{font-style:normal;color:var(--blue);overflow:hidden;text-overflow:ellipsis}
+.tv-c .c{font-weight:600;margin-top:calc(var(--u) * .1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-c .p{font-size:calc(var(--u) * .8);font-weight:500;margin-top:calc(var(--u) * .1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-c .p u{text-decoration:none;display:inline-block;width:calc(var(--u) * .5);height:calc(var(--u) * .5);
+  margin-right:calc(var(--u) * .35);vertical-align:0}
+.tv-c.late .p u{box-shadow:0 0 0 1px #FFFFFF}
+.tv-c.late{background:var(--red-deep);border-color:var(--red-deep);color:#FFFFFF}
+.tv-c.late .a i{color:#FFFFFF}
+.tv-c.today{box-shadow:inset calc(var(--u) * .3) 0 0 var(--red)}
+.tv-c.today .a span{color:var(--red)}
+.tv-more{margin-top:calc(var(--u) * .45);font-size:calc(var(--u) * .9);font-weight:700;color:var(--blue);cursor:pointer;
+  display:inline-block;border-bottom:1px solid transparent}
+.tv-more:hover{border-bottom-color:currentColor}
+.tv-more:empty{display:none}
+/* opened from "+ N More": everything, scrollable, rotation paused */
+.tv-body.open{overflow:auto}
+.tv-lane.open{overflow:auto}
+
+/* machine load */
+.tv-ld{width:100%;height:100%;border-collapse:separate;border-spacing:calc(var(--u) * .25);table-layout:fixed;font-variant-numeric:tabular-nums}
+.tv-ld th{font-size:calc(var(--u) * .9);font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-align:center;padding-bottom:calc(var(--u) * .3)}
+.tv-ld th span{display:block;font-size:calc(var(--u) * .85);font-weight:500;letter-spacing:0;text-transform:none}
+.tv-ld th.m,.tv-ld td.m{text-align:left;width:calc(var(--u) * 13)}
+.tv-ld th.od{color:var(--red-deep)} .tv-ld th.td{color:var(--blue)}
+.tv-ld td{text-align:center;border:1px solid rgba(14,15,19,0.14);font-size:calc(var(--u) * 1.25);font-weight:700}
+.tv-ld td.m{border:0;border-top:1px solid var(--line);font-size:calc(var(--u) * 1.15);color:var(--blue)}
+.tv-ld td.m small{display:block;font-size:calc(var(--u) * .72);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.tv-ld td i{font-style:normal;color:rgba(14,15,19,0.25);font-weight:400}
+
+/* lists: due next working day, at risk */
+.tv-list{width:100%;border-collapse:collapse;table-layout:fixed}
+.tv-list th{font-size:calc(var(--u) * .82);font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-align:left;
+  padding:0 calc(var(--u) * .5) calc(var(--u) * .45);border-bottom:2px solid var(--ink)}
+.tv-list td{font-size:calc(var(--u) * 1.0);font-weight:500;padding:calc(var(--u) * .42) calc(var(--u) * .4);border-bottom:1px solid var(--line);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
+.tv-list th{padding-left:calc(var(--u) * .4);padding-right:calc(var(--u) * .4)}
+.tv-list td.pr,.tv-list td.wy{white-space:normal}
+.tv-list td.pr div,.tv-list td.wy div{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.25}
+.tv-list td.pr div{font-weight:600}
+.tv-list td.o{font-weight:700;color:var(--blue)}
+.tv-list td.cu{font-weight:700}
+.tv-list td.v,.tv-list th.v{text-align:right}
+.tv-list .flag{display:inline-block;background:var(--red-deep);color:#FFFFFF;font-weight:700;padding:0 calc(var(--u) * .3);line-height:1.5;font-size:calc(var(--u) * .92)}
+.tv-list .ln,.tv-c .ln{margin-left:calc(var(--u) * .15)}
+.tv-flow{display:block}
+.tv-flow text{fill:var(--ink);font-family:inherit;paint-order:stroke;stroke:#FFFFFF;stroke-width:3px;stroke-linejoin:round}
+.tv-flow text .b{font-weight:700}
+.tv-flow text .m{font-weight:500}
+.tv-flow text .cut{font-weight:700;fill:var(--red-deep)}
+.tv-flow text.hd{font-weight:700;letter-spacing:.1em;stroke:none}
+.tv-flow .fl-n{cursor:pointer}
+.tv-flow .fl-n:hover rect{fill:var(--ink)}
+.tv-flow path{transition:fill-opacity .2s}
+.tv-flow:hover path{fill-opacity:.12}
+.tv-flow path:hover{fill-opacity:.6}
+.tv-list.fit{table-layout:auto}
+.tv-list .sh{width:1%;white-space:nowrap;padding-right:calc(var(--u) * 1.1)}
+.tv-list td.cu{width:24%}
+.tv-list td.cu div{max-width:calc(var(--u) * 24);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tv-list th.wy,.tv-list td.wy{width:15%}
+.tv-list td.mc{padding-right:calc(var(--u) * 1.6)}
+.tv-list td.mc{font-weight:700;color:var(--blue);font-size:calc(var(--u) * 1.05)}
+.tv-list td.mc small{display:block;font-size:calc(var(--u) * .72);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.tv-list tr.mfirst td{border-top:2px solid var(--ink)}
+.tv-list tbody tr.mfirst:first-child td{border-top:0}
+.tv-list .tvwhy{font-size:calc(var(--u) * .85);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.tv-list td.ce i{display:inline-block;width:calc(var(--u) * .55);height:calc(var(--u) * .55);margin-right:calc(var(--u) * .45)}
+
+/* footer: which board, and how long until the next */
+.tv-foot{display:flex;justify-content:space-between;align-items:center;padding-top:calc(var(--u) * .5);border-top:1px solid var(--line)}
+.tv-pills{display:flex;gap:calc(var(--u) * .6)}
+.tv-pill{position:relative;font-size:calc(var(--u) * .82);font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:calc(var(--u) * .25) calc(var(--u) * .7);border:1px solid var(--ink);overflow:hidden}
+.tv-pill.on{background:var(--ink);color:#FFFFFF}
+.tv-pill.on::after{content:'';position:absolute;left:0;bottom:0;height:3px;background:var(--red);
+  width:0;animation:tvBar var(--tvdur, 30s) linear forwards}
+body.tv-paused .tv-pill.on::after{animation-play-state:paused}
+@keyframes tvBar{to{width:100%}}
+.tv-next{font-size:calc(var(--u) * .85);font-weight:600}
+.tv-ctl{display:flex;align-items:center;gap:calc(var(--u) * .9)}
+.tv-pause{display:inline-flex;align-items:center;gap:calc(var(--u) * .45);cursor:pointer;
+  background:#FFFFFF;color:var(--ink);border:1px solid var(--ink);padding:calc(var(--u) * .25) calc(var(--u) * .7);
+  font-family:var(--sans);font-size:calc(var(--u) * .82);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.tv-pause svg{width:calc(var(--u) * .8);height:calc(var(--u) * .8)}
+.tv-pause svg path{fill:currentColor}
+body.tv-paused .tv-pause{background:var(--ink);color:#FFFFFF}
+.tv-pill{cursor:pointer;white-space:nowrap}
+.tv-pill:hover{background:rgba(14,15,19,.06)}
+.tv-pill.on:hover{background:var(--ink)}
+.tv-pill .hold{display:inline-block;margin-left:calc(var(--u) * .45)}
+
+/* ===== BIG SCREEN — the whole dashboard, scaled to fill a large display.
+   The body is zoomed by --bigz; anything sized to the screen's height is
+   divided back by it so it is still exactly one screen tall. ===== */
+html.big-screen .hero{height:calc(100vh / var(--bigz) - var(--topbar))}
+html.big-screen #gantt.pinned{height:calc(100vh / var(--bigz) - var(--topbar))}
+html.big-screen .metrics-panel{min-height:calc(100vh / var(--bigz))}
+html.big-screen .metrics-panel .km-stage{height:calc(100vh / var(--bigz) - 210px)}
+html.big-screen .km-stage{height:calc(100vh / var(--bigz) - var(--topbar) - 150px)}
+html.big-screen .scroll-spacer{height:calc(52vh / var(--bigz))}
+html.big-screen .details-panel{min-height:calc(100vh / var(--bigz))}
+html.big-screen .board.full{padding-top:calc(7vh / var(--bigz))}
+html.big-screen .full-stage{top:calc(var(--topbar) + 7vh / var(--bigz))}
+html.big-screen .board.full .rise:not(.chart){margin-top:calc(34vh / var(--bigz))}
+html.big-screen .board.full .chart-plot{height:clamp(380px, 60vh / var(--bigz), 740px)}
+html.big-screen .lt-wrap{max-height:min(78vh / var(--bigz), 900px)}
+html.big-screen .sub-menu.open{max-height:min(72vh / var(--bigz), 720px)}
+/* TV mode keeps filling the TV exactly even with Big screen on */
+html.big-screen .tv-view{--u:calc(min(1vw, 1.7778vh) / var(--bigz))}
+
 /* ===== SALESPERSON SIDEBAR =====
    Rolls-Royce's slide-in menu, in Helm's own paper-and-ink language. A
    full-height panel enters from the left over a dimmed page; the salespeople
@@ -3864,6 +4034,36 @@ body.kiosk .topbar.retracted .tb-l1{height:var(--topbar-l1,40px);opacity:1;paddi
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js"></script>
+<!-- TV MODE — a full-screen wall display that rotates through the boards -->
+<div class="tv-view" id="tvView" aria-hidden="true">
+  <div class="tv-frame" id="tvFrame">
+    <div class="tv-head">
+      <span class="tv-brand" id="tvBrand"></span>
+      <span class="tv-scope" id="tvScope"></span>
+      <span class="tv-clock" id="tvClock"></span>
+    </div>
+    <div class="tv-kpis" id="tvKpis"></div>
+    <div class="tv-title" id="tvTitle"></div>
+    <div class="tv-body" id="tvBody"></div>
+    <div class="tv-foot">
+      <div class="tv-pills" id="tvPills"></div>
+      <span class="tv-ctl"><span class="tv-next" id="tvNext"></span>
+        <button class="tv-pause" id="tvPause" aria-label="Pause"></button></span>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN DOCK — big-screen scale (B) and TV mode (T) -->
+<div class="screen-dock" id="screenDock">
+  <button id="bigBtn" aria-pressed="false" title="Big screen (B): scale the whole dashboard to fill a large screen">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    <span>Big screen</span><kbd>B</kbd>
+  </button>
+  <button id="tvBtn" title="TV mode (T): full-screen wall display that rotates through the boards">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v12H3zM8 21h8M12 17v4"/></svg>
+    <span>TV mode</span><kbd>T</kbd>
+  </button>
+</div>
 <script>
 "use strict";
 
@@ -4038,7 +4238,7 @@ async function fetchTenant(tk, onPage){
   const chunks = await Promise.all(locs.flatMap(l => [
     sweep(tk,l.id,'modified',shift(-150),shift(60), onPage)
       .catch(e => { DIAG.push(tk+'/'+l.name+' modified sweep failed: '+e.message); return []; }),
-    sweep(tk,l.id,'dueDate',shift(-365),shift(-1), onPage).catch(()=>[])
+    sweep(tk,l.id,'due',shift(-365),shift(-1), onPage).catch(()=>[])
   ]));
   const flat = chunks.flat();
   DIAG.push(tk+': '+flat.length+' raw order records');
@@ -5238,10 +5438,12 @@ function heightBudget(nSections){
   const headH = head ? head.getBoundingClientRect().height : 30;
   /* only the frame's own bottom padding is held back */
   const room = innerHeight - topbarPx() - base - 20;
+  /* on screen px → layout px when Big screen has the body zoomed */
+  const z = (typeof BIG_Z === 'number' && BIG_Z > 0) ? BIG_Z : 1;
 
   return {
-    full: Math.max(120, Math.round(room - nSections * headH)),
-    solo: Math.max(170, Math.round(room - headH))
+    full: Math.max(120, Math.round((room - nSections * headH) / z)),
+    solo: Math.max(170, Math.round((room - headH) / z))
   };
 }
 
@@ -7356,6 +7558,7 @@ function render(){
   window.__lastS = S; renderKeyMetrics(S);
   renderGantt(rows);
   renderUnmapped(rows);
+  if (window.__TV_ON && typeof renderTV === 'function') renderTV();
 }
 
 /* ============================================================
@@ -9495,6 +9698,714 @@ if (location.hash && !KIOSK){
     }
   }, 300);
 }
+
+/* ============================================================
+   BIG SCREEN (B) — the whole dashboard, scaled to fill a large display.
+   The page lays itself out as if the screen were 1,280 px wide and is then
+   zoomed to fill the real width: on a TV whose browser reports 1,920 px that
+   is ×1.5, so every word and card is half as big again and still fits.
+   ============================================================ */
+const BIG_KEY = 'fs_helm_big';
+let BIG_ON = false;
+var BIG_Z = 1;   /* var, not let: read by heightBudget(), which can run first */
+function applyBig(){
+  const z = BIG_ON ? Math.max(1, Math.min(3, innerWidth / 1280)) : 1;
+  BIG_Z = z;
+  document.documentElement.classList.toggle('big-screen', BIG_ON);
+  document.documentElement.style.setProperty('--bigz', z.toFixed(3));
+  /* the body is zoomed, not the page root: scrolling, page height and fixed
+     elements then all stay in step */
+  document.body.style.zoom = z === 1 ? '' : z.toFixed(3);
+  const b = document.getElementById('bigBtn');
+  if (b) b.setAttribute('aria-pressed', String(BIG_ON));
+  if (HAS_GSAP) setTimeout(() => ScrollTrigger.refresh(), 60);
+}
+function setBig(on, keep){
+  BIG_ON = !!on;
+  if (keep) try{ localStorage.setItem(BIG_KEY, BIG_ON ? '1' : '0'); }catch(e){}
+  applyBig();
+  if (window.__lastRows) renderKeepingPlace();
+}
+(function initBig(){
+  let v = QP.get('big');
+  if (v === null) try{ v = localStorage.getItem(BIG_KEY); }catch(e){}
+  BIG_ON = v === '1' || v === 'true';
+  applyBig();
+  let t = null;
+  addEventListener('resize', () => { if (!BIG_ON) return; clearTimeout(t); t = setTimeout(applyBig, 200); });
+})();
+
+/* ============================================================
+   TV MODE (T) — a full-screen wall display. A header with the scope and the
+   clock, four big counts, then the boards one at a time: the busy machine
+   queues (six lanes a page), machine load, what is due the next working day,
+   and what is at risk — each for 30 seconds, round and round. It reads the
+   same data and filters as the page (?center= and the rest), refreshes with
+   it, and is sized in units of a 16:9 frame so it fills any TV exactly.
+   Remote or keyboard: ← → change board, Space pauses, T or Esc leaves.
+   ============================================================ */
+const TV = {i:0, pg:0, open:false, timer:null, clock:null, paused:false,
+            sec: Math.max(10, Number(QP.get('tvsec')) || 30), slides:[]};
+window.__TV_ON = false;
+
+function tvScopeLabel(){
+  const parts = [];
+  const L = state.lens;
+  if (state.rep) parts.push(state.rep);
+  else parts.push(L === 'districts' || L === 'centers' ? 'All Centres'
+                : L === 'valley' ? 'Valley' : L === 'southbay' ? 'South Bay' : L);
+  if (state.subStatus !== null) parts.push(state.subStatus || SUB_NONE);
+  if (state.flow) parts.push(FLOW_BY[state.flow].t);
+  if (state.due !== 'all') parts.push({act:'Needs Action', late:'Overdue', today:'Due Today',
+                                       tomorrow: nextDayLabel()}[state.due] || '');
+  return parts.filter(Boolean).join('  ·  ');
+}
+/* every small line on the TV in Title Case, like the totals on the page;
+   figures such as 5d or $4.2K are left as they are */
+const tc = t => String(t || '').replace(/(^|[\s·(\/-])([a-z])/g, (m, a, b) => a + b.toUpperCase());
+const tvMachine = k => { const m = String(k || '').match(/^[^|:>-]+?\s*[|:>-]\s*(.+)$/); return m ? m[1].trim() : String(k || ''); };
+const tvMoney = v => v >= 1000 ? '$' + (v / 1000).toFixed(v >= 10000 ? 0 : 1) + 'K' : '$' + Math.round(v);
+
+function tvClock(){
+  const el = document.getElementById('tvClock');
+  if (!el) return;
+  const now = new Date();
+  const d = now.toLocaleDateString([], {weekday:'short', month:'short', day:'numeric'});
+  const t = now.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+  let up = '';
+  if (demoMode) up = 'Demo Data';
+  else if (lastLoad){
+    const m = Math.max(0, Math.round((Date.now() - lastLoad) / 60000));
+    up = m < 1 ? 'Updated Just Now' : `Updated ${m} Min Ago`;
+  }
+  el.innerHTML = `${esc(d)} · <b>${esc(t)}</b>${up ? `<br>${esc(up)}` : ''}`;
+}
+
+function tvCard(r, showSub){
+  const u = urgOf(r);
+  const cls = u === 'late' || u === 'pre' ? 'late' : u === 'today' ? 'today' : '';
+  const st = u === 'pre' ? 'Cut Today' : tc(dueLabel(r));
+  const prod = String(r.desc || '').split('|').map(x => x.trim()).filter(Boolean);
+  /* the product's own name, past any leading code like "05WS - 3MM ACP" */
+  let name = prod.length > 1 ? prod[1] : (prod[0] || '');
+  if (showSub) name = r.subStatus || 'No Substatus';
+  return `<div class="tv-c ${cls}"><div class="a"><i>${tvOrd(r)}</i>` +
+         `<span>${esc(st)}</span></div><div class="c">${esc(r.customer || '—')}</div>` +
+         `<div class="p"><u style="background:${COLOR_OF[r.center] || '#0E0F13'}"></u>${esc(r.center || '—')}${name ? ' · ' + esc(name) : ''}</div></div>`;
+}
+
+/* order and line set tight: a hair-space dot instead of " · " */
+const tvOrd = r => `${esc(r.order || r.orderId)}${r.line ? '<span class="ln">·P' + NUM(r.line) + '</span>' : ''}`;
+function tvListHTML(list, why, start){
+    const shown = list.slice(start || 0);
+    return `<table class="tv-list fit">
+      <thead><tr><th class="sh">Due</th><th class="sh">Order</th><th>Customer</th><th>Product</th><th class="wy">${why ? 'Why' : 'Substatus'}</th>
+        <th class="sh">Centre</th><th class="sh v">Value</th></tr></thead><tbody>` +
+      shown.map(r => {
+        const u = urgOf(r);
+        const due = u === 'pre' ? 'Cut Today' : r.daysLate === 0 ? 'Today' : u === 'late' ? tc(dueLabel(r)) : DUE_DATE(r);
+        const hot = u === 'pre' || u === 'late' || r.daysLate === 0;
+        return `<tr><td class="sh">${hot ? `<span class="flag">${esc(due)}</span>` : esc(due)}</td>
+          <td class="sh o">${tvOrd(r)}</td>
+          <td class="cu"><div>${esc(r.customer || '—')}</div></td><td class="pr"><div>${esc(r.desc || '—')}</div></td>
+          <td class="wy"><div class="tvwhy">${esc(why ? riskWhy(r) : (r.subStatus || '—'))}</div></td>
+          <td class="sh ce"><i style="background:${COLOR_OF[r.center] || '#0E0F13'}"></i>${esc(r.center || '—')}</td>
+          <td class="sh v">${esc(money(NUM(r.value)))}</td></tr>`;
+      }).join('') + `</tbody></table><div class="tv-more" data-total="${list.length}" data-start="${start || 0}"></div>`;
+}
+
+/* one row per line, the machine named on the first row of its group (and
+   again at the top of each page) */
+function tvMachineTodayHTML(list, start){
+  const shown = list.slice(start || 0);
+  let prev = null;
+  return `<table class="tv-list fit">
+    <thead><tr><th class="sh">Machine</th><th class="sh">Due</th><th class="sh">Order</th><th>Customer</th><th>Product</th><th class="sh">Centre</th><th class="sh v">Value</th></tr></thead><tbody>` +
+    shown.map(r => {
+      const m = r.subStatus || '';
+      const first = m !== prev; prev = m;
+      const fam = (m.match(/^([^|:>-]+?)\s*[|:>-]/) || [, 'Bench'])[1];
+      const u = urgOf(r);
+      const due = u === 'pre' ? 'Cut Today' : 'Today';
+      return `<tr class="${first ? 'mfirst' : ''}" data-m="${esc(m)}">
+        <td class="sh mc">${first ? `<small>${esc(fam.trim())}</small>${esc(tvMachine(m))}` : ''}</td>
+        <td class="sh"><span class="flag">${esc(due)}</span></td>
+        <td class="sh o">${tvOrd(r)}</td>
+        <td class="cu"><div>${esc(r.customer || '—')}</div></td>
+        <td class="pr"><div>${esc(r.desc || '—')}</div></td>
+        <td class="sh ce"><i style="background:${COLOR_OF[r.center] || '#0E0F13'}"></i>${esc(r.center || '—')}</td>
+        <td class="sh v">${esc(money(NUM(r.value)))}</td></tr>`;
+    }).join('') + `</tbody></table><div class="tv-more" data-total="${list.length}" data-start="${start || 0}"></div>`;
+}
+
+
+/* TODAY FLOW — a Sankey of today's lines: centre → substatus group →
+   substatus. A ribbon's thickness is its number of line items; every block
+   carries its dollar total. Drawn at the board's own pixel size. */
+function tvFlowSVG(list, W, H, sets){
+  const u = Math.max(8, W / 95);
+  const CEN = ['Long Beach','Torrance','Santa Ana','Thousand Oaks','Tarzana'];
+  const fam = s => (String(s).match(/^([^|:>-]+?)\s*[|:>-]/) || [, 'Bench'])[1].trim();
+  const BLUE = '#1A4C7E', RED = '#9E1219', GREY = '#6B6E76';
+  const groupOf = r => {
+    const f = flowOf(r);
+    if (f === 'shop') return {k: 'm:' + fam(r.subStatus), t: tc(fam(r.subStatus)), c: BLUE};
+    return ({ready:{k:'ready', t:'Ready To Run', c:GREY}, inside:{k:'blocked', t:'Blocked', c:RED},
+             outside:{k:'blocked', t:'Blocked', c:RED}, vendor:{k:'vendor', t:'Vendors', c:GREY},
+             moving:{k:'moving', t:'Moving', c:GREY}, other:{k:'other', t:'Other', c:GREY}})[f]
+           || {k:'none', t:'No Substatus', c:RED};
+  };
+  const subOf = r => { const s = String(r.subStatus || '').trim();
+    if (!s) return 'Blank';
+    return flowOf(r) === 'shop' ? tvMachine(s) : tc(s); };
+  const mOrd = machineList(list).map(fam).filter((x, i, a) => a.indexOf(x) === i);
+  const gRank = k => k.startsWith('m:') ? mOrd.indexOf(k.slice(2)) : 50 + ['ready','blocked','vendor','moving','other','none'].indexOf(k);
+  const sum = l => l.reduce((a, r) => a + NUM(r.value), 0);
+
+  /* nodes */
+  const cent = [...new Set(list.map(r => r.center || '—'))]
+    .sort((a, b) => ((CEN.indexOf(a) + 1 || 99) - (CEN.indexOf(b) + 1 || 99)))
+    .map(n => ({k:n, t:n, c: COLOR_OF[n] || '#0E0F13', rows: list.filter(r => (r.center || '—') === n)}));
+  const gm = new Map();
+  for (const r of list){ const g = groupOf(r); if (!gm.has(g.k)) gm.set(g.k, {...g, rows: []}); gm.get(g.k).rows.push(r); }
+  const groups = [...gm.values()].sort((a, b) => gRank(a.k) - gRank(b.k));
+  let subs = [];
+  for (const g of groups){
+    const sm = new Map();
+    for (const r of g.rows){ const t = subOf(r); if (!sm.has(t)) sm.set(t, []); sm.get(t).push(r); }
+    const mo = machineList(list).map(tvMachine);
+    subs.push(...[...sm.entries()].map(([t, rows]) => ({k: g.k + '|' + t, t, g, c: g.c, rows}))
+      .sort((a, b) => g.k.startsWith('m:') ? mo.indexOf(a.t) - mo.indexOf(b.t) : b.rows.length - a.rows.length));
+  }
+  /* too many substatuses for their labels: fold the smallest of a group together */
+  const gap = u * .45, hmin = u * 1.25;
+  const maxN = Math.max(4, Math.floor((H + gap) / (hmin + gap)));
+  while (subs.length > maxN){
+    const small = subs.filter(x => !x.fold).sort((a, b) => a.rows.length - b.rows.length);
+    const a = small.find(x => subs.some(y => y !== x && y.g === x.g && !y.fold)) || small[0];
+    let o = subs.find(y => y.fold && y.g === a.g);
+    if (!o){ o = {k: a.g.k + '|+', t: 'Others', g: a.g, c: a.g.c, rows: [], fold: 0}; subs.splice(subs.indexOf(a), 0, o); }
+    o.rows.push(...a.rows); o.fold++; o.t = `${o.fold} Others`;
+    subs.splice(subs.indexOf(a), 1);
+    if (small.length < 2) break;
+  }
+  const tot = list.length;
+  /* vertical layout: proportional, with a floor so every label has room */
+  const place = (nodes, floor) => {
+    const g = nodes.length > 1 ? Math.min(gap * 2, (H * .25) / (nodes.length - 1)) : 0;
+    let fixed = new Set(), k = 0;
+    for (let it = 0; it < 4; it++){
+      const fh = [...fixed].reduce((a, n) => a + floor, 0), fn = [...fixed].reduce((a, n) => a + n.rows.length, 0);
+      k = (H - g * (nodes.length - 1) - fh) / Math.max(1, tot - fn);
+      nodes.forEach(n => { if (n.rows.length * k < floor) fixed.add(n); });
+    }
+    let y = 0;
+    nodes.forEach(n => { n.h = fixed.has(n) ? floor : n.rows.length * k; n.y = y; n.o = y; n.i = y; y += n.h + g; });
+  };
+  place(cent, u * 2.4); place(groups, u * 1.25); place(subs, hmin);
+
+  const nw = u * .8, x1 = u * 13, x2 = W * .40, x3 = W * .66;
+  const id = (k) => { const t = 'f' + Object.keys(sets).length; return t; };
+  let out = '';
+  const ribbon = (xa, ya, ha, xb, yb, hb, col, op) => {
+    const m = (xa + xb) / 2;
+    return `<path d="M${xa},${ya}C${m},${ya} ${m},${yb} ${xb},${yb}L${xb},${yb + hb}C${m},${yb + hb} ${m},${ya + ha} ${xa},${ya + ha}Z" fill="${col}" fill-opacity="${op}"/>`;
+  };
+  /* centre → group */
+  for (const c of cent) for (const g of groups){
+    const n = c.rows.filter(r => g.rows.includes(r)).length;
+    if (!n) continue;
+    const ha = c.h * n / c.rows.length, hb = g.h * n / g.rows.length;
+    out += ribbon(x1 + nw, c.o, ha, x2, g.i, hb, c.c, .32); c.o += ha; g.i += hb;
+  }
+  /* group → substatus, still in each centre's colour, so a centre can be
+     followed all the way to the substatus its work sits in */
+  for (const sb of subs){
+    const g = sb.g;
+    let yi = sb.y;
+    for (const c of cent){
+      const n = sb.rows.filter(r => (r.center || '—') === c.k).length;
+      if (!n) continue;
+      const ha = g.h * n / g.rows.length, hb = sb.h * n / sb.rows.length;
+      out += ribbon(x2 + nw, g.o, ha, x3, yi, hb, c.c, .32); g.o += ha; yi += hb;
+    }
+  }
+  const fs = u * .95, fsS = u * .8;
+  const block = (n, x, col, side, label, extra) => {
+    const t = id(); sets[t] = {title: n.t, rows: n.rows};
+    const cy = n.y + n.h / 2;
+    const tx = side < 0 ? x - u * .5 : x + nw + u * .5;
+    return `<g class="fl-n" data-ft="${t}"><rect x="${x}" y="${n.y}" width="${nw}" height="${Math.max(2, n.h)}" fill="${col}"/>` +
+      `<text x="${tx}" y="${cy}" dy=".35em" text-anchor="${side < 0 ? 'end' : 'start'}" style="font-size:${fs}px">${label}${extra || ''}</text></g>`;
+  };
+  const meta = rows => `<tspan class="m" dx="${u * .5}">${rows.length} · ${esc(tvMoney(sum(rows)))}</tspan>`;
+  for (const c of cent) out += block(c, x1, c.c, -1, `<tspan class="b">${esc(c.t)}</tspan>`, meta(c.rows));
+  for (const g of groups) out += block(g, x2, g.c, 1, `<tspan class="b" fill="${g.c === BLUE ? BLUE : g.c === RED ? RED : '#0E0F13'}">${esc(g.t)}</tspan>`, meta(g.rows));
+  for (const sb of subs){
+    const cut = sb.rows.filter(preDue).length;
+    out += block(sb, x3, sb.c, 1, `<tspan class="b">${esc(sb.t)}</tspan>`,
+      meta(sb.rows) + (cut ? `<tspan class="cut" dx="${u * .6}">${cut} Cut Today</tspan>` : ''));
+  }
+  const head = (x, t, a) => `<text class="hd" x="${x}" y="${-u * .9}" text-anchor="${a}" style="font-size:${u * .78}px">${t}</text>`;
+  return `<svg class="tv-flow" viewBox="0 ${-u * 1.6} ${W} ${H + u * 1.6}" width="${W}" height="${H + u * 1.6}">` +
+    head(x1 + nw, 'CENTRE', 'end') + head(x2, 'SUBSTATUS GROUP', 'start') + head(x3, 'SUBSTATUS', 'start') + out + `</svg>`;
+}
+
+function tvSlides(rows){
+  const slides = [];
+  /* TODAY — every line due today, plus anything on a cutter that must be cut
+     today; whatever stage or substatus it sits in */
+  const todayList = rows.filter(r => r.daysLate === 0 || preDue(r))
+    .sort((a, b) => (preDue(a) - preDue(b)) || (NUM(b.value) - NUM(a.value)));
+  const dueN = todayList.filter(r => r.daysLate === 0).length, cutN = todayList.filter(preDue).length;
+  /* TODAY — the whole day as lanes of cards, like the machine queues: one
+     lane per machine with today's work (and what must be cut today), then
+     lanes for today's work that is not on a machine yet */
+  const todaySum = `${dueN} Due Today${cutN ? ` · ${cutN} To Cut Today` : ''} · ${tvMoney(todayList.reduce((a, r) => a + NUM(r.value), 0))}`;
+  const tMachines = machineList(rows);
+  const tPrio = (a, b) => (preDue(b) - preDue(a)) || (NUM(b.value) - NUM(a.value));
+  const tLanes = tMachines.map(k => { const m = k.match(/^([^|:>-]+?)\s*[|:>-]\s*(.+)$/);
+      return {f: m ? m[1].trim() : 'Bench', name: m ? m[2].trim() : k,
+              list: todayList.filter(r => flowOf(r) === 'shop' && subNorm(r.subStatus || '') === subNorm(k))}; })
+    .concat([
+      {f:'Ready to run', name:'Up next', cls:'next', note:'Needs A Machine', list: todayList.filter(r => flowOf(r) === 'ready')},
+      {f:'Not on a machine', name:'Blocked', cls:'stop', note:'Files Or Customer', sub:true,
+       list: todayList.filter(r => ['inside','outside'].includes(flowOf(r)))},
+      {f:'Not on a machine', name:'Vendors', note:'Outside Supplier', sub:true, list: todayList.filter(r => flowOf(r) === 'vendor')},
+      {f:'Not on a machine', name:'Moving', note:'Transfer Or Shipping', sub:true, list: todayList.filter(r => flowOf(r) === 'moving')},
+      {f:'Not on a machine', name:'No substatus', cls:'stop', note:'Nobody Has Placed It', sub:true,
+       list: todayList.filter(r => ['untracked','other'].includes(flowOf(r)))}
+    ])
+    .filter(L => L.list.length)
+    .map(L => ({...L, list: L.list.slice().sort(tPrio)}));
+  const onMachine = todayList.filter(r => flowOf(r) === 'shop').length;
+  const tPages = Math.max(1, Math.ceil(tLanes.length / 6));
+  for (let p = 0; p < tPages; p++){
+    const page = tLanes.slice(p * 6, p * 6 + 6);
+    slides.push({key: p ? 'today' + p : 'today', grp:'today', pg:p, pill: tPages > 1 ? `Today ${p + 1}/${tPages}` : 'Today', title:'Today',
+      sub: todayList.length ? `${todaySum} · ${onMachine} On A Machine` + (tPages > 1 ? ` · Page ${p + 1} Of ${tPages}` : '')
+                            : 'Nothing Due Today',
+      html: () => !todayList.length ? `<div class="tv-empty">Nothing Due Today In This View</div>` :
+        `<div class="tv-lanes" style="grid-template-columns:repeat(${Math.max(page.length, 3)}, minmax(0,1fr))">` + page.map(L => {
+          const cut = L.list.filter(preDue).length, due = L.list.length - cut;
+          const val = L.list.reduce((a, r) => a + NUM(r.value), 0);
+          const cnt = [due ? `${due} Due` : '', cut ? `<em>${cut} Cut</em>` : ''].filter(Boolean).join(' · ');
+          return `<div class="tv-lane ${L.cls || ''}"><div class="f">${esc(L.f)}</div>
+            <div class="nm"><b>${esc(tc(L.name))}</b><span>${cnt}</span></div>
+            <div class="sm">${esc(tvMoney(val))} · ${esc(L.note || (cut ? 'Cut Before Due' : 'Due Today'))}</div>
+            <div class="cards">${L.list.slice(0, 60).map(r => tvCard(r, L.sub)).join('')}</div>
+            <div class="tv-more" data-total="${L.list.length}"></div></div>`;
+        }).join('') + `</div>`});
+  }
+  /* TODAY FLOW — the same lines as a Sankey, ending on the substatus */
+  if (todayList.length){
+    const stuck = todayList.filter(r => ['inside','outside','untracked'].includes(flowOf(r))).length;
+    slides.push({key:'flow', pill:'Today Flow', title:'Today, by substatus',
+      sub: `${todayList.length} ${todayList.length === 1 ? 'Line' : 'Lines'} · ${tvMoney(todayList.reduce((a, r) => a + NUM(r.value), 0))}` +
+           (stuck ? ` · ${stuck} Blocked Or No Substatus` : '') + ' · Width Is Line Items',
+      html: () => {
+        const body = document.getElementById('tvBody');
+        const sl = TV.slides.find(x => x.key === 'flow') || {};
+        sl.sets = {};
+        const W = body.clientWidth, H = body.clientHeight;
+        const u = Math.max(8, W / 95);
+        return tvFlowSVG(todayList, W, Math.max(200, H - u * 1.8), sl.sets);
+      }});
+  }
+  /* the same day as one list, row by row */
+  if (todayList.length) slides.push({key:'tlist', pill:'Today List', title:'Today, every line', sub: todaySum,
+    list: todayList, html: start => tvListHTML(todayList, false, start)});
+
+  /* MACHINES TODAY — only work on a machine or bench, due today or to cut today,
+     grouped machine by machine in the floor's machine order */
+  const mOrder = machineList(rows).map(subNorm);
+  const mRank = r => { const i = mOrder.indexOf(subNorm(r.subStatus || '')); return i < 0 ? 99 : i; };
+  const mToday = rows.filter(r => flowOf(r) === 'shop' && (r.daysLate === 0 || preDue(r)))
+    .sort((a, b) => (mRank(a) - mRank(b)) || (preDue(a) - preDue(b)) || (NUM(b.value) - NUM(a.value)));
+  const mCount = new Set(mToday.map(r => subNorm(r.subStatus || ''))).size;
+  slides.push({key:'mtoday', pill:'Machines Today', title:'Machines today',
+    sub: mToday.length
+      ? `${mToday.length} ${mToday.length === 1 ? 'Line' : 'Lines'} On ${mCount} ${mCount === 1 ? 'Machine' : 'Machines'}` +
+        `${mToday.filter(preDue).length ? ` · ${mToday.filter(preDue).length} To Cut Today` : ''} · ${tvMoney(mToday.reduce((a, r) => a + NUM(r.value), 0))}`
+      : 'Nothing On A Machine Is Due Today',
+    list: mToday.length ? mToday : null,
+    html: start => mToday.length ? tvMachineTodayHTML(mToday, start)
+                                 : `<div class="tv-empty">Nothing On A Machine Is Due Today</div>`});
+  /* machine queues: busy lanes only, six to a page */
+  const machines = machineList(rows);
+  const lanes = [{f:'Ready to run', name:'Up next', next:true, list: rows.filter(r => flowOf(r) === 'ready')}]
+    .concat(machines.map(k => { const m = k.match(/^([^|:>-]+?)\s*[|:>-]\s*(.+)$/);
+      return {f: m ? m[1].trim() : 'Bench', name: m ? m[2].trim() : k,
+              list: rows.filter(r => subNorm(r.subStatus || '') === subNorm(k))}; }))
+    .filter(L => L.list.length)
+    .map(L => ({...L, list: L.list.slice().sort(prio)}));
+  const pages = Math.ceil(lanes.length / 6);
+  for (let p = 0; p < pages; p++){
+    const page = lanes.slice(p * 6, p * 6 + 6);
+    const jobs = lanes.reduce((a, L) => a + L.list.length, 0);
+    const lateAll = lanes.reduce((a, L) => a + L.list.filter(r => isLate(r) || preDue(r)).length, 0);
+    slides.push({key:'q' + p, grp:'q', pg:p, pill: pages > 1 ? `Machine Queues ${p + 1}/${pages}` : 'Machine Queues',
+      title: 'Machine queues',
+      sub: `${lanes.length} Busy · ${jobs} ${jobs === 1 ? 'Job' : 'Jobs'}${lateAll ? ` · ${lateAll} Late` : ''}` +
+           (pages > 1 ? ` · Page ${p + 1} Of ${pages}` : ''),
+      html: () => `<div class="tv-lanes" style="grid-template-columns:repeat(${Math.max(page.length, 3)}, minmax(0,1fr))">` + page.map(L => {
+        const late = L.list.filter(r => isLate(r) || preDue(r)).length;
+        const val = L.list.reduce((a, r) => a + NUM(r.value), 0);
+        const oldest = Math.max(0, ...L.list.map(r => r.daysLate != null && r.daysLate > 0 ? r.daysLate : 0));
+        const note = L.next ? 'Waiting For A Machine' : oldest ? `Oldest ${oldest}d Late` : 'All On Time';
+        return `<div class="tv-lane${L.next ? ' next' : ''}"><div class="f">${esc(L.f)}</div>
+          <div class="nm"><b>${esc(L.name)}</b><span>${L.list.length}${late ? ` · <em>${late} Late</em>` : ''}</span></div>
+          <div class="sm">${esc(tvMoney(val))} · ${esc(note)}</div>
+          <div class="cards">${L.list.slice(0, 30).map(tvCard).join('')}</div>
+          <div class="tv-more" data-total="${L.list.length}"></div></div>`;
+      }).join('') + `</div>`});
+  }
+  if (!lanes.length) slides.push({key:'q0', pill:'Machine Queues', title:'Machine queues', sub:'',
+    html: () => `<div class="tv-empty">Nothing On The Machines In This View</div>`});
+
+  /* machine load */
+  const days = [...Array(7)].map((_, i) => dayFromToday(i));
+  const cols = [{k:'late', t:'Overdue', s:'', c:'od'}]
+    .concat(days.map((d, i) => ({k:'d' + i, t: i === 0 ? 'Today' : d.toLocaleDateString([], {weekday:'short'}),
+                                 s: d.toLocaleDateString([], {month:'short', day:'numeric'}), c: i === 0 ? 'td' : ''})))
+    .concat([{k:'later', t:'Later', s:'', c:''}]);
+  const colOf = r => r.daysLate == null ? 'later' : r.daysLate > 0 ? 'late' : -r.daysLate <= 6 ? 'd' + (-r.daysLate) : 'later';
+  const loadRows = lanes.map(L => {
+    const cells = Object.fromEntries(cols.map(c => [c.k, {n:0, pre:0}]));
+    for (const r of L.list){ const c = cells[colOf(r)]; c.n++; if (preDue(r)) c.pre++; }
+    return {...L, cells};
+  });
+  if (loadRows.length){
+    const maxDay = Math.max(1, ...loadRows.flatMap(L => cols.filter(c => c.k !== 'late' && c.k !== 'later').map(c => L.cells[c.k].n)));
+    const maxLate = Math.max(1, ...loadRows.map(L => L.cells.late.n));
+    const maxLater = Math.max(1, ...loadRows.map(L => L.cells.later.n));
+    const SAPPHIRE = ['#EAF2FB','#CFE1F6','#9EC3EC','#5592D8','#1F62B5','#0B3F85'];
+    const shade = (k, x) => {
+      if (!x.n) return '';
+      if (x.pre) return 'background:var(--red-deep);border-color:var(--red-deep);color:#FFFFFF;';
+      if (k === 'late'){ const a = 0.15 + 0.75 * (x.n / maxLate);
+        return `background:rgba(158,18,25,${a.toFixed(2)});border-color:transparent;${a > 0.45 ? 'color:#FFFFFF;' : ''}`; }
+      const max = k === 'later' ? maxLater : maxDay;
+      const st = max > 1 ? Math.round(5 * (x.n - 1) / (max - 1)) : 2;
+      return `background:${SAPPHIRE[st]};border-color:${SAPPHIRE[st]};${st >= 3 ? 'color:#FFFFFF;' : ''}`;
+    };
+    slides.push({key:'load', pill:'Machine Load', title:'Machine load', sub:'Jobs Due Off Each Machine This Week',
+      html: () => `<table class="tv-ld"><thead><tr><th class="m">Machine</th>` +
+        cols.map(c => `<th class="${c.c}">${esc(c.t)}${c.s ? `<span>${esc(c.s)}</span>` : ''}</th>`).join('') +
+        `</tr></thead><tbody>` + loadRows.slice(0, 13).map(L => `<tr><td class="m"><small>${esc(L.f)}</small>${esc(L.name)}</td>` +
+          cols.map(c => { const x = L.cells[c.k]; return `<td style="${shade(c.k, x)}">${x.n ? x.n : '<i>·</i>'}</td>`; }).join('') +
+          `</tr>`).join('') + `</tbody></table>`});
+  }
+
+  /* lists */
+  /* a list is drawn from a starting row; tvShow trims it to what fits and
+     the rest rotates on as further pages */
+  const listHTML = (list, why, start) => tvListHTML(list, why, start);
+
+  const next = rows.filter(dueByNextWorkDay)
+    .sort((a, b) => (preDue(b) - preDue(a)) || prio(a, b));
+  if (next.length) slides.push({key:'next', pill: nextDayLabel(), title: nextDayLabel(),
+    sub: `${next.length} Line ${next.length === 1 ? 'Item' : 'Items'}${next.filter(preDue).length ? ` · ${next.filter(preDue).length} To Cut Today` : ''}`,
+    list: next, html: start => listHTML(next, false, start)});
+  const risk = rows.filter(r => preDue(r) || (r.daysLate != null && r.daysLate <= 0 && r.daysLate >= -2 &&
+                                !['shop','moving','ready'].includes(flowOf(r))))
+    .sort((a, b) => { const t = r => r.daysLate === 0 ? 0 : preDue(r) ? 1 : 2;
+                      return (t(a) - t(b)) || (b.daysLate - a.daysLate) || (NUM(b.value) - NUM(a.value)); });
+  if (risk.length) slides.push({key:'risk', pill:'At Risk', title:'At risk',
+    sub:'Due Within Two Days And Not On A Machine, Or Still To Cut', list: risk, html: start => listHTML(risk, true, start)});
+  return slides;
+}
+
+function renderTV(){
+  if (!window.__TV_ON) return;
+  const all = visible();
+  const rows = all.filter(inScope);
+  /* the four counts read the whole scope, whatever the due filter */
+  const sum = l => l.reduce((a, r) => a + NUM(r.value), 0);
+  const late = all.filter(isLate), today = all.filter(r => r.daysLate === 0),
+        next = all.filter(dueByNextWorkDay), cut = all.filter(preDue);
+  /* the machine holding the most of a list, as "Kern 3" */
+  const topMachine = list => {
+    const c = new Map();
+    for (const r of list) if (flowOf(r) === 'shop'){ const m = tvMachine(r.subStatus); c.set(m, (c.get(m) || 0) + 1); }
+    const best = [...c.entries()].sort((a, b) => b[1] - a[1])[0];
+    return best ? `${best[0]} ${best[1]}` : '';
+  };
+  const oldest = Math.max(0, ...late.map(r => r.daysLate));
+  const notOn = today.filter(r => !['shop','moving'].includes(flowOf(r))).length;
+  const cutBy = (() => {
+    if (!cut.length) return 'Nothing To Cut Early';
+    if (cut.length === 1) return `${tvMachine(cut[0].subStatus)} · ${cut[0].customer || ''}`;
+    const c = new Map(); for (const r of cut){ const m = tvMachine(r.subStatus); c.set(m, (c.get(m) || 0) + 1); }
+    return [...c.entries()].sort((a, b) => b[1] - a[1]).map(([m, n]) => `${m} ${n}`).join(' · ');
+  })();
+  const details = {
+    late:  !late.length ? 'Nothing Overdue' : (topMachine(late) ? `Worst: ${topMachine(late)} · ` : '') + `Oldest ${oldest}d`,
+    today: !today.length ? 'Nothing Due Today' : notOn ? `${notOn} Not Yet On A Machine` : 'All On A Machine',
+    next:  !next.length ? 'Nothing Due' : topMachine(next) ? `Busiest: ${topMachine(next).replace(/ (\d+)$/, ' · $1')}` : 'None On A Machine Yet',
+    cut:   cutBy
+  };
+  const k = (label, list, hot, showVal, d) => `<div class="tv-k${hot && list.length ? ' hot' : ''}">
+      <div class="l">${esc(label)}</div><div class="n"><b>${list.length}</b>${showVal ? `<span>${esc(money(sum(list)))}</span>` : ''}</div>
+      <div class="d">${esc(d)}</div></div>`;
+  document.getElementById('tvKpis').innerHTML =
+    k('Overdue', late, true, true, details.late) + k('Due today', today, true, true, details.today) +
+    k(nextDayLabel(), next, false, true, details.next) + k('Cut today', cut, true, false, details.cut);
+  document.getElementById('tvScope').textContent = tvScopeLabel();
+  const logo = document.querySelector('.tb-mark img');
+  document.getElementById('tvBrand').innerHTML = (logo ? `<img src="${logo.src}" alt="FASTSIGNS">` : 'FASTSIGNS') + '<span>Helm</span>';
+  tvClock();
+
+  const prevKey = TV.slides[TV.i] && TV.slides[TV.i].key;
+  TV.slides = tvSlides(rows);
+  const keep = TV.slides.findIndex(x => x.key === prevKey);
+  TV.i = keep >= 0 ? keep : Math.min(TV.i, TV.slides.length - 1);
+  if (keep < 0) TV.pg = 0;
+  const cur = TV.slides[TV.i];
+  if (cur && cur.list){ cur.starts = [0]; TV.pg = 0; }   /* refreshed rows: start the list again */
+  tvShow(false);
+}
+
+/* cards are drawn generously, then each lane drops whatever does not fit
+   and says how many more there are */
+function tvFit(){
+  const body = document.getElementById('tvBody');
+  /* lists: drop rows from the end until the page fits, note what is left */
+  const tbl = body.querySelector('.tv-list');
+  if (tbl && !TV.open){
+    const more = body.querySelector('.tv-more');
+    const rows = [...tbl.querySelectorAll('tbody tr')];
+    const total = Number(more.dataset.total), start = Number(more.dataset.start);
+    let shown = rows.length;
+    const label = () => {
+      const left = total - start - shown;
+      more.textContent = left > 0 ? `+ ${left} More · Click To See All` : '';
+    };
+    label();
+    while (shown > 1 && body.scrollHeight > body.clientHeight + 1){ rows[--shown].remove(); label(); }
+    const sl = TV.slides[TV.i];
+    if (sl){ sl.starts = sl.starts || [0]; sl.starts[TV.pg + 1] = start + shown; }
+  }
+  if (tbl && TV.open){ const more = body.querySelector('.tv-more'); if (more) more.textContent = 'Show Less'; }
+  document.querySelectorAll('#tvBody .tv-lane').forEach(lane => {
+    if (lane.classList.contains('open')){ const m = lane.querySelector('.tv-more'); if (m) m.textContent = 'Show Less'; return; }
+    const more = lane.querySelector('.tv-more');
+    const cards = [...lane.querySelectorAll('.tv-c')];
+    const total = Number(more && more.dataset.total) || cards.length;
+    let shown = cards.length;
+    const fits = () => lane.scrollHeight <= lane.clientHeight + 1;
+    const label = () => { if (more) more.textContent = total > shown ? `+ ${total - shown} More · Click To See All` : ''; };
+    label();
+    while (shown > 1 && !fits()){ cards[--shown].remove(); label(); }
+  });
+}
+
+function tvMachineFirsts(){
+  const first = document.querySelector('#tvBody tbody tr[data-m]');
+  if (first && !first.classList.contains('mfirst')){
+    const m = first.dataset.m;
+    const fam = (m.match(/^([^|:>-]+?)\s*[|:>-]/) || [, 'Bench'])[1];
+    first.classList.add('mfirst');
+    first.querySelector('td.mc').innerHTML = `<small>${esc(fam.trim())}</small>${esc(tvMachine(m))}`;
+  }
+}
+function tvShow(animate){
+  const sl = TV.slides[TV.i];
+  if (!sl) return;
+  const body = document.getElementById('tvBody');
+  const start = sl.list ? ((sl.starts && sl.starts[TV.pg]) || 0) : 0;
+  /* the title goes in first, with room for the row count, so the board is
+     measured at the height it will really have */
+  document.getElementById('tvTitle').innerHTML = `<h2>${esc(sl.title)}</h2><span>${esc(sl.sub || '')} · Rows</span>`;
+  body.classList.toggle('open', !!TV.open && !!sl.list);
+  body.innerHTML = sl.list && TV.open ? sl.html(0) : sl.html(start);
+  if (animate){ body.style.animation = 'none'; void body.offsetWidth; body.style.animation = ''; }
+  tvMachineFirsts();
+  tvFit();
+  /* which rows this page holds, and how many pages the list runs to */
+  let sub = sl.sub || '', pill = sl.pill;
+  if (sl.list && !TV.open){
+    const end = sl.starts[TV.pg + 1] || sl.list.length;
+    if (end < sl.list.length || TV.pg > 0){
+      const per = Math.max(1, end - start);
+      const pages = TV.pg + 1 + Math.ceil((sl.list.length - end) / per);
+      sub += ` · Rows ${start + 1}–${end} Of ${sl.list.length}`;
+      pill += ` ${TV.pg + 1}/${pages}`;
+    }
+  }
+  document.getElementById('tvTitle').innerHTML = `<h2>${esc(sl.title)}</h2>${sub ? `<span>${esc(sub)}</span>` : ''}`;
+  /* a board of several pages keeps one tab: the page on show, or its first */
+  document.getElementById('tvPills').innerHTML = TV.slides.map((x, i) =>
+    x.grp && (sl.grp === x.grp ? i !== TV.i : x.pg > 0) ? '' :
+    `<span class="tv-pill${i === TV.i ? ' on' : ''}" data-i="${i}">${esc(i === TV.i ? pill : x.pill)}` +
+    `${i === TV.i && TV.paused ? '<span class="hold">‖</span>' : ''}</span>`).join('');
+  document.getElementById('tvView').style.setProperty('--tvdur', TV.sec + 's');
+  tvTick();
+}
+const TV_PAUSE_SVG = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z"/></svg>';
+const TV_PLAY_SVG  = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5l7 4.5-7 4.5z"/></svg>';
+function tvSetPaused(on){
+  TV.paused = !!on;
+  document.body.classList.toggle('tv-paused', TV.paused);
+  tvArm(); tvTick();
+  /* the open tab carries the pause mark while the board is held */
+  const pill = document.querySelector('#tvPills .tv-pill.on');
+  if (pill){ const h = pill.querySelector('.hold'); if (h) h.remove();
+    if (TV.paused) pill.insertAdjacentHTML('beforeend', '<span class="hold">‖</span>'); }
+}
+function tvTick(){
+  const pb = document.getElementById('tvPause');
+  if (pb) pb.innerHTML = TV.paused ? `${TV_PLAY_SVG}<span>Resume</span>` : `${TV_PAUSE_SVG}<span>Pause</span>`;
+  const el = document.getElementById('tvNext');
+  if (el) el.textContent = TV.open ? 'Showing All · Click Show Less To Go On' :
+    TV.paused ? 'Holding · Click A Tab To Switch'
+              : `Every ${TV.sec}s · Click A Tab To Hold`;
+}
+function tvGo(step){
+  if (!TV.slides.length) return;
+  if (TV.open) tvClose();
+  const sl = TV.slides[TV.i];
+  /* a long list turns its own pages before the next board comes round */
+  if (sl && sl.list && sl.starts){
+    if (step > 0 && sl.starts[TV.pg + 1] < sl.list.length){ TV.pg++; tvShow(true); tvArm(); return; }
+    if (step < 0 && TV.pg > 0){ TV.pg--; tvShow(true); tvArm(); return; }
+  }
+  TV.i = (TV.i + step + TV.slides.length) % TV.slides.length;
+  TV.pg = 0;
+  const nx = TV.slides[TV.i];
+  if (nx && nx.list) nx.starts = [0];
+  tvShow(true);
+  tvArm();
+}
+/* "+ N More": open the whole list (or the whole lane) and hold the board */
+function tvOpenMore(el){
+  const lane = el.closest('.tv-lane');
+  if (TV.open){ tvClose(); return; }
+  TV.open = true;
+  tvSetPaused(true);
+  if (lane){
+    /* draw every card of that lane again, then let it scroll */
+    const sl = TV.slides[TV.i];
+    const idx = [...lane.parentElement.children].indexOf(lane);
+    const tmp = document.createElement('div'); tmp.innerHTML = sl.html();
+    const fresh = tmp.querySelectorAll('.tv-lane')[idx];
+    if (fresh){ fresh.classList.add('open'); lane.replaceWith(fresh); }
+    tvFit();
+  } else tvShow(false);
+  tvTick();
+}
+/* a block on Today Flow: its lines as a full list, board held */
+function tvOpenFlow(t){
+  const sl = TV.slides[TV.i];
+  const set = sl && sl.sets && sl.sets[t];
+  if (!set) return;
+  TV.open = true;
+  tvSetPaused(true);
+  const body = document.getElementById('tvBody');
+  body.classList.add('open');
+  body.innerHTML = tvListHTML(set.rows.slice().sort((a, b) => (preDue(b) - preDue(a)) || (NUM(b.value) - NUM(a.value))), false, 0);
+  document.getElementById('tvTitle').innerHTML = `<h2>${esc(sl.title)} · ${esc(set.title)}</h2>` +
+    `<span>${set.rows.length} ${set.rows.length === 1 ? 'Line' : 'Lines'} · ${esc(tvMoney(set.rows.reduce((a, r) => a + NUM(r.value), 0)))}</span>`;
+  tvFit(); tvTick();
+}
+function tvClose(){
+  TV.open = false;
+  tvShow(false); tvSetPaused(false);
+}
+function tvArm(){
+  clearInterval(TV.timer);
+  if (!TV.paused) TV.timer = setInterval(() => tvGo(1), TV.sec * 1000);
+}
+
+function setTV(on, viaGesture){
+  if (on === window.__TV_ON) return;
+  window.__TV_ON = on;
+  document.body.classList.toggle('tv-on', on);
+  document.getElementById('tvView').setAttribute('aria-hidden', String(!on));
+  if (on){
+    if (window.lenis) lenis.stop();
+    TV.i = 0; TV.pg = 0; TV.open = false; TV.paused = false; document.body.classList.remove('tv-paused');
+    renderTV(); tvArm();
+    TV.clock = setInterval(tvClock, 20000);
+    if (viaGesture && document.documentElement.requestFullscreen && !document.fullscreenElement)
+      document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    clearInterval(TV.timer); clearInterval(TV.clock);
+    if (window.lenis) lenis.start();
+    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+  }
+}
+
+(function wireScreens(){
+  const bb = document.getElementById('bigBtn'), tb = document.getElementById('tvBtn');
+  /* the dock hides itself after a few still seconds and comes back on any move */
+  const dock = document.getElementById('screenDock');
+  let idle = null;
+  const wake = () => {
+    if (!dock) return;
+    dock.classList.remove('idle');
+    clearTimeout(idle);
+    idle = setTimeout(() => { if (!dock.matches(':hover')) dock.classList.add('idle'); }, 3500);
+  };
+  ['mousemove','pointerdown','touchstart'].forEach(t => addEventListener(t, wake, {passive:true}));
+  wake();
+  if (bb) bb.addEventListener('click', () => setBig(!BIG_ON, true));
+  if (tb) tb.addEventListener('click', () => setTV(true, true));
+  addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const t = e.target;
+    if (t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName))) return;
+    const k = e.key;
+    if (window.__TV_ON){
+      if (k === 'Escape' && TV.open){ tvClose(); e.preventDefault(); }
+      else if (k === 'Escape' || k === 't' || k === 'T'){ setTV(false); e.preventDefault(); }
+      else if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown'){ tvGo(1); e.preventDefault(); }
+      else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp'){ tvGo(-1); e.preventDefault(); }
+      else if (k === ' ' || k === 'Enter'){ tvSetPaused(!TV.paused); e.preventDefault(); }
+      return;
+    }
+    if (k === 't' || k === 'T'){ setTV(true, true); e.preventDefault(); }
+    else if (k === 'b' || k === 'B'){ setBig(!BIG_ON, true); e.preventDefault(); }
+  });
+  const tvv = document.getElementById('tvView');
+  if (tvv) tvv.addEventListener('click', e => {
+    const m = e.target.closest('.tv-more');
+    if (m && m.textContent){ tvOpenMore(m); return; }
+    const fl = e.target.closest('[data-ft]');
+    if (fl){ tvOpenFlow(fl.dataset.ft); return; }
+    if (e.target.closest('#tvPause')){ tvSetPaused(!TV.paused); return; }
+    const pill = e.target.closest('.tv-pill');
+    if (pill){
+      const i = Number(pill.dataset.i);
+      if (TV.open){ TV.open = false; document.getElementById('tvBody').classList.remove('open'); }
+      if (i === TV.i){ tvSetPaused(!TV.paused); return; }
+      TV.i = i; TV.pg = 0;
+      const sl = TV.slides[i]; if (sl && sl.list) sl.starts = [0];
+      TV.paused = true; document.body.classList.add('tv-paused');
+      tvShow(true); tvArm();
+    }
+  });
+  /* leaving full screen with the browser's own Esc leaves TV mode too */
+  document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement){ TV.fsAt = Date.now(); return; }
+    /* a deliberate exit (not a browser bouncing straight back out) */
+    if (window.__TV_ON && TV.fsAt && Date.now() - TV.fsAt > 800) setTV(false);
+    TV.fsAt = 0;
+  });
+  /* ?tv=1 opens straight into TV mode once the first data has painted */
+  if (QP.get('tv') === '1'){
+    const w = setInterval(() => {
+      if (!ROWS.length) return;
+      clearInterval(w); setTV(true, false);
+      /* ?board=today|queues|load|next|risk opens on that board and holds it */
+      const want = {today:'today', flow:'flow', sankey:'flow', list:'tlist', todaylist:'tlist', machines:'mtoday', queues:'q0', load:'load', next:'next', tomorrow:'next', risk:'risk'}[(QP.get('board') || '').toLowerCase()];
+      if (want){
+        const i = TV.slides.findIndex(x => x.key === want);
+        if (i >= 0){ TV.i = i; TV.pg = 0; tvShow(false); tvSetPaused(true); }
+      }
+    }, 300);
+  }
+})();
 
 if (KIOSK){
   document.body.classList.add('kiosk');
