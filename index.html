@@ -2,18 +2,26 @@
 <!--
   ============================================================
   HELM, FASTSIGNS production priority dashboard
-  Version : 2026-10-21 · "Flow In Centre Colours"
+  Version : 2026-10-21 · "Holds Its Place, Clean Red Edge"
+  Also    : the due-today red edge is now the outline's own left side
+            (4px), exactly the card's height, flush with the black
+            outline, and it redraws with the outline on hover.
   Date    : Wednesday, October 21, 2026
-  Based on: 2026-10-16 · "Today Flow"
-  Changed in this version (TV mode):
-    - Today Flow: the ribbons from substatus group to substatus now
-      keep each centre's colour (Long Beach #004990, Torrance
-      #0066B3, Santa Ana #0096D6, Thousand Oaks #52247F, Tarzana
-      #97005E), so a centre can be followed from left to right all
-      the way to its substatus. Blocks keep their group colours.
-  Carried over: every earlier change, including Today Flow, Today
-  Lanes, Machines Today, hold-any-board tabs, Pause button, pages
-  and clickable More.
+  Based on: 2026-10-21 · "Substatus Story, Production"
+  Changed in this version (whole dashboard):
+    - The page no longer jumps. One place-keeper remembers which
+      section is at the top of the screen and how far into it you
+      are, and puts it back after: a filter or centre click, the
+      five-minute auto-refresh (it used to restore the raw pixel
+      position, which lands somewhere else once sections change
+      height), and zooming in or out or resizing the window.
+    - Any click or scroll you make stops the hold at once, so it
+      never fights you.
+    - The substatus charts and the late trend now have a fixed
+      height, so drawing or redrawing them never pushes the page.
+  Carried over: every earlier change, including the substatus
+  charts at the bottom of Production, the TV boards and the
+  clean card styles.
   ============================================================
 -->
 <html lang="en">
@@ -981,7 +989,9 @@ body.view-mgmt [data-view="prod"]{display:none !important}
   background:#FFFFFF;border:1px solid var(--ink);border-radius:0;cursor:pointer;
 }
 /* overdue: the whole card in claret, white type; due today: a red edge */
-.mq-job.urg-today{box-shadow:inset 3px 0 0 var(--red)}
+/* due today: the outline's own left side is red and 4px, drawn by the same
+   outline that runs round the card, so it is exactly the card's height */
+.mq-job.urg-today{padding-left:19px;--olL:var(--red)}
 .mq-job.urg-late{background:var(--red-deep);border-color:var(--red-deep);color:#FFFFFF}
 .mq-job.urg-late .mq-j1,.mq-job.urg-late .mq-j1 a,.mq-job.urg-late .mq-due,
 .mq-job.urg-late .mq-cust,.mq-job.urg-late .mq-prod,.mq-job.urg-late .mq-meta,
@@ -1023,7 +1033,7 @@ body.view-mgmt [data-view="prod"]{display:none !important}
 .mc-1{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:10.5px;font-weight:700;white-space:nowrap}
 .mc-1 a{color:var(--blue);text-decoration:none;overflow:hidden;text-overflow:ellipsis}
 .mc-1 a:hover{text-decoration:underline}
-.mc-due{flex:none}
+.mc-due{flex:none;text-transform:capitalize}
 .mc-cust{font-size:11.5px;font-weight:700;margin-top:3px;line-height:1.25;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mc-job.open .mc-cust{white-space:normal}
@@ -1036,7 +1046,7 @@ body.view-mgmt [data-view="prod"]{display:none !important}
 .mc-dl dd i{display:inline-block;width:6px;height:6px;margin-right:6px;vertical-align:1px}
 
 /* overdue: claret card, white type; due today: red edge — as in the big queues */
-.mc-job.urg-today{box-shadow:inset 3px 0 0 var(--red)}
+.mc-job.urg-today{padding-left:13px;--olL:var(--red)}
 .mc-job.urg-today .mc-due{color:var(--red)}
 .mc-job.urg-late{background:var(--red-deep);border-color:var(--red-deep);color:#FFFFFF}
 .mc-job.urg-late .mc-1 a,.mc-job.urg-late .mc-due{color:#FFFFFF}
@@ -1150,7 +1160,8 @@ body.view-mgmt [data-view="prod"]{display:none !important}
   width:calc(100% + 2px);height:calc(100% + 2px);border:1px solid transparent;
 }
 .mq-job::before,.mc-job::before,.bt-g::before{top:-1px;left:-1px;border-top-color:var(--ol);border-right-color:var(--ol)}
-.mq-job::after,.mc-job::after,.bt-g::after{bottom:-1px;right:-1px;border-bottom-color:var(--ol);border-left-color:var(--ol)}
+.mq-job::after,.mc-job::after,.bt-g::after{bottom:-1px;right:-1px;border-bottom-color:var(--ol);border-left-color:var(--olL, var(--ol))}
+.mq-job.urg-today::after,.mc-job.urg-today::after{border-left-width:4px}
 .mq-job:hover::before,.mc-job:hover::before,.bt-g:hover::before{animation:olTR .5s linear both}
 .mq-job:hover::after,.mc-job:hover::after,.bt-g:hover::after{animation:olBL .5s linear both}
 @keyframes olTR{
@@ -1160,7 +1171,7 @@ body.view-mgmt [data-view="prod"]{display:none !important}
 }
 @keyframes olBL{
   0%,49.9%{width:0;height:0;border-bottom-color:transparent;border-left-color:transparent}
-  50% {width:0;height:0;border-bottom-color:var(--ol);border-left-color:var(--ol)}
+  50% {width:0;height:0;border-bottom-color:var(--ol);border-left-color:var(--olL, var(--ol))}
   75% {width:calc(100% + 2px);height:0}
   100%{width:calc(100% + 2px);height:calc(100% + 2px)}
 }
@@ -1244,6 +1255,37 @@ body.view-mgmt [data-view="prod"]{display:none !important}
 /* ===== WHERE WORK IS STUCK ===== */
 .st-meta{font-size:12px;font-weight:600;color:var(--ink);margin:0 0 28px}
 .st-meta b{color:var(--red-deep);font-weight:700}
+/* SUBSTATUS CHARTS — the approved four, plus scorecard and trend */
+.sc-panel{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:44px;padding-bottom:56px}
+.sc-panel.sc-short{min-height:auto;padding-bottom:24px}
+.sc-stage{position:relative;margin-top:20px;height:calc(100vh - var(--topbar, 80px) - 190px);min-height:460px}
+.sc-stage.sc-trend{height:360px;min-height:0}
+.sc-stage svg{display:block;overflow:visible}
+/* drawn charts scale down to fit their fixed stage, text and all */
+.sc-stage > svg[viewBox]{width:100%;height:100%}
+.sc-stage svg text{font-family:var(--sans);paint-order:stroke;stroke:#FFFFFF;stroke-width:5px;stroke-linejoin:round}
+.sc-stage svg text[style*="fill:#FFFFFF"]{stroke:none}
+.sc-stage .card{position:absolute;border-radius:8px;color:#FFFFFF;padding:0 16px;display:flex;flex-direction:column;justify-content:center;
+  box-shadow:0 16px 36px -14px rgba(14,15,19,.38);transition:transform .5s var(--ease-premium),box-shadow .5s ease}
+.sc-stage .card:hover{transform:translateY(-2px);box-shadow:0 26px 54px -18px rgba(14,15,19,.45)}
+.sc-stage .card .t{font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-stage .card .v{font-size:24px;font-weight:300;line-height:1.15;letter-spacing:-.01em}
+.sc-stage .card .s{font-size:10.5px;font-weight:500;letter-spacing:.04em;white-space:nowrap}
+.sc-stage .card.sm .v{font-size:18px}
+.sc-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:18px;text-align:center}
+.sc-stats .l{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+.sc-stats .n{font-size:40px;font-weight:300;line-height:1.1}
+.sc-stats .d{font-size:11px;font-weight:500}
+.sc-empty{font-size:13px;font-weight:500;text-align:center;padding:100px 0}
+.sc-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:40px;margin-top:20px}
+.sc-card .sc-n{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.sc-card .sc-n i{width:2px;height:12px;display:inline-block}
+.sc-card .sc-pct{font-size:64px;font-weight:300;line-height:1.05;margin-top:6px}
+.sc-card .sc-pct small{font-size:24px;margin-left:2px}
+.sc-card .sc-bar{height:3px;background:#EEF0F4;margin:10px 0 10px}
+.sc-card .sc-bar b{display:block;height:100%}
+.sc-card .sc-d{font-size:11.5px;font-weight:500;line-height:1.6}
+
 .st-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(360px, 1fr));gap:44px 56px}
 .st-fam{border-top:1.5px solid var(--ink);padding-top:14px}
 .st-fam-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:10px}
@@ -3031,19 +3073,22 @@ body.tv-on{overflow:hidden}
 .tv-scope{font-size:calc(var(--u) * 1.35);font-weight:700;color:var(--blue)}
 .tv-clock{justify-self:end;font-size:calc(var(--u) * 1.0);font-weight:500;text-align:right}
 .tv-clock b{font-weight:700}
-.tv-kpis{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:calc(var(--u) * 1.6)}
-.tv-k{border-top:3px solid var(--ink);padding-top:calc(var(--u) * .35)}
-.tv-k .l{font-size:calc(var(--u) * 1.0);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.tv-k .n{display:flex;align-items:baseline;gap:calc(var(--u) * .8);margin-top:calc(var(--u) * .2)}
-.tv-k .n b{font-size:calc(var(--u) * 3.2);font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
-.tv-k .n span{font-size:calc(var(--u) * 1.1);font-weight:600}
-.tv-k .d{font-size:calc(var(--u) * .95);font-weight:500;margin-top:calc(var(--u) * .25);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
-.tv-k.hot{border-top-color:var(--red-deep)}
-.tv-k.hot .n b,.tv-k.hot .l{color:var(--red-deep)}
-.tv-title{display:flex;align-items:baseline;gap:calc(var(--u) * 1.2)}
-.tv-title h2{margin:0;font-size:calc(var(--u) * 1.6);font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-.tv-title span{font-size:calc(var(--u) * 1.05);font-weight:500}
+/* the four day figures, under every board: icon, small caption, one big number */
+.tv-kpis{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:calc(var(--u) * 1.6);
+  padding-top:calc(var(--u) * .4);text-align:center;color:#1B2340}
+.tv-k svg{width:calc(var(--u) * 1.25);height:calc(var(--u) * 1.25);fill:none;stroke:#5B6CFF;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;display:block;margin:0 auto}
+.tv-k.hot svg{stroke:#E5416C}
+.tv-k .l{font-size:calc(var(--u) * .78);font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#1B2340;
+  margin-top:calc(var(--u) * .3)}
+.tv-k .n{font-size:calc(var(--u) * 2.5);font-weight:400;line-height:1.1;font-variant-numeric:tabular-nums;margin-top:calc(var(--u) * .1)}
+.tv-k .d{font-size:calc(var(--u) * .85);font-weight:400;color:#1B2340;margin-top:calc(var(--u) * .1);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-k.hot .n{color:#C8102E}
+.tv-title{display:flex;align-items:baseline;gap:calc(var(--u) * 1.2);color:#1B2340}
+.tv-title h2{margin:0;font-size:calc(var(--u) * 2.1);font-weight:400;letter-spacing:0;text-transform:none}
+.tv-title h2::first-letter{text-transform:uppercase}
+.tv-title span{font-size:calc(var(--u) * .95);font-weight:400;color:#1B2340}
 .tv-body{flex:1;min-height:0;overflow:hidden;animation:tvIn .6s var(--ease-premium) both}
 @keyframes tvIn{from{opacity:0;transform:translateY(calc(var(--u) * .6))}to{opacity:1;transform:none}}
 .tv-empty{font-size:calc(var(--u) * 1.6);font-weight:500;padding-top:calc(var(--u) * 4);text-align:center}
@@ -3072,7 +3117,7 @@ body.tv-on{overflow:hidden}
 .tv-c.late .p u{box-shadow:0 0 0 1px #FFFFFF}
 .tv-c.late{background:var(--red-deep);border-color:var(--red-deep);color:#FFFFFF}
 .tv-c.late .a i{color:#FFFFFF}
-.tv-c.today{box-shadow:inset calc(var(--u) * .3) 0 0 var(--red)}
+.tv-c.today{border-left:calc(var(--u) * .3) solid var(--red)}
 .tv-c.today .a span{color:var(--red)}
 .tv-more{margin-top:calc(var(--u) * .45);font-size:calc(var(--u) * .9);font-weight:700;color:var(--blue);cursor:pointer;
   display:inline-block;border-bottom:1px solid transparent}
@@ -3108,17 +3153,21 @@ body.tv-on{overflow:hidden}
 .tv-list td.v,.tv-list th.v{text-align:right}
 .tv-list .flag{display:inline-block;background:var(--red-deep);color:#FFFFFF;font-weight:700;padding:0 calc(var(--u) * .3);line-height:1.5;font-size:calc(var(--u) * .92)}
 .tv-list .ln,.tv-c .ln{margin-left:calc(var(--u) * .15)}
-.tv-flow{display:block}
-.tv-flow text{fill:var(--ink);font-family:inherit;paint-order:stroke;stroke:#FFFFFF;stroke-width:3px;stroke-linejoin:round}
-.tv-flow text .b{font-weight:700}
-.tv-flow text .m{font-weight:500}
-.tv-flow text .cut{font-weight:700;fill:var(--red-deep)}
-.tv-flow text.hd{font-weight:700;letter-spacing:.1em;stroke:none}
-.tv-flow .fl-n{cursor:pointer}
-.tv-flow .fl-n:hover rect{fill:var(--ink)}
-.tv-flow path{transition:fill-opacity .2s}
-.tv-flow:hover path{fill-opacity:.12}
-.tv-flow path:hover{fill-opacity:.6}
+.tvf-panel{background:#FFFFFF;height:100%;box-sizing:border-box}
+.tvf{position:relative}
+.tvf svg{position:absolute;left:0;top:0;overflow:visible}
+.tvf-c{position:absolute;box-sizing:border-box;border-radius:calc(var(--fu) * .7);color:#FFFFFF;
+  padding:0 calc(var(--fu) * .9);display:flex;flex-direction:column;justify-content:center;cursor:pointer;
+  box-shadow:0 calc(var(--fu) * .6) calc(var(--fu) * 1.4) rgba(27,35,64,.10);transition:transform .2s var(--ease-premium)}
+.tvf-c:hover{transform:translateY(-2px)}
+.tvf-c.more{color:#1B2340}
+.tvf-c .t{display:flex;justify-content:space-between;align-items:center;gap:calc(var(--fu) * .5);
+  font-size:calc(var(--fu) * .95);font-weight:600;white-space:nowrap}
+.tvf-c .t span{overflow:hidden;text-overflow:ellipsis}
+.tvf-c .t em{font-style:normal;background:#FFFFFF;color:#C8102E;font-size:calc(var(--fu) * .78);font-weight:700;
+  padding:0 calc(var(--fu) * .4);border-radius:calc(var(--fu) * .3);line-height:1.5}
+.tvf-c .n{font-size:calc(var(--fu) * 1.3);font-weight:600;white-space:nowrap;margin-top:calc(var(--fu) * .1)}
+.tvf-c .n small{font-size:calc(var(--fu) * 1.0);font-weight:400;opacity:.92}
 .tv-list.fit{table-layout:auto}
 .tv-list .sh{width:1%;white-space:nowrap;padding-right:calc(var(--u) * 1.1)}
 .tv-list td.cu{width:24%}
@@ -3916,6 +3965,19 @@ html.big-screen .tv-view{--u:calc(min(1vw, 1.7778vh) / var(--bigz))}
       <div class="score" id="stallBoard"></div>
     </section>
 
+    <!-- MANAGEMENT: substatus scorecard and the late trend -->
+    <section class="board sc-panel sc-short" id="scoreSec" data-view="mgmt">
+      <div class="panel-header"><div class="sec-title"><h2>Substatus Scorecard</h2></div>
+        <span class="board-sub">How much of each centre's work is blocked or has no real substatus: no substatus, Pending, waiting on files, art, proofs or the customer. Worst first.</span></div>
+      <div class="sc-grid" id="scoreGrid"></div>
+    </section>
+    <section class="board sc-panel sc-short" id="trendSec2" data-view="mgmt">
+      <div class="panel-header"><div class="sec-title"><h2>Late, Week By Week</h2></div>
+        <span class="board-sub">Overdue lines each day for the scope above. Helm keeps one small snapshot a day in this browser, so the line grows from the day it was first opened here.</span></div>
+      <div class="sc-stage sc-trend" id="trendChart"></div>
+      <div class="sc-stats" id="trendMeta"></div>
+    </section>
+
     <!-- WHERE THE MONEY SITS -->
     <section class="board metrics-panel" id="metricsSec" data-view="mgmt">
       <div class="panel-header"><div class="sec-title"><h2>Where The Money Sits</h2></div>
@@ -3923,6 +3985,28 @@ html.big-screen .tv-view{--u:calc(min(1vw, 1.7778vh) / var(--bigz))}
       <div class="km-stage" id="keyMetricsStage"></div>
     </section>
 
+    <!-- PRODUCTION, at the bottom: the substatus story, one screen each -->
+    <section class="board sc-panel" id="scGatherSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>Where The Money Goes</h2></div>
+        <span class="board-sub">Every line in view gathers in the middle: from the centres on the left, out to where it sits now on the right. Each band is as wide as its money.</span></div>
+      <div class="sc-stage" id="scGather"></div>
+    </section>
+    <section class="board sc-panel" id="scSankeySec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>Where The Work Comes From</h2></div>
+        <span class="board-sub">From each centre, through its substatus group, to the substatus it sits in. Each card carries its money, items and late lines; ribbons thicken with the number of lines.</span></div>
+      <div class="sc-stage" id="scSankey"></div>
+    </section>
+    <section class="board sc-panel" id="scOrbitSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>Substatus Orbit</h2></div>
+        <span class="board-sub">The work in view at the centre, its late share on the ticked ring. Around it each group, sized by its money, with its late share beside it and its substatuses circling that.</span></div>
+      <div class="sc-stage" id="scOrbit"></div>
+    </section>
+    <section class="board sc-panel" id="scPathMSec" data-view="prod">
+      <div class="panel-header"><div class="sec-title"><h2>The Production Path</h2></div>
+        <span class="board-sub">The steps a job moves through, opening on Needs Action when the page shows All. The dark trail runs through every step holding work; faint lines show the routes that are clear.</span></div>
+      <div class="sc-stage" id="scPathM"></div>
+      <div class="sc-stats" id="scPathMStats"></div>
+    </section>
     <div class="unmapped" id="unmapped"></div>
   </div>
 
@@ -4042,9 +4126,9 @@ html.big-screen .tv-view{--u:calc(min(1vw, 1.7778vh) / var(--bigz))}
       <span class="tv-scope" id="tvScope"></span>
       <span class="tv-clock" id="tvClock"></span>
     </div>
-    <div class="tv-kpis" id="tvKpis"></div>
     <div class="tv-title" id="tvTitle"></div>
     <div class="tv-body" id="tvBody"></div>
+    <div class="tv-kpis" id="tvKpis"></div>
     <div class="tv-foot">
       <div class="tv-pills" id="tvPills"></div>
       <span class="tv-ctl"><span class="tv-next" id="tvNext"></span>
@@ -6881,8 +6965,8 @@ function scopeColor(){
    zig-zagged across two rows so a big neighbour never sits directly next
    to another big one. Same S the rest of the boards use, so it already
    reflects whatever centre/district/due filter the header is set to. */
-function renderKeyMetrics(S){
-  const el = document.getElementById('keyMetricsStage');
+function renderKeyMetrics(S, elId, subFn){
+  const el = document.getElementById(elId || 'keyMetricsStage');
   if (!el) return;
 
   if (document.body.classList.contains('loading')){
@@ -6927,7 +7011,7 @@ function renderKeyMetrics(S){
 
   /* the words for a stage: its name, then its share and its item count. the
      count is no longer something you have to hover to find. */
-  const subOf = s => `${fmtPct(pctOf(s.value))} of open · ${s.count} ${s.count===1?'Item':'Items'}`;
+  const subOf = subFn ? (s => subFn(s, fmtPct(pctOf(s.value)))) : (s => `${fmtPct(pctOf(s.value))} of open · ${s.count} ${s.count===1?'Item':'Items'}`);
 
   let order = 0;
   const stat = (s, leftPct, topPct) => {
@@ -6940,7 +7024,7 @@ function renderKeyMetrics(S){
     const drift  = (-3 - (h % 4)).toFixed(0);            // -3 to -6px
     const fdelay = ((h % 30)/10).toFixed(1);             // desync the float
     return `
-      <div class="km-stat" style="left:${leftPct}%; top:${topPct}%; width:${size}px; height:${size}px;
+      <div class="km-stat${s.key != null && state.subStatus === s.key ? ' on' : ''}"${s.key != null ? ` data-sub="${esc(s.key === '' ? '__none__' : s.key)}"` : ''} style="left:${leftPct}%; top:${topPct}%; width:${size}px; height:${size}px;
         --delay:${delay}s; --breath:${breath}s; --drift:${drift}px; --floatdelay:${fdelay}s;
         background: radial-gradient(circle at 38% 32%, ${light} 0%, ${color} 46%, ${color} 74%, ${dark} 100%);">
         <div class="km-num-wrap">
@@ -7552,6 +7636,7 @@ function render(){
   renderLeaderboard(cr);
   renderStalled(cr);
   renderList(cr);
+  renderSubCharts();
   renderStuck();
   renderProduction();
   window.__lastRows = cr;
@@ -8445,6 +8530,387 @@ const subShort = (k, head) => {
     ? rest.replace(/^\s*[|:>-]\s*/, '') : k;
 };
 
+
+/* ============================================================
+   SUBSTATUS AT A GLANCE — the Today Flow Sankey plus two more
+   pictures of the same rows: an orbit (total → groups → substatus)
+   and a production path (the order work moves through the shop).
+   Reads chartRows(), so the due filter, lens, rep, dates and the
+   substatus menu all apply.
+   ============================================================ */
+const SH_GROUPS = [
+  {k:'shop',  t:'On A Machine',       f:['shop']},
+  {k:'ready', t:'Ready To Run',       f:['ready']},
+  {k:'block', t:'Blocked',            f:['inside','outside']},
+  {k:'out',   t:'Vendors And Moving', f:['vendor','moving']},
+  {k:'none',  t:'No Substatus',       f:['untracked','other']}
+];
+/* one colour for everything that is not a centre: the dashboard's own blue;
+   red only for what is late, as everywhere else on the page */
+const SH_BLUE = '#1A4C7E', SH_RED = '#9E1219', SH_INK = '#1B2340', SH_FAINT = '#E3E6EE';
+const shLift = (h, a) => { const n = parseInt(h.slice(1), 16), m = x => Math.round(x + (255 - x) * a);
+  return `rgb(${m(n >> 16)},${m(n >> 8 & 255)},${m(n & 255)})`; };
+const shGroupOf = r => SH_GROUPS.find(g => g.f.includes(flowOf(r))) || SH_GROUPS[4];
+const shName = k => { const s = String(k || '').trim();
+  return !s ? 'Blank' : flowOf({subStatus:s}) === 'shop' ? tvMachine(s) : tc(s); };
+const shSum = l => l.reduce((a, r) => a + NUM(r.value), 0);
+const shMoney = v => money(v);
+const shMeta = list => { const late = list.filter(isLate).length;
+  return `<tspan>${esc(shMoney(shSum(list)))}</tspan>` + (late ? `<tspan fill="${SH_RED}" font-weight="700"> · ${late} Late</tspan>` : ''); };
+const SH = {sets:{}};
+function shDefs(id){
+  return `<defs><filter id="${id}sh" x="-50%" y="-50%" width="200%" height="200%">` +
+    `<feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#1B2340" flood-opacity=".12"/></filter>` +
+    `<linearGradient id="${id}blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${shLift(SH_BLUE, .12)}"/>` +
+    `<stop offset=".7" stop-color="${SH_BLUE}"/></linearGradient></defs>`;
+}
+const shSubAttr = key => key === null ? '' : ` data-sub="${esc(key === '' ? '__none__' : key)}"${state.subStatus === key ? ' class="on"' : ''}`;
+
+
+/* ============================================================
+   SUBSTATUS CHARTS — the four approved in substatus-charts.html
+   (Where The Money Goes, Where The Work Comes From, Substatus Orbit,
+   The Production Path), on Helm's own rows. Their own helpers live
+   inside this wrapper so nothing clashes with the page's.
+   ============================================================ */
+const SC = (function(){
+  let CTX = {color:'#221F2B', head:'All', stats:null};
+const CENTERS = [["Long Beach","#004990"],["Torrance","#0066B3"],["Santa Ana","#0096D6"],["Thousand Oaks","#52247F"],["Tarzana","#97005E"]];
+const COLOR_OF = Object.fromEntries(CENTERS);
+/* ---------- helpers ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const money = v => v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M' : v >= 1000 ? '$' + Math.round(v / 1000) + 'K' : '$' + Math.round(v);
+const sum = l => l.reduce((a, r) => a + r.value, 0);
+const late = l => l.filter(r => r.days > 0).length;
+const mix = (h, t, k) => { const a = parseInt(h.slice(1), 16), b = parseInt(t.slice(1), 16);
+  const c = s => Math.round(((a >> s) & 255) + (((b >> s) & 255) - ((a >> s) & 255)) * k);
+  return '#' + [16, 8, 0].map(s => c(s).toString(16).padStart(2, '0')).join(''); };
+const lighten = (h, k) => mix(h, '#FFFFFF', k), darken = (h, k) => mix(h, '#000000', k);
+const GROUPS = [{k:'shop',t:'On A Machine',f:['shop']},{k:'ready',t:'Ready To Run',f:['ready']},{k:'block',t:'Blocked',f:['inside','outside']},
+  {k:'out',t:'Vendors And Moving',f:['vendor','moving']},{k:'none',t:'No Substatus',f:['none']}];
+const groupOf = r => GROUPS.find(g => g.f.includes(r.flow));
+const nameOf = s => !s ? 'Blank' : (s.match(/^[^|:>-]+?\s*[|]\s*(.+)$/) || [, s])[1].trim();
+const fam = s => (s.match(/^([^|:>-]+?)\s*[|:>-]/) || [, 'Bench'])[1].trim();
+const items = l => `${l.length} ${l.length === 1 ? 'Item' : 'Items'}`;
+const meta = l => `${items(l)}${late(l) ? ` · ${late(l)} Late` : ''}`;
+const sphere = (c, id) => `<radialGradient id="${id}" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="${lighten(c, .14)}"/>` +
+  `<stop offset=".46" stop-color="${c}"/><stop offset=".74" stop-color="${c}"/><stop offset="1" stop-color="${darken(c, .16)}"/></radialGradient>`;
+const SHADOW = id => `<filter id="${id}" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0E0F13" flood-opacity=".22"/></filter>`;
+
+/* ---------- 1. SANKEY ---------- */
+function sankey(el, R){
+  const W = el.clientWidth, H = el.clientHeight || 600;
+  const color = CTX.color;
+  const cent = CENTERS.map(([n, c]) => ({t:n, c, rows: R.filter(r => r.center === n)})).filter(x => x.rows.length);
+  const groups = GROUPS.map(g => ({t:g.t, g, c: color, rows: R.filter(r => groupOf(r) === g)})).filter(x => x.rows.length);
+  const m = new Map(); R.forEach(r => { if (!m.has(r.sub)) m.set(r.sub, []); m.get(r.sub).push(r); });
+  const all = [...m.entries()].sort((a, b) => sum(b[1]) - sum(a[1]));
+  let subs = all.slice(0, 6).map(([k, l]) => ({t: nameOf(k), g: groupOf(l[0]), c: color, rows: l}))
+    .sort((a, b) => GROUPS.indexOf(a.g) - GROUPS.indexOf(b.g));
+  if (all.length > 6){ const rest = all.slice(6); subs.push({t:`${rest.length} More`, more:true, c: lighten(color, .3), rows: rest.flatMap(x => x[1])}); }
+  const cw = Math.min(230, W * .17), X = {c: 0, g: (W - cw) / 2, s: W - cw};
+  const col = (list, hMax) => { const n = list.length, h = Math.min(hMax, (H - 18 * (n - 1)) / n), gap = n > 1 ? (H - h * n) / (n - 1) : 0;
+    list.forEach((x, i) => { x.h = h; x.y = n > 1 ? i * (h + gap) : (H - h) / 2; }); };
+  col(cent, 96); col(groups, 96); col(subs, 74);
+  const L = [];
+  cent.forEach(c => groups.forEach(g => { const n = c.rows.filter(r => g.rows.includes(r)).length; if (n) L.push({a:c, b:g, n, ca:c.c, cb:g.c, x1:X.c + cw, x2:X.g}); }));
+  groups.forEach(g => subs.forEach(s => { const n = s.rows.filter(r => g.rows.includes(r)).length; if (n) L.push({a:g, b:s, n, ca:g.c, cb:s.c, x1:X.g + cw, x2:X.s}); }));
+  const maxN = Math.max(1, ...L.map(l => l.n));
+  const slot = (node, side) => { const own = L.filter(l => l[side] === node), pad = node.h * .2, span = node.h - pad * 2;
+    own.forEach((l, i) => { l[side + 'y'] = node.y + pad + (own.length === 1 ? span / 2 : span * i / (own.length - 1)); }); };
+  cent.concat(groups).forEach(n => slot(n, 'a')); groups.concat(subs).forEach(n => slot(n, 'b'));
+  let defs = '', paths = '';
+  L.sort((a, b) => b.n - a.n).forEach((l, i) => {
+    const w = 3 + 22 * Math.sqrt(l.n / maxN), tuck = 24, r = 16, m = (l.x1 + l.x2) / 2;
+    defs += `<linearGradient id="rb${i}" gradientUnits="userSpaceOnUse" x1="${l.x1}" y1="0" x2="${l.x2}" y2="0">` +
+      `<stop offset="0" stop-color="${l.ca}"/><stop offset="1" stop-color="${lighten(l.cb, .35)}"/></linearGradient>`;
+    paths += `<path d="M${l.x1 - tuck},${l.ay}L${l.x1 + r},${l.ay}C${m},${l.ay} ${m},${l.by} ${l.x2 - r},${l.by}L${l.x2 + tuck},${l.by}"` +
+      ` fill="none" stroke="url(#rb${i})" stroke-width="${w.toFixed(1)}" stroke-opacity=".9"/>`;
+  });
+  const card = (x, n, w) => { const c = n.c, small = n.h < 70;
+    return `<div class="card${small ? ' sm' : ''}" style="left:${x}px;top:${n.y}px;width:${w}px;height:${n.h}px;` +
+      `background:${n.more ? '#FFFFFF' : `linear-gradient(140deg, ${lighten(c, .14)} 0%, ${c} 46%, ${c} 74%, ${darken(c, .16)} 100%)`};` +
+      `${n.more ? 'color:#0E0F13;box-shadow:0 0 0 1px rgba(14,15,19,.12), 0 16px 36px -18px rgba(14,15,19,.3);' : ''}">` +
+      `<div class="t">${esc(n.t)}</div><div class="v">${money(sum(n.rows))}</div>${small ? '' : `<div class="s">${meta(n.rows)}</div>`}` +
+      (small ? `<div class="s" style="position:absolute;right:14px;top:50%;transform:translateY(-50%)">${meta(n.rows)}</div>` : '') + `</div>`; };
+  el.innerHTML = `<svg width="${W}" height="${H}" style="position:absolute;left:0;top:0"><defs>${defs}</defs>${paths}</svg>` +
+    cent.map(n => card(X.c, n, cw)).join('') + groups.map(n => card(X.g, n, cw)).join('') + subs.map(n => card(X.s, n, cw)).join('');
+}
+
+/* ---------- 2. ORBIT ---------- */
+function orbit(el, R){
+  const W = 1200, H = 700, cx = 600, cy = 350, color = CTX.color;
+  const tot = R.length, lt = late(R), share = tot ? lt / tot : 0;
+  let back = '', mid = '', front = '';
+  back += [120, 230, 330].map(r => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#F0F1F5" stroke-width="1"/>`).join('');
+  /* the ticked ring: dark ticks for the late share, faint for the rest */
+  const T = 120;
+  for (let i = 0; i < T; i++){
+    const a = -Math.PI / 2 + i * 2 * Math.PI / T, on = i / T < share, len = on ? 16 : 10;
+    const r1 = 96, r2 = r1 + len;
+    back += `<line x1="${cx + Math.cos(a) * r1}" y1="${cy + Math.sin(a) * r1}" x2="${cx + Math.cos(a) * r2}" y2="${cy + Math.sin(a) * r2}"` +
+      ` stroke="${on ? color : '#D9DCE5'}" stroke-width="${on ? 1.6 : 1}" stroke-linecap="round"/>`;
+  }
+  const groups = GROUPS.map(g => ({g, rows: R.filter(r => groupOf(r) === g)})).filter(x => x.rows.length);
+  const maxV = Math.max(1, ...groups.map(x => sum(x.rows)));
+  const ANG = [-118, -40, 24, 112, 178], DIST = [235, 250, 225, 245, 240];
+  groups.forEach((x, i) => {
+    const a = (ANG[i % 5] + (groups.length < 5 ? 0 : 0)) * Math.PI / 180, d = DIST[i % 5];
+    const px = cx + Math.cos(a) * d, py = cy + Math.sin(a) * d * .82, pr = 30 + 28 * Math.sqrt(sum(x.rows) / maxV);
+    mid += `<line x1="${cx}" y1="${cy}" x2="${px}" y2="${py}" stroke="${color}" stroke-opacity=".28" stroke-width="1.2"/>`;
+    /* the ring node, further out, with the group's late share */
+    const ra = a + (i % 2 ? .22 : -.22), rd = d + 120, rx = cx + Math.cos(ra) * rd, ry = cy + Math.sin(ra) * rd * .82;
+    const gl = x.rows.length ? Math.round(100 * late(x.rows) / x.rows.length) : 0;
+    mid += `<line x1="${px}" y1="${py}" x2="${rx}" y2="${ry}" stroke="${color}" stroke-opacity=".22" stroke-width="1"/>`;
+    /* satellites: the group's substatuses */
+    const m = new Map(); x.rows.forEach(r => { if (!m.has(r.sub)) m.set(r.sub, []); m.get(r.sub).push(r); });
+    const sats = [...m.entries()].sort((p, q) => q[1].length - p[1].length).slice(0, 4);
+    sats.forEach(([k, l], j) => {
+      const sa = ra + (j - (sats.length - 1) / 2) * .5, sx = rx + Math.cos(sa) * 62, sy = ry + Math.sin(sa) * 62;
+      mid += `<line x1="${rx}" y1="${ry}" x2="${sx}" y2="${sy}" stroke="${color}" stroke-opacity=".18" stroke-width="1"/>`;
+      const right = Math.cos(sa) >= 0;
+      front += `<g><title>${esc(nameOf(k))}: ${meta(l)}, ${money(sum(l))}</title>` +
+        `<circle cx="${sx}" cy="${sy}" r="14" fill="#FFFFFF" stroke="${lighten(color, .55)}" stroke-width="1"/>` +
+        `<text x="${sx}" y="${sy + 3.5}" text-anchor="middle" style="font-size:10px;font-weight:600;fill:#0E0F13">${l.length}</text>` +
+        `<text x="${sx + (right ? 20 : -20)}" y="${sy + 3.5}" text-anchor="${right ? 'start' : 'end'}" style="font-size:10.5px;font-weight:500;fill:#0E0F13">${esc(nameOf(k))}</text></g>`;
+    });
+    front += `<circle cx="${rx}" cy="${ry}" r="21" fill="#FFFFFF" filter="url(#osh)"/>` +
+      `<circle cx="${rx}" cy="${ry}" r="18" fill="none" stroke="${color}" stroke-width="4"/>` +
+      `<text x="${rx}" y="${ry + 4}" text-anchor="middle" style="font-size:11px;font-weight:600;fill:#0E0F13">${gl}%</text>`;
+    /* the planet */
+    front += `<circle cx="${px}" cy="${py}" r="${pr}" fill="url(#osp)" filter="url(#osh)"/>` +
+      `<text x="${px}" y="${py + 6}" text-anchor="middle" style="font-size:${Math.max(13, pr / 3.2)}px;font-weight:300;fill:#FFFFFF">${money(sum(x.rows))}</text>` +
+      `<text x="${px}" y="${py - pr - 26}" text-anchor="middle" style="font-size:11.5px;font-weight:600;letter-spacing:.12em;fill:#0E0F13">${esc(x.g.t.toUpperCase())}</text>` +
+      `<text x="${px}" y="${py - pr - 11}" text-anchor="middle" style="font-size:10px;font-weight:600;letter-spacing:.06em;fill:#0E0F13">${esc(meta(x.rows).toUpperCase())}</text>`;
+  });
+  const head = CTX.head;
+  front += `<circle cx="${cx}" cy="${cy}" r="78" fill="url(#osp)" filter="url(#osh)"/>` +
+    `<circle cx="${cx}" cy="${cy}" r="62" fill="none" stroke="#FFFFFF" stroke-opacity=".18" stroke-width="1"/>` +
+    `<text x="${cx}" y="${cy - 22}" text-anchor="middle" style="font-size:9px;font-weight:600;letter-spacing:.18em;fill:#FFFFFF">${esc(head.toUpperCase())}</text>` +
+    `<text x="${cx}" y="${cy + 14}" text-anchor="middle" style="font-size:38px;font-weight:300;fill:#FFFFFF">${tot}</text>` +
+    `<text x="${cx}" y="${cy + 34}" text-anchor="middle" style="font-size:10.5px;font-weight:500;fill:#FFFFFF">${money(sum(R))} · ${Math.round(share * 100)}% Late</text>`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%"><defs>${sphere(color, 'osp')}${SHADOW('osh')}</defs>${back}${mid}${front}</svg>`;
+}
+
+/* ---------- 3. SKILL TREE ---------- */
+/* ---------- 4. GATHER: centres in, groups out, the total in the middle ---------- */
+function gather(el, R){
+  const W = 1400, H = 560, cx = W / 2, cy = H / 2, color = CTX.color;
+  const hubH = 140, hubW = 160, xL = 330, xR = W - 330;
+  const left = CENTERS.map(([n, c]) => ({t:n, c, rows: R.filter(r => r.center === n)})).filter(x => x.rows.length);
+  const right = GROUPS.map((g, i) => ({t:g.t, rows: R.filter(r => groupOf(r) === g)})).filter(x => x.rows.length);
+  /* one colour on the right: ink, or the chosen centre's colour */
+  right.forEach(x => { x.c = color; });
+  const tot = sum(R) || 1;
+  const band = (list, side) => {
+    const avail = H - 40, gap = 26, scale = (avail - gap * (list.length - 1)) / tot;
+    let y = 20, hy = cy - hubH / 2;
+    list.forEach(x => { x.h = Math.max(6, sum(x.rows) * scale); x.y = y; y += x.h + gap;
+      x.hh = hubH * sum(x.rows) / tot; x.hy = hy; hy += x.hh; });
+  };
+  band(left); band(right);
+  let defs = '', paths = '', labels = '';
+  left.forEach((x, i) => {
+    const x1 = xL, x2 = cx - hubW / 2, m = (x1 + x2) / 2;
+    defs += `<linearGradient id="gl${i}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${x.c}"/><stop offset="1" stop-color="${lighten(x.c, .25)}"/></linearGradient>`;
+    paths += `<path d="M${x1},${x.y}C${m},${x.y} ${m},${x.hy} ${x2},${x.hy}L${x2},${x.hy + x.hh}C${m},${x.hy + x.hh} ${m},${x.y + x.h} ${x1},${x.y + x.h}Z" fill="url(#gl${i})" fill-opacity=".92"/>`;
+    const ly = x.y + x.h / 2;
+    labels += `<text x="${x1 - 20}" y="${ly - 14}" text-anchor="end" style="font-size:11px;font-weight:600;letter-spacing:.14em;fill:#0E0F13">${esc(x.t.toUpperCase())}</text>` +
+      `<text x="${x1 - 20}" y="${ly + 8}" text-anchor="end" style="font-size:20px;font-weight:400;fill:#0E0F13">${money(sum(x.rows))}</text>` +
+      `<text x="${x1 - 20}" y="${ly + 25}" text-anchor="end" style="font-size:10.5px;font-weight:500;fill:#0E0F13">${meta(x.rows)}</text>`;
+  });
+  right.forEach((x, i) => {
+    const x1 = cx + hubW / 2, x2 = xR, m = (x1 + x2) / 2;
+    defs += `<linearGradient id="gr${i}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${lighten(x.c, .25)}"/><stop offset="1" stop-color="${x.c}"/></linearGradient>`;
+    paths += `<path d="M${x1},${x.hy}C${m},${x.hy} ${m},${x.y} ${x2},${x.y}L${x2},${x.y + x.h}C${m},${x.y + x.h} ${m},${x.hy + x.hh} ${x1},${x.hy + x.hh}Z" fill="url(#gr${i})" fill-opacity=".92"/>`;
+    const ly = x.y + x.h / 2;
+    labels += `<text x="${x2 + 20}" y="${ly - 14}" style="font-size:11px;font-weight:600;letter-spacing:.14em;fill:#0E0F13">${esc(x.t.toUpperCase())}</text>` +
+      `<text x="${x2 + 20}" y="${ly + 8}" style="font-size:20px;font-weight:400;fill:#0E0F13">${money(sum(x.rows))}</text>` +
+      `<text x="${x2 + 20}" y="${ly + 25}" style="font-size:10.5px;font-weight:500;fill:#0E0F13">${meta(x.rows)}</text>`;
+  });
+  const head = CTX.head;
+  const hub = `<circle cx="${cx}" cy="${cy}" r="230" fill="none" stroke="#F0F1F5"/>` +
+    `<circle cx="${cx}" cy="${cy}" r="190" fill="none" stroke="#E3E6EE" stroke-dasharray="1 7" stroke-linecap="round"/>` +
+    `<rect x="${cx - hubW / 2}" y="${cy - hubH / 2}" width="${hubW}" height="${hubH}" fill="#FFFFFF"/>` +
+    `<text x="${cx}" y="${cy - 30}" text-anchor="middle" style="font-size:10px;font-weight:600;letter-spacing:.18em;fill:#0E0F13">${esc(head.toUpperCase())}</text>` +
+    `<text x="${cx}" y="${cy + 16}" text-anchor="middle" style="font-size:52px;font-weight:300;fill:#0E0F13">${R.length}</text>` +
+    `<text x="${cx}" y="${cy + 42}" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#0E0F13">${money(sum(R))}</text>` +
+    `<text x="${cx}" y="${cy + 60}" text-anchor="middle" style="font-size:10.5px;font-weight:600;letter-spacing:.06em;fill:#0E0F13">${late(R)} LATE</text>`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%"><defs>${defs}</defs>${hub.split('<rect')[0]}${paths}<rect${hub.split('<rect')[1]}${labels}</svg>`;
+}
+
+function tree(el, R){
+  const W = 1200, H = 600, color = CTX.color;
+  const isProof = r => /proof|approv/i.test(r.sub);
+  const famOrder = ['Printing','Lamination','Cutting','Bench'];
+  const N = {
+    none:  {t:'No Substatus',  x:110, y:300, test: r => r.flow === 'none'},
+    art:   {t:'Files And Art', x:330, y:120, test: r => r.flow === 'inside' && !isProof(r)},
+    proof: {t:'Proof',         x:330, y:300, test: r => r.flow === 'inside' && isProof(r)},
+    cust:  {t:'Customer',      x:450, y:470, test: r => r.flow === 'outside'},
+    ready: {t:'Ready',         x:560, y:300, test: r => r.flow === 'ready'},
+    print: {t:'Printing',      x:690, y:150, test: r => r.flow === 'shop' && fam(r.sub) === 'Printing'},
+    lam:   {t:'Lamination',    x:690, y:450, test: r => r.flow === 'shop' && fam(r.sub) === 'Lamination'},
+    cut:   {t:'Cutting',       x:830, y:300, test: r => r.flow === 'shop' && fam(r.sub) === 'Cutting'},
+    bench: {t:'Bench',         x:1090,y:300, test: r => r.flow === 'shop' && fam(r.sub) === 'Bench'},
+    vend:  {t:'Vendors',       x:960, y:140, test: r => r.flow === 'vendor'},
+    move:  {t:'Moving',        x:960, y:460, test: r => r.flow === 'moving'}
+  };
+  Object.values(N).forEach(n => n.rows = R.filter(n.test));
+  const E = [['none','art'],['none','proof'],['none','cust'],['art','proof'],['proof','ready'],['cust','ready'],['art','print'],
+    ['ready','print'],['ready','lam'],['ready','cut'],['print','cut'],['lam','cut'],['cut','bench'],['print','vend'],['cut','vend'],['cut','move'],['lam','move'],['vend','bench'],['move','bench']];
+  let lines = '', nodes = '';
+  const on = n => n.rows.length > 0;
+  /* the trail: the main route work takes; the rest of the lattice stays faint */
+  const TRAIL = new Set(['none>art','art>proof','proof>ready','cust>ready','ready>print','print>cut','ready>lam','lam>cut','cut>bench','cut>vend','vend>bench']);
+  E.forEach(([a, b]) => { const A = N[a], B = N[b], lit = TRAIL.has(a + '>' + b) && on(A) && on(B);
+    lines += `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="${lit ? color : '#E6E8EE'}" stroke-width="${lit ? 3 : 1.4}" stroke-linecap="round" ${lit ? 'stroke-opacity=".85"' : ''}/>`; });
+  Object.values(N).forEach(n => {
+    const lit = on(n), below = n.y >= 300, ly = below ? n.y + 62 : n.y - 66;
+    nodes += `<g><title>${esc(n.t)}: ${meta(n.rows)}, ${money(sum(n.rows))}</title>` +
+      (lit ? `<circle cx="${n.x}" cy="${n.y}" r="29" fill="#FFFFFF" stroke="${color}" stroke-width="5" filter="url(#tsh)"/>` +
+             `<text x="${n.x}" y="${n.y + 6}" text-anchor="middle" style="font-size:17px;font-weight:400;fill:#0E0F13">${n.rows.length}</text>`
+           : `<circle cx="${n.x}" cy="${n.y}" r="28" fill="#FFFFFF" stroke="#E0E3EA" stroke-width="1.4"/>` +
+             `<text x="${n.x}" y="${n.y + 5}" text-anchor="middle" style="font-size:13px;font-weight:400;fill:#0E0F13">0</text>`) +
+      `<text x="${n.x}" y="${ly}" text-anchor="middle" style="font-size:11px;font-weight:600;letter-spacing:.14em;fill:#0E0F13">${esc(n.t.toUpperCase())}</text>` +
+      (lit ? `<text x="${n.x}" y="${ly + 16}" text-anchor="middle" style="font-size:10.5px;font-weight:500;fill:#0E0F13">${money(sum(n.rows))} · ${meta(n.rows)}</text>` : '') + `</g>`;
+  });
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%"><defs>${SHADOW('tsh')}</defs>${lines}${nodes}</svg>`;
+  const ma = R.filter(r => r.flow === 'shop');
+  if (CTX.stats) CTX.stats.innerHTML = [['Lines In View', R.length, money(sum(R))], ['On A Machine', ma.length, money(sum(ma))], ['Late', late(R), `${R.length ? Math.round(100 * late(R) / R.length) : 0}% Of View`]]
+    .map(([l, n, d]) => `<div><div class="l">${l}</div><div class="n">${n}</div><div class="d">${d}</div></div>`).join('');
+}
+
+
+  const adapt = rows => rows.map(r => {
+    const f = flowOf(r);
+    return {sub: r.subStatus || '', flow: ['untracked','other'].includes(f) ? 'none' : f,
+            center: r.center || '—', value: NUM(r.value), days: r.daysLate == null ? -99 : r.daysLate};
+  });
+  const go = (fn, el, rows, ctx) => {
+    if (!el) return;
+    if (!rows.length){ el.innerHTML = '<div class="sc-empty">Nothing In The Current View</div>'; if (ctx.stats) ctx.stats.innerHTML = ''; return; }
+    if (el.clientWidth === 0) return;           /* hidden by the other view; drawn when shown */
+    CTX = ctx; fn(el, adapt(rows));
+    /* two copies of a chart can live on the page (the path, in both views):
+       give every gradient and shadow its own name so neither borrows the
+       hidden one's */
+    const svg = el.querySelector('svg');
+    if (svg) svg.outerHTML = svg.outerHTML.replace(/id="([^"]+)"/g, `id="${el.id}-$1"`).replace(/url\(#([^)]+)\)/g, `url(#${el.id}-$1)`);
+  };
+  return {
+    gather: (el, rows, ctx) => go(gather, el, rows, ctx),
+    sankey: (el, rows, ctx) => go(sankey, el, rows, ctx),
+    orbit:  (el, rows, ctx) => go(orbit,  el, rows, ctx),
+    tree:   (el, rows, ctx) => go(tree,   el, rows, ctx)
+  };
+})();
+
+/* the late trend keeps one small snapshot a day in this browser */
+const LATE_KEY = 'helm.lateHistory.v1';
+function lateSnapshot(){
+  if (demoMode || !ROWS.length) return;
+  try {
+    const H = JSON.parse(localStorage.getItem(LATE_KEY) || '{}');
+    const d = new Date(), k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const by = {};
+    for (const r of ROWS){ const c = r.center || '—'; by[c] = by[c] || {late:0, lines:0, val:0}; by[c].lines++; if (isLate(r)){ by[c].late++; by[c].val += NUM(r.value); } }
+    H[k] = by;
+    const keys = Object.keys(H).sort(); while (keys.length > 120) delete H[keys.shift()];
+    localStorage.setItem(LATE_KEY, JSON.stringify(H));
+  } catch (e) {}
+}
+function lateHistory(){
+  let H = {};
+  try { H = JSON.parse(localStorage.getItem(LATE_KEY) || '{}'); } catch (e) {}
+  if (demoMode){
+    /* a believable six weeks so the chart can be seen before real days collect */
+    H = {}; let late = 260;
+    for (let i = 41; i >= 0; i--){ const d = new Date(); d.setDate(d.getDate() - i);
+      late = Math.max(120, Math.round(late + (Math.sin(i / 4) * 9) - 1.2));
+      const k = d.toISOString().slice(0, 10);
+      H[k] = Object.fromEntries(CENTERS.map((c, j) => [c.name, {late: Math.round(late * [.24,.18,.2,.19,.19][j]), lines: 100, val: late * 1600 * [.24,.18,.2,.19,.19][j]}])); }
+  }
+  return H;
+}
+
+function renderScorecard(){
+  const el = document.getElementById('scoreGrid');
+  if (!el) return;
+  const rows = chartRows();
+  const cs = CENTERS.map(c => ({c, rows: rows.filter(r => r.center === c.name)})).filter(x => x.rows.length);
+  if (!cs.length){ el.innerHTML = '<div class="sc-empty">Nothing In The Current View</div>'; return; }
+  const unplaced = r => ['untracked','other','inside','outside'].includes(flowOf(r));
+  cs.forEach(x => { x.bad = x.rows.filter(unplaced); x.pct = Math.round(100 * x.bad.length / x.rows.length); x.late = x.rows.filter(isLate).length; });
+  cs.sort((a, b) => b.pct - a.pct);
+  el.innerHTML = cs.map(x => `<div class="sc-card">
+      <div class="sc-n"><i style="background:${x.c.color}"></i>${esc(x.c.name)}</div>
+      <div class="sc-pct">${x.pct}<small>%</small></div>
+      <div class="sc-bar"><b style="width:${x.pct}%;background:${x.c.color}"></b></div>
+      <div class="sc-d">${x.bad.length} Of ${x.rows.length} Lines Blocked Or Unplaced</div>
+      <div class="sc-d">${esc(money(shSum(x.bad)))} Waiting · ${x.late} Late</div></div>`).join('');
+}
+
+function renderLateTrend(){
+  const el = document.getElementById('trendChart');
+  if (!el) return;
+  const H = lateHistory(), days = Object.keys(H).sort().slice(-42);
+  const lens = state.lens, names = CENTERS.map(c => c.name);
+  const pick = names.includes(lens) ? [lens] : ['valley','southbay'].includes(lens)
+             ? CENTERS.filter(c => c.facility === lens).map(c => c.name) : names;
+  const pts = days.map(k => ({k, n: pick.reduce((a, c) => a + ((H[k][c] || {}).late || 0), 0),
+                                 v: pick.reduce((a, c) => a + ((H[k][c] || {}).val || 0), 0)}));
+  const meta = document.getElementById('trendMeta');
+  if (pts.length < 2){
+    el.innerHTML = `<div class="sc-empty">Collecting Since Today · The Line Fills In Day By Day</div>`;
+    if (meta) meta.innerHTML = ''; return;
+  }
+  const W = 1200, Hh = 360, pad = 40, color = scopeColor();
+  const max = Math.max(...pts.map(p => p.n)) * 1.12, min = Math.min(...pts.map(p => p.n)) * .85;
+  const X = i => pad + (W - pad * 2) * i / (pts.length - 1), Y = n => Hh - pad - (Hh - pad * 2) * (n - min) / Math.max(1, max - min);
+  let d = `M${X(0)},${Y(pts[0].n)}`;
+  for (let i = 1; i < pts.length; i++){ const x0 = X(i - 1), x1 = X(i), mx = (x0 + x1) / 2; d += ` C${mx},${Y(pts[i - 1].n)} ${mx},${Y(pts[i].n)} ${x1},${Y(pts[i].n)}`; }
+  const last = pts[pts.length - 1], first = pts[0], wk = pts[Math.max(0, pts.length - 8)];
+  const chg = last.n - wk.n;
+  const fmt = k => new Date(k + 'T12:00').toLocaleDateString([], {month:'short', day:'numeric'});
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${Hh}" width="100%" class="tr-svg">
+    <defs><linearGradient id="trf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".16"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+    <path d="${d} L${X(pts.length - 1)},${Hh - pad} L${X(0)},${Hh - pad} Z" fill="url(#trf)"/>
+    <path d="${d}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="${X(pts.length - 1)}" cy="${Y(last.n)}" r="6" fill="#FFFFFF" stroke="${color}" stroke-width="3"/>
+    <text x="${X(0)}" y="${Hh - 10}" style="font-size:11px;font-weight:600;letter-spacing:.1em;fill:#0E0F13">${esc(fmt(first.k).toUpperCase())}</text>
+    <text x="${X(pts.length - 1)}" y="${Hh - 10}" text-anchor="end" style="font-size:11px;font-weight:600;letter-spacing:.1em;fill:#0E0F13">TODAY</text>
+  </svg>`;
+  if (meta) meta.innerHTML = `<div><div class="l">Late Today</div><div class="n">${last.n}</div><div class="d">${esc(money(last.v))}</div></div>
+    <div><div class="l">A Week Ago</div><div class="n">${wk.n}</div><div class="d">${esc(fmt(wk.k))}</div></div>
+    <div><div class="l">Change</div><div class="n">${chg > 0 ? '+' : ''}${chg}</div><div class="d">${chg < 0 ? 'Getting Better' : chg > 0 ? 'Getting Worse' : 'Holding'}</div></div>`;
+}
+
+function renderSubCharts(){
+  const rows = chartRows();
+  const head = {act:'Needs Action', late:'Overdue', today:'Due Today', tomorrow: nextDayLabel(), all:'In View'}[state.due] || 'In View';
+  const ctx = {color: scopeColor(), head, stats:null};
+  SC.gather(document.getElementById('scGather'), rows, ctx);
+  SC.sankey(document.getElementById('scSankey'), rows, ctx);
+  SC.orbit(document.getElementById('scOrbit'), rows, ctx);
+  /* the path opens on what needs action when the page shows everything */
+  const pathRows = state.due === 'all' ? rows.filter(r => r.daysLate != null && r.daysLate >= -7) : rows;
+  SC.tree(document.getElementById('scPathM'), pathRows,
+          {...ctx, head: state.due === 'all' ? 'Needs Action' : head, stats: document.getElementById('scPathMStats')});
+  renderScorecard();
+  lateSnapshot();
+  renderLateTrend();
+}
+(function wireSubCharts(){
+  ['scGatherSec','scSankeySec','scOrbitSec','scPathMSec','scoreSec','trendSec2'].forEach(id => {
+    const sec = document.getElementById(id);
+    if (sec && 'IntersectionObserver' in window)
+      new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && ROWS.length) renderSubCharts(); }), {threshold:.05}).observe(sec);
+  });
+  let rt = 0;
+  addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (ROWS.length) renderSubCharts(); }, 200); });
+})();
+
 function renderStuck(){
   const grid = document.getElementById('stGrid');
   const meta = document.getElementById('stMeta');
@@ -9018,15 +9484,10 @@ let lastLoad = 0;
 
 async function autoRefresh(){
   if (document.hidden) return;
-  const y = window.scrollY || document.documentElement.scrollTop || 0;
+  const m = placeMark();
   await load(true);
   if (HAS_GSAP) ScrollTrigger.refresh();
-  const put = () => {
-    if (window.lenis) lenis.scrollTo(y, {immediate:true});
-    else scrollTo(0, y);
-  };
-  put();
-  requestAnimationFrame(put);
+  placePut(m);
 }
 
 /* The first render creates the pinned timeline, which changes the document
@@ -9184,14 +9645,10 @@ async function load(force){
     if (!merged.length) throw new Error('API responded but returned 0 usable line items');
     ROWS = merged; demoMode = false; memCache = {at:Date.now(), rows:merged};
     saveCachedData(merged);
-    const keepY = quiet ? (window.scrollY || document.documentElement.scrollTop || 0) : null;
+    const keep = quiet ? placeMark() : null;
     setNotice(''); render(); stamp(new Date());
-    if (keepY === null) toTopOnce();
-    else {
-      const put = () => { if (window.lenis) lenis.scrollTo(keepY, {immediate:true});
-                          else scrollTo(0, keepY); };
-      put(); requestAnimationFrame(put);
-    }
+    if (!keep) toTopOnce();
+    else placePut(keep);
     BOOT.to(99, 'Drawing');
     trendSave(ROWS); renderTrend();
     stallSave(ROWS); renderStalled(chartRows());
@@ -9217,44 +9674,79 @@ async function load(force){
    top of the screen was sitting in, put it back under the top of the screen at
    the same offset, and keep putting it back for half a second while the boards
    and the pinned ladder settle. */
-function renderKeepingPlace(){
-  const y = window.scrollY || document.documentElement.scrollTop || 0;
-
-  /* the last landmark that starts at or above the fold is the one being read */
+/* Hold the reader's place: remember which section sits at the top of the
+   screen and how far into it they are, then after anything redraws, put that
+   same section back under the top of the screen. Used for filter clicks, the
+   auto-refresh, and zooming or resizing the window. */
+let PLACE_BUSY = false;
+/* the line just under the sticky header is where reading happens */
+const placeLine = () => { const t = document.getElementById('topbar');
+  return t ? Math.max(0, t.getBoundingClientRect().bottom) : 0; };
+function placeMark(){
+  const line = placeLine();
   const marks = [...document.querySelectorAll('#scrollContainer [id]')]
-    .filter(el => el.matches('section, .hero, .details-panel, .metrics-panel, .gantt'));
-  let anchorId = null, delta = 0;
+    .filter(el => el.matches('section, .hero, .details-panel, .metrics-panel, .gantt') && el.offsetParent !== null &&
+                  !/sticky|fixed/.test(getComputedStyle(el).position))
+    /* the innermost ones: a wrapper around many sections is no landmark */
+    .filter((el, i, all) => !all.some(o => o !== el && el.contains(o)));
+  /* the section crossing that line, or failing that the first one below it */
+  let best = null;
   for (const el of marks){
-    const top = el.getBoundingClientRect().top + y;
-    if (top <= y + 4){ anchorId = el.id; delta = y - top; }
+    const r = el.getBoundingClientRect();
+    if (r.top <= line && r.bottom > line){ best = {el, r}; }
   }
-
-  render();
-  if (HAS_GSAP) ScrollTrigger.refresh();
-
+  if (!best){
+    for (const el of marks){ const r = el.getBoundingClientRect(); if (r.top > line){ best = {el, r}; break; } }
+  }
+  return {y: window.scrollY || document.documentElement.scrollTop || 0,
+          id: best ? best.el.id : null, top: best ? best.r.top : 0};
+}
+function placePut(m, ms){
+  if (!m) return;
+  PLACE_BUSY = true;
   let live = true;
   const stop = () => { live = false; };
-  ['wheel','touchstart','keydown'].forEach(t =>
-    addEventListener(t, stop, {once:true, passive:true}));
-
+  ['wheel','touchstart','keydown'].forEach(t => addEventListener(t, stop, {once:true, passive:true}));
   const put = () => {
     if (!live) return;
-    let target = y;
-    const a = anchorId && document.getElementById(anchorId);
-    if (a && a.isConnected){
-      const now = a.getBoundingClientRect().top +
-                  (window.scrollY || document.documentElement.scrollTop || 0);
-      target = Math.max(0, now + delta);
+    let target = m.y;
+    const a = m.id && document.getElementById(m.id);
+    if (a && a.isConnected && a.offsetParent !== null){
+      const r = a.getBoundingClientRect(), y = window.scrollY || document.documentElement.scrollTop || 0;
+      /* the same section back at the same height on the screen */
+      target = Math.max(0, y + r.top - m.top);
     }
     if (window.lenis) lenis.scrollTo(target, {immediate:true});
     else window.scrollTo(0, target);
   };
   put();
   requestAnimationFrame(put);
-  setTimeout(put, 80);
-  setTimeout(put, 260);
-  setTimeout(() => { put(); live = false; }, 550);
+  [80, 260, 550].forEach(t => setTimeout(put, t));
+  setTimeout(() => { live = false; PLACE_BUSY = false; }, (ms || 600));
 }
+function renderKeepingPlace(){
+  const m = placeMark();
+  render();
+  if (HAS_GSAP) ScrollTrigger.refresh();
+  placePut(m);
+}
+/* zooming in or out, or resizing the window, redraws the page at a new size:
+   keep the section being read on screen instead of whatever lands there */
+(function holdOnResize(){
+  let last = null, t = 0, resizing = false;
+  const note = () => { if (!resizing && !PLACE_BUSY) last = placeMark(); };
+  addEventListener('scroll', () => requestAnimationFrame(note), {passive:true});
+  setTimeout(note, 1500);
+  addEventListener('resize', () => {
+    resizing = true;
+    clearTimeout(t);
+    t = setTimeout(() => {
+      if (HAS_GSAP) ScrollTrigger.refresh();
+      placePut(last, 900);
+      setTimeout(() => { resizing = false; note(); }, 950);
+    }, 260);
+  });
+})();
 
 /* The header wears the identifier colour of whatever is selected — a centre's
    own, Valley's maroon (Tarzana's), South Bay's blue (Long Beach's), ink for
@@ -9839,116 +10331,108 @@ function tvMachineTodayHTML(list, start){
 }
 
 
-/* TODAY FLOW — a Sankey of today's lines: centre → substatus group →
-   substatus. A ribbon's thickness is its number of line items; every block
-   carries its dollar total. Drawn at the board's own pixel size. */
-function tvFlowSVG(list, W, H, sets){
+/* TODAY FLOW — today's lines as soft cards joined by even ribbons:
+   centre → group → substatus. Cards carry "count · $value" on one line;
+   ribbons keep one thickness end to end (busier = thicker) and blend from
+   one card's colour into the next. The eight biggest substatuses get a card,
+   the rest share "+ N More". Every card opens its lines. */
+function tvFlowSVG(list, W, H, sets, mono){
   const u = Math.max(8, W / 95);
   const CEN = ['Long Beach','Torrance','Santa Ana','Thousand Oaks','Tarzana'];
-  const fam = s => (String(s).match(/^([^|:>-]+?)\s*[|:>-]/) || [, 'Bench'])[1].trim();
-  const BLUE = '#1A4C7E', RED = '#9E1219', GREY = '#6B6E76';
-  const groupOf = r => {
-    const f = flowOf(r);
-    if (f === 'shop') return {k: 'm:' + fam(r.subStatus), t: tc(fam(r.subStatus)), c: BLUE};
-    return ({ready:{k:'ready', t:'Ready To Run', c:GREY}, inside:{k:'blocked', t:'Blocked', c:RED},
-             outside:{k:'blocked', t:'Blocked', c:RED}, vendor:{k:'vendor', t:'Vendors', c:GREY},
-             moving:{k:'moving', t:'Moving', c:GREY}, other:{k:'other', t:'Other', c:GREY}})[f]
-           || {k:'none', t:'No Substatus', c:RED};
-  };
+  const lift = (h, a) => { const n = parseInt(h.slice(1), 16), m = x => Math.round(x + (255 - x) * a);
+    return `rgb(${m(n >> 16)},${m(n >> 8 & 255)},${m(n & 255)})`; };
+  const GROUPS = [
+    {k:'shop',  t:'On A Machine',       a:'#5B6CFF', b:'#3A3FD1', f:['shop']},
+    {k:'ready', t:'Ready To Run',       a:'#14B39B', b:'#0B8A78', f:['ready']},
+    {k:'block', t:'Blocked',            a:'#FF6B8B', b:'#E5416C', f:['inside','outside']},
+    {k:'out',   t:'Vendors And Moving', a:'#A57BFF', b:'#7A4DF0', f:['vendor','moving']},
+    {k:'none',  t:'No Substatus',       a:'#FF6B8B', b:'#C8102E', f:['untracked','other']}
+  ];
+  const gOf = r => GROUPS.find(g => g.f.includes(flowOf(r))) || GROUPS[4];
   const subOf = r => { const s = String(r.subStatus || '').trim();
-    if (!s) return 'Blank';
-    return flowOf(r) === 'shop' ? tvMachine(s) : tc(s); };
-  const mOrd = machineList(list).map(fam).filter((x, i, a) => a.indexOf(x) === i);
-  const gRank = k => k.startsWith('m:') ? mOrd.indexOf(k.slice(2)) : 50 + ['ready','blocked','vendor','moving','other','none'].indexOf(k);
+    return !s ? 'Blank' : flowOf(r) === 'shop' ? tvMachine(s) : tc(s); };
   const sum = l => l.reduce((a, r) => a + NUM(r.value), 0);
+  let n = 0; const keep = (title, rows) => { const t = 'f' + (n++); sets[t] = {title, rows}; return t; };
 
-  /* nodes */
   const cent = [...new Set(list.map(r => r.center || '—'))]
     .sort((a, b) => ((CEN.indexOf(a) + 1 || 99) - (CEN.indexOf(b) + 1 || 99)))
-    .map(n => ({k:n, t:n, c: COLOR_OF[n] || '#0E0F13', rows: list.filter(r => (r.center || '—') === n)}));
-  const gm = new Map();
-  for (const r of list){ const g = groupOf(r); if (!gm.has(g.k)) gm.set(g.k, {...g, rows: []}); gm.get(g.k).rows.push(r); }
-  const groups = [...gm.values()].sort((a, b) => gRank(a.k) - gRank(b.k));
-  let subs = [];
-  for (const g of groups){
-    const sm = new Map();
-    for (const r of g.rows){ const t = subOf(r); if (!sm.has(t)) sm.set(t, []); sm.get(t).push(r); }
-    const mo = machineList(list).map(tvMachine);
-    subs.push(...[...sm.entries()].map(([t, rows]) => ({k: g.k + '|' + t, t, g, c: g.c, rows}))
-      .sort((a, b) => g.k.startsWith('m:') ? mo.indexOf(a.t) - mo.indexOf(b.t) : b.rows.length - a.rows.length));
-  }
-  /* too many substatuses for their labels: fold the smallest of a group together */
-  const gap = u * .45, hmin = u * 1.25;
-  const maxN = Math.max(4, Math.floor((H + gap) / (hmin + gap)));
-  while (subs.length > maxN){
-    const small = subs.filter(x => !x.fold).sort((a, b) => a.rows.length - b.rows.length);
-    const a = small.find(x => subs.some(y => y !== x && y.g === x.g && !y.fold)) || small[0];
-    let o = subs.find(y => y.fold && y.g === a.g);
-    if (!o){ o = {k: a.g.k + '|+', t: 'Others', g: a.g, c: a.g.c, rows: [], fold: 0}; subs.splice(subs.indexOf(a), 0, o); }
-    o.rows.push(...a.rows); o.fold++; o.t = `${o.fold} Others`;
-    subs.splice(subs.indexOf(a), 1);
-    if (small.length < 2) break;
-  }
-  const tot = list.length;
-  /* vertical layout: proportional, with a floor so every label has room */
-  const place = (nodes, floor) => {
-    const g = nodes.length > 1 ? Math.min(gap * 2, (H * .25) / (nodes.length - 1)) : 0;
-    let fixed = new Set(), k = 0;
-    for (let it = 0; it < 4; it++){
-      const fh = [...fixed].reduce((a, n) => a + floor, 0), fn = [...fixed].reduce((a, n) => a + n.rows.length, 0);
-      k = (H - g * (nodes.length - 1) - fh) / Math.max(1, tot - fn);
-      nodes.forEach(n => { if (n.rows.length * k < floor) fixed.add(n); });
-    }
-    let y = 0;
-    nodes.forEach(n => { n.h = fixed.has(n) ? floor : n.rows.length * k; n.y = y; n.o = y; n.i = y; y += n.h + g; });
-  };
-  place(cent, u * 2.4); place(groups, u * 1.25); place(subs, hmin);
+    .map(c => { const col = COLOR_OF[c] || '#0E0F13';
+      return {t:c, a: lift(col, .22), b: col, rows: list.filter(r => (r.center || '—') === c)}; });
+  const groups = GROUPS.map(g => ({...g, ...(mono ? {a:'#1A4C7E', b:'#1A4C7E'} : {}), rows: list.filter(r => gOf(r) === g)})).filter(g => g.rows.length);
+  /* substatuses, biggest first; the top eight shown, in group order */
+  const sm = new Map();
+  for (const r of list){ const g = gOf(r), t = subOf(r), k = g.k + '|' + t;
+    if (!sm.has(k)) sm.set(k, {t, g, rows: []}); sm.get(k).rows.push(r); }
+  const all = [...sm.values()].sort((a, b) => b.rows.length - a.rows.length);
+  const SHOW = all.length > 9 ? 8 : 9;
+  const shown = all.slice(0, SHOW).sort((a, b) => (GROUPS.indexOf(a.g) - GROUPS.indexOf(b.g)) || (b.rows.length - a.rows.length));
+  const hidden = all.slice(SHOW);
+  const subs = shown.map(x => ({...x, a: mono ? '#1A4C7E' : x.g.a, b: mono ? '#1A4C7E' : x.g.b}));
+  if (hidden.length) subs.push({t: `+ ${hidden.length} More`, more: true, rows: hidden.flatMap(x => x.rows), parts: hidden, a:'#FFFFFF', b:'#FFFFFF'});
 
-  const nw = u * .8, x1 = u * 13, x2 = W * .40, x3 = W * .66;
-  const id = (k) => { const t = 'f' + Object.keys(sets).length; return t; };
-  let out = '';
-  const ribbon = (xa, ya, ha, xb, yb, hb, col, op) => {
-    const m = (xa + xb) / 2;
-    return `<path d="M${xa},${ya}C${m},${ya} ${m},${yb} ${xb},${yb}L${xb},${yb + hb}C${m},${yb + hb} ${m},${ya + ha} ${xa},${ya + ha}Z" fill="${col}" fill-opacity="${op}"/>`;
+  /* card positions */
+  const cw = W * .17, sw = W * .19;
+  const X = {c: 0, g: (W - cw) * .5 - W * .02, s: W - sw};
+  const col = (items, h0) => {
+    const gap0 = u * .9, h = Math.min(h0, (H - gap0 * (items.length - 1)) / items.length);
+    const gap = items.length > 1 ? (H - h * items.length) / (items.length - 1) : 0;
+    items.forEach((x, i) => { x.y = items.length > 1 ? i * (h + gap) : (H - h) / 2; x.h = h; });
   };
-  /* centre → group */
+  col(cent, u * 4.4); col(groups, u * 4.4); col(subs, u * 3.6);
+
+  /* links */
+  const L = [];
   for (const c of cent) for (const g of groups){
-    const n = c.rows.filter(r => g.rows.includes(r)).length;
-    if (!n) continue;
-    const ha = c.h * n / c.rows.length, hb = g.h * n / g.rows.length;
-    out += ribbon(x1 + nw, c.o, ha, x2, g.i, hb, c.c, .32); c.o += ha; g.i += hb;
+    const k = c.rows.filter(r => g.rows.includes(r)).length;
+    if (k) L.push({from:c, to:g, n:k, ca:c.b, cb:g.b});
   }
-  /* group → substatus, still in each centre's colour, so a centre can be
-     followed all the way to the substatus its work sits in */
-  for (const sb of subs){
-    const g = sb.g;
-    let yi = sb.y;
-    for (const c of cent){
-      const n = sb.rows.filter(r => (r.center || '—') === c.k).length;
-      if (!n) continue;
-      const ha = g.h * n / g.rows.length, hb = sb.h * n / sb.rows.length;
-      out += ribbon(x2 + nw, g.o, ha, x3, yi, hb, c.c, .32); g.o += ha; yi += hb;
+  for (const g of groups){
+    for (const x of subs){
+      const k = x.more ? x.parts.filter(p => p.g.k === g.k).reduce((a, p) => a + p.rows.length, 0)
+                       : (x.g.k === g.k ? x.rows.length : 0);
+      if (k) L.push({from:g, to:x, n:k, ca:g.b, cb: x.more ? g.b : x.b});
+    /* mono: ribbons into a substatus keep the dashboard blue */
     }
   }
-  const fs = u * .95, fsS = u * .8;
-  const block = (n, x, col, side, label, extra) => {
-    const t = id(); sets[t] = {title: n.t, rows: n.rows};
-    const cy = n.y + n.h / 2;
-    const tx = side < 0 ? x - u * .5 : x + nw + u * .5;
-    return `<g class="fl-n" data-ft="${t}"><rect x="${x}" y="${n.y}" width="${nw}" height="${Math.max(2, n.h)}" fill="${col}"/>` +
-      `<text x="${tx}" y="${cy}" dy=".35em" text-anchor="${side < 0 ? 'end' : 'start'}" style="font-size:${fs}px">${label}${extra || ''}</text></g>`;
+  const maxN = Math.max(1, ...L.map(l => l.n));
+  const thick = k => u * .35 + u * 1.45 * k / maxN;
+  const slotsFor = (node, side) => {
+    const own = L.filter(l => (side === 'out' ? l.from : l.to) === node);
+    const pad = Math.min(node.h * .22, u * .9), span = node.h - pad * 2;
+    own.forEach((l, i) => { l[side] = node.y + pad + (own.length === 1 ? span / 2 : span * i / (own.length - 1)); });
   };
-  const meta = rows => `<tspan class="m" dx="${u * .5}">${rows.length} · ${esc(tvMoney(sum(rows)))}</tspan>`;
-  for (const c of cent) out += block(c, x1, c.c, -1, `<tspan class="b">${esc(c.t)}</tspan>`, meta(c.rows));
-  for (const g of groups) out += block(g, x2, g.c, 1, `<tspan class="b" fill="${g.c === BLUE ? BLUE : g.c === RED ? RED : '#0E0F13'}">${esc(g.t)}</tspan>`, meta(g.rows));
-  for (const sb of subs){
-    const cut = sb.rows.filter(preDue).length;
-    out += block(sb, x3, sb.c, 1, `<tspan class="b">${esc(sb.t)}</tspan>`,
-      meta(sb.rows) + (cut ? `<tspan class="cut" dx="${u * .6}">${cut} Cut Today</tspan>` : ''));
-  }
-  const head = (x, t, a) => `<text class="hd" x="${x}" y="${-u * .9}" text-anchor="${a}" style="font-size:${u * .78}px">${t}</text>`;
-  return `<svg class="tv-flow" viewBox="0 ${-u * 1.6} ${W} ${H + u * 1.6}" width="${W}" height="${H + u * 1.6}">` +
-    head(x1 + nw, 'CENTRE', 'end') + head(x2, 'SUBSTATUS GROUP', 'start') + head(x3, 'SUBSTATUS', 'start') + out + `</svg>`;
+  [...cent, ...groups].forEach(x => slotsFor(x, 'out'));
+  [...groups, ...subs].forEach(x => slotsFor(x, 'in'));
+  const xOf = (node, side) => node === undefined ? 0 :
+    cent.includes(node) ? (side === 'out' ? X.c + cw : X.c) :
+    groups.includes(node) ? (side === 'out' ? X.g + cw : X.g) : X.s;
+  let defs = '', paths = '';
+  L.sort((a, b) => b.n - a.n).forEach((l, i) => {
+    const tuck = u * 1.6, xa = xOf(l.from, 'out') - tuck, xb = xOf(l.to, 'in') + tuck,
+          m = (xOf(l.from, 'out') + xOf(l.to, 'in')) / 2;
+    defs += `<linearGradient id="tvfg${i}" gradientUnits="userSpaceOnUse" x1="${xa}" y1="0" x2="${xb}" y2="0">` +
+            `<stop offset="0" stop-color="${l.ca}"/><stop offset="1" stop-color="${l.cb}"/></linearGradient>`;
+    const xo = xOf(l.from, 'out'), xi = xOf(l.to, 'in');
+    /* a short straight run out of the card, then the curve, then a straight run in */
+    const r = Math.min(u * 1.2, (xi - xo) * .12);
+    paths += `<path d="M${xa},${l.out}L${xo + r},${l.out}C${m},${l.out} ${m},${l.in} ${xi - r},${l.in}L${xb},${l.in}" fill="none" stroke="url(#tvfg${i})" stroke-width="${thick(l.n).toFixed(1)}"/>`;
+  });
+
+  const card = (x, w, node, inner, dark) =>
+    `<div class="tvf-c${node.more ? ' more' : ''}" data-ft="${keep(node.t, node.rows)}" style="left:${x}px;top:${node.y}px;width:${w}px;height:${node.h}px;` +
+    `background:${node.more ? '#FFFFFF' : `linear-gradient(135deg,${lift(node.b, .10)},${node.b} 70%)`}">${inner}</div>`;
+  const lateTag = rows => { const n = mono ? rows.filter(isLate).length : 0; return n ? `<em>${n} Late</em>` : ''; };
+  const two = (t, rows) => `<div class="t"><span>${esc(t)}</span>${lateTag(rows)}</div><div class="n">${rows.length} <small>· ${esc(tvMoney(sum(rows)))}</small></div>`;
+  let cards = '';
+  cent.forEach(c => cards += card(X.c, cw, c, two(c.t, c.rows)));
+  groups.forEach(g => cards += card(X.g, cw, g, two(g.t, g.rows)));
+  subs.forEach(x => {
+    const cut = x.rows.filter(preDue).length;
+    cards += card(X.s, sw, x, `<div class="t"><span>${esc(x.t)}</span>${cut ? `<em>${cut} Cut</em>` : lateTag(x.rows)}</div>` +
+      `<div class="n">${x.rows.length} <small>· ${esc(tvMoney(sum(x.rows)))}</small></div>`);
+  });
+  return `<div class="tvf" style="height:${H}px;--fu:${u}px">` +
+    `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${defs}</defs>${paths}</svg>${cards}</div>`;
 }
 
 function tvSlides(rows){
@@ -10002,14 +10486,16 @@ function tvSlides(rows){
     const stuck = todayList.filter(r => ['inside','outside','untracked'].includes(flowOf(r))).length;
     slides.push({key:'flow', pill:'Today Flow', title:'Today, by substatus',
       sub: `${todayList.length} ${todayList.length === 1 ? 'Line' : 'Lines'} · ${tvMoney(todayList.reduce((a, r) => a + NUM(r.value), 0))}` +
-           (stuck ? ` · ${stuck} Blocked Or No Substatus` : '') + ' · Width Is Line Items',
+           (stuck ? ` · ${stuck} Blocked Or No Substatus` : ''),
       html: () => {
         const body = document.getElementById('tvBody');
         const sl = TV.slides.find(x => x.key === 'flow') || {};
         sl.sets = {};
         const W = body.clientWidth, H = body.clientHeight;
         const u = Math.max(8, W / 95);
-        return tvFlowSVG(todayList, W, Math.max(200, H - u * 1.8), sl.sets);
+        const pad = u * .5;
+        return `<div class="tvf-panel" style="padding:${pad}px">` +
+          tvFlowSVG(todayList, W - pad * 2, Math.max(200, H - pad * 2), sl.sets) + `</div>`;
       }});
   }
   /* the same day as one list, row by row */
@@ -10145,12 +10631,19 @@ function renderTV(){
     next:  !next.length ? 'Nothing Due' : topMachine(next) ? `Busiest: ${topMachine(next).replace(/ (\d+)$/, ' · $1')}` : 'None On A Machine Yet',
     cut:   cutBy
   };
-  const k = (label, list, hot, showVal, d) => `<div class="tv-k${hot && list.length ? ' hot' : ''}">
-      <div class="l">${esc(label)}</div><div class="n"><b>${list.length}</b>${showVal ? `<span>${esc(money(sum(list)))}</span>` : ''}</div>
-      <div class="d">${esc(d)}</div></div>`;
+  const ICON = {
+    late:  '<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+    today: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 15l2 2 4-4"/>',
+    next:  '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+    cut:   '<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/>'
+  };
+  const k = (key, label, list, hot, showVal, d) => `<div class="tv-k${hot && list.length ? ' hot' : ''}">
+      <svg viewBox="0 0 24 24" aria-hidden="true">${ICON[key]}</svg>
+      <div class="l">${esc(label)}</div><div class="n">${list.length}</div>
+      <div class="d">${showVal && list.length ? esc(money(sum(list))) + ' · ' : ''}${esc(d)}</div></div>`;
   document.getElementById('tvKpis').innerHTML =
-    k('Overdue', late, true, true, details.late) + k('Due today', today, true, true, details.today) +
-    k(nextDayLabel(), next, false, true, details.next) + k('Cut today', cut, true, false, details.cut);
+    k('late', 'Overdue', late, true, true, details.late) + k('today', 'Due today', today, true, true, details.today) +
+    k('next', nextDayLabel(), next, false, true, details.next) + k('cut', 'Cut today', cut, true, false, details.cut);
   document.getElementById('tvScope').textContent = tvScopeLabel();
   const logo = document.querySelector('.tb-mark img');
   document.getElementById('tvBrand').innerHTML = (logo ? `<img src="${logo.src}" alt="FASTSIGNS">` : 'FASTSIGNS') + '<span>Helm</span>';
