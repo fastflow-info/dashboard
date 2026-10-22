@@ -2,35 +2,11 @@
 <!--
   ============================================================
   HELM, FASTSIGNS production priority dashboard
-  Version : 2026-10-21 · "Orbit, Spread Out"
-  Also    : Substatus Orbit: planets on an oval round the middle; each
-            family's % ring and its machines and substatuses stand in
-            two tidy columns at the screen edges, in planet order, so
-            nothing overlaps; % rings are a single ringed circle (no white
-            disc outside the outline), larger so the % fits; lower
-            families carry their name below. Based on "Families, Path
-            Too, Bigger Text".
-  Also    : all text on Substatus Orbit and The Production Path is
-            about 35% larger.
-  Also    : The Production Path uses the same families, each lit step
-            carrying its machines and substatuses as small nodes; the
-            machine steps follow whatever families hold work. Substatus
-            Orbit stretched wider and 8% larger.
-  Also    : Substatus Orbit and Where The Work Comes From are built on
-            substatus families (Printing, Cutting, Lamination, Bench,
-            Ready To Run, Files And Art, Proof, Customer, Vendors,
-            Transfers, No Substatus): families are the planets and the
-            middle cards; machines and substatuses circle them and
-            fill the right column. Centre ribbons keep their centre
-            colour end to end; family-to-substatus ribbons are light
-            grey. Based on "Holds Its Place, Clean Red Edge, Wider Orbit".
-  Also    : Where The Work Comes From: group and substatus cards are
-            white with a hairline and soft shadow (only centres are
-            coloured). Substatus Orbit: 25% larger and stretched wide
-            so the middle no longer crowds.
-  Also    : the due-today red edge is now the outline's own left side
-            (4px), exactly the card's height, flush with the black
-            outline, and it redraws with the outline on hover.
+  Version : 2026-10-21 · "TV Substatus Boards"
+  Also    : TV mode (T) gains five boards after At Risk: Where The
+            Work Comes From, Substatus Orbit, The Production Path,
+            Substatus Scorecard, Late Week By Week (?board=work, orbit,
+            path, score, trend). Based on "Orbit, Spread Out".
   Date    : Wednesday, October 21, 2026
   Based on: 2026-10-21 · "Substatus Story, Production"
   Changed in this version (whole dashboard):
@@ -1281,6 +1257,16 @@ body.view-mgmt [data-view="prod"]{display:none !important}
 .st-meta{font-size:12px;font-weight:600;color:var(--ink);margin:0 0 28px}
 .st-meta b{color:var(--red-deep);font-weight:700}
 /* SUBSTATUS CHARTS — the approved four, plus scorecard and trend */
+.tv-body .sc-stage.tv-sc{height:100%;min-height:0;margin:0}
+.tv-body .tv-score{height:100%;align-content:center;gap:calc(var(--u) * 3)}
+.tv-body .tv-score .sc-n{font-size:calc(var(--u) * 1.1)}
+.tv-body .tv-score .sc-pct{font-size:calc(var(--u) * 7)}
+.tv-body .tv-score .sc-pct small{font-size:calc(var(--u) * 2.4)}
+.tv-body .tv-score .sc-d{font-size:calc(var(--u) * 1.15)}
+.tv-body .tv-trend{height:100%;display:flex;flex-direction:column;justify-content:center}
+.tv-body .tv-trend .sc-stage{height:auto;margin:0}
+.tv-body .tv-trend .sc-stats .n{font-size:calc(var(--u) * 3.4)}
+.tv-body .tv-trend .sc-stats .l,.tv-body .tv-trend .sc-stats .d{font-size:calc(var(--u) * 1)}
 .sc-panel{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:44px;padding-bottom:56px}
 .sc-panel.sc-short{min-height:auto;padding-bottom:24px}
 .sc-stage{position:relative;margin-top:20px;height:calc(100vh - var(--topbar, 80px) - 190px);min-height:460px}
@@ -3208,9 +3194,10 @@ body.tv-on{overflow:hidden}
 
 /* footer: which board, and how long until the next */
 .tv-foot{display:flex;justify-content:space-between;align-items:center;padding-top:calc(var(--u) * .5);border-top:1px solid var(--line)}
-.tv-pills{display:flex;gap:calc(var(--u) * .6)}
+.tv-pills{display:flex;flex-wrap:wrap;gap:calc(var(--u) * .4);min-width:0;flex:1;margin-right:calc(var(--u) * 1.2)}
+.tv-foot .tv-ctl{flex:none}
 .tv-pill{position:relative;font-size:calc(var(--u) * .82);font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  padding:calc(var(--u) * .25) calc(var(--u) * .7);border:1px solid var(--ink);overflow:hidden}
+  padding:calc(var(--u) * .22) calc(var(--u) * .55);border:1px solid var(--ink);overflow:hidden;letter-spacing:.06em}
 .tv-pill.on{background:var(--ink);color:#FFFFFF}
 .tv-pill.on::after{content:'';position:absolute;left:0;bottom:0;height:3px;background:var(--red);
   width:0;animation:tvBar var(--tvdur, 30s) linear forwards}
@@ -10691,6 +10678,32 @@ function tvSlides(rows){
                       return (t(a) - t(b)) || (b.daysLate - a.daysLate) || (NUM(b.value) - NUM(a.value)); });
   if (risk.length) slides.push({key:'risk', pill:'At Risk', title:'At risk',
     sub:'Due Within Two Days And Not On A Machine, Or Still To Cut', list: risk, html: start => listHTML(risk, true, start)});
+
+  /* the substatus charts from the page, one board each (not Where The Money Goes) */
+  if (rows.length){
+    const head = {act:'Needs Action', late:'Overdue', today:'Due Today', tomorrow: nextDayLabel(), all:'In View'}[state.due] || 'In View';
+    const ctx = {color: scopeColor(), head, stats:null};
+    const sumV = l => money(l.reduce((a, r) => a + NUM(r.value), 0));
+    const stage = '<div class="sc-stage tv-sc" id="tvSc"></div>';
+    slides.push({key:'work', pill:'Work Comes From', title:'Where the work comes from',
+      sub:`${rows.length} Lines · ${sumV(rows)} · Centre To Family To Substatus`,
+      html: () => stage, after: b => SC.sankey(b.querySelector('#tvSc'), rows, ctx)});
+    slides.push({key:'orbit', pill:'Substatus Orbit', title:'Substatus orbit',
+      sub:`${rows.length} Lines · ${sumV(rows)} · ${rows.filter(isLate).length} Late`,
+      html: () => stage, after: b => SC.orbit(b.querySelector('#tvSc'), rows, ctx)});
+    const pathRows = state.due === 'all' ? rows.filter(r => r.daysLate != null && r.daysLate >= -7) : rows;
+    slides.push({key:'path', pill:'Production Path', title:'The production path',
+      sub:`${pathRows.length} Lines ${state.due === 'all' ? 'Needing Action' : 'In View'} · ${sumV(pathRows)}`,
+      html: () => stage, after: b => SC.tree(b.querySelector('#tvSc'), pathRows, {...ctx, head: state.due === 'all' ? 'Needs Action' : head})});
+    slides.push({key:'score', pill:'Scorecard', title:'Substatus scorecard',
+      sub:'Share Of Each Centre\'s Lines Blocked Or Without A Real Substatus · Worst First',
+      html: () => { renderScorecard(); const g = document.getElementById('scoreGrid');
+        return `<div class="sc-grid tv-score">${g ? g.innerHTML : ''}</div>`; }});
+    slides.push({key:'trend', pill:'Late Trend', title:'Late, week by week',
+      sub:'Overdue Lines Each Day For This Scope',
+      html: () => { renderLateTrend(); const c = document.getElementById('trendChart'), m = document.getElementById('trendMeta');
+        return `<div class="tv-trend"><div class="sc-stage sc-trend">${c ? c.innerHTML : ''}</div><div class="sc-stats">${m ? m.innerHTML : ''}</div></div>`; }});
+  }
   return slides;
 }
 
@@ -10804,6 +10817,7 @@ function tvShow(animate){
   document.getElementById('tvTitle').innerHTML = `<h2>${esc(sl.title)}</h2><span>${esc(sl.sub || '')} · Rows</span>`;
   body.classList.toggle('open', !!TV.open && !!sl.list);
   body.innerHTML = sl.list && TV.open ? sl.html(0) : sl.html(start);
+  if (sl.after) sl.after(body);
   if (animate){ body.style.animation = 'none'; void body.offsetWidth; body.style.animation = ''; }
   tvMachineFirsts();
   tvFit();
@@ -10983,7 +10997,7 @@ function setTV(on, viaGesture){
       if (!ROWS.length) return;
       clearInterval(w); setTV(true, false);
       /* ?board=today|queues|load|next|risk opens on that board and holds it */
-      const want = {today:'today', flow:'flow', sankey:'flow', list:'tlist', todaylist:'tlist', machines:'mtoday', queues:'q0', load:'load', next:'next', tomorrow:'next', risk:'risk'}[(QP.get('board') || '').toLowerCase()];
+      const want = {today:'today', flow:'flow', sankey:'flow', work:'work', orbit:'orbit', path:'path', score:'score', scorecard:'score', trend:'trend', list:'tlist', todaylist:'tlist', machines:'mtoday', queues:'q0', load:'load', next:'next', tomorrow:'next', risk:'risk'}[(QP.get('board') || '').toLowerCase()];
       if (want){
         const i = TV.slides.findIndex(x => x.key === want);
         if (i >= 0){ TV.i = i; TV.pg = 0; tvShow(false); tvSetPaused(true); }
