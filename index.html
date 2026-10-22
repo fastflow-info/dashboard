@@ -2,11 +2,10 @@
 <!--
   ============================================================
   HELM, FASTSIGNS production priority dashboard
-  Version : 2026-10-21 · "TV Substatus Boards"
-  Also    : TV mode (T) gains five boards after At Risk: Where The
-            Work Comes From, Substatus Orbit, The Production Path,
-            Substatus Scorecard, Late Week By Week (?board=work, orbit,
-            path, score, trend). Based on "Orbit, Spread Out".
+  Version : 2026-10-21 · "Orbit Groups Spaced"
+  Also    : Substatus Orbit: the edge groups (a % ring and its machines)
+            spread over the full height with generous space between
+            groups. Based on "Tighter Sankey Sides".
   Date    : Wednesday, October 21, 2026
   Based on: 2026-10-21 · "Substatus Story, Production"
   Changed in this version (whole dashboard):
@@ -8643,9 +8642,13 @@ function sankey(el, R){
     .sort((a, b) => fRank(a.rows[0]) - fRank(b.rows[0]));
   if (all.length > 6){ const rest = all.slice(6); subs.push({t:`${rest.length} More`, more:true, c: lighten(color, .3), rows: rest.flatMap(x => x[1])}); }
   const cw = Math.min(230, W * .17), X = {c: 0, g: (W - cw) / 2, s: W - cw};
-  const col = (list, hMax) => { const n = list.length, h = Math.min(hMax, (H - 18 * (n - 1)) / n), gap = n > 1 ? (H - h * n) / (n - 1) : 0;
-    list.forEach((x, i) => { x.h = h; x.y = n > 1 ? i * (h + gap) : (H - h) / 2; }); };
-  col(cent, 96); col(groups, 84); col(subs, 74);
+  /* the middle column fills the height; the centres and the substatuses sit
+     as a tighter group in the middle of theirs */
+  const col = (list, hMax, tight) => { const n = list.length, h = Math.min(hMax, (H - 18 * (n - 1)) / n);
+    const gap = tight ? Math.min(tight, n > 1 ? (H - h * n) / (n - 1) : 0) : (n > 1 ? (H - h * n) / (n - 1) : 0);
+    const y0 = (H - (h * n + gap * (n - 1))) / 2;
+    list.forEach((x, i) => { x.h = h; x.y = y0 + i * (h + gap); }); };
+  col(cent, 96, 22); col(groups, 84); col(subs, 74, 16);
   const L = [];
   /* a centre's ribbon keeps its own colour all the way; ribbons from a family to
      its substatuses are a light grey, so the centres stay the story */
@@ -8711,10 +8714,13 @@ function orbit(el, R){
   [-1, 1].forEach(side => {
     const list = groups.filter(x => x.side === side).sort((p, q) => p.py - q.py);
     const hs = list.map(x => Math.max(70, x.sats.length * STEP));
-    const total = hs.reduce((a, h) => a + h, 0) + GAP * Math.max(0, list.length - 1);
-    let y = Math.max(40, cy - total / 2);
+    /* the groups spread over the whole height, generous space between them */
+    const used = hs.reduce((a, h) => a + h, 0), top = 30, bottom = H - 30;
+    const gap = list.length > 1 ? Math.max(GAP, (bottom - top - used) / (list.length - 1)) : 0;
+    const total = used + gap * Math.max(0, list.length - 1);
+    let y = Math.max(top, cy - total / 2);
     const rxCol = side < 0 ? 480 : W - 480;
-    list.forEach((x, i) => { x.rx = rxCol; x.ry = y + hs[i] / 2; y += hs[i] + GAP; });
+    list.forEach((x, i) => { x.rx = rxCol; x.ry = y + hs[i] / 2; y += hs[i] + gap; });
   });
   groups.forEach(x => {
     const {px, py, pr, rx, ry, side} = x;
